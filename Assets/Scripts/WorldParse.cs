@@ -6,60 +6,60 @@ using UnityEngine;
 
 public class WorldParse : MonoBehaviour
 {
+    public GameObject tile1Prefab;
+    public GameObject tile2Prefab;
+
     // Start is called before the first frame update
     void Start()
     {
-        byte[] input = File.ReadAllBytes("Assets/Worlds/level1.txt");
+        String[] input = File.ReadAllLines("Assets/Worlds/level1.txt");
         Parse(input, 0);
     }
 
-    void Parse(byte[] input, int n)
+    void Parse(String[] input, int n)
     {
         //Debug.Log("In parse with n : " + n);
         //Debug.Log("Array length : " + input.Length);
-
-        if(n < input.Length)
+        while (n < input.Length)
         {
-            //Debug.Log("Char at newline : " + (char)input[n] + " : byte = " + input[n]);
-            int new_index = 0;
-
-            switch (input[n])
+            String line = input[n];
+            switch (line[0])
             {
-                // 35 = '#'
-                case 35:
-                    new_index = Comment(input, n);
+                case '#':
                     break;
-                // 123 = '{'
-                case 123:
-                    new_index = Load(input, n);
+                case '{':
+                    Load(line);
                     break;
                 default:
-                    Debug.Log("Error, wrong format in world file!");
-                    throw new Exception("Wrong format in level file");          
+                    throw new Exception("Wrong format in level file");
             }
-
-            Parse(input, new_index);
+            n++;
         }
-        else
-        {
-            Debug.Log("Load done!");
-        }
-
     }
 
-    int Comment(byte[] input, int n)
+    void Load(String line)
     {
-        while(input[n++] != '\n');
-        return n;
-    }
-
-    int Load(byte[] input, int n)
-    {
-        while (n < input.Length && input[n] != '\n')
+        //Extract information
+        int x = 0;
+        int y = 0;
+        int z = 0;
+        int sprite = 0;
+        String[] extracted = line.Split(',', '{', '}');
+        try
         {
-            Debug.Log((char)input[n++]);
+            x = Int32.Parse(extracted[1]);
+            y = Int32.Parse(extracted[2]);
+            z = Int32.Parse(extracted[3]);
+            sprite = Int32.Parse(extracted[4]);
         }
-        return ++n;
-    }
+        catch (FormatException)
+        {
+            Console.WriteLine($"Unable to parse!");
+        }        
 
+        if (sprite == 0) Instantiate(tile1Prefab, new Vector3(x,y,z), Quaternion.identity);
+        else Instantiate(tile2Prefab, new Vector3(x,y,z), Quaternion.identity);
+        
+        Debug.Log(line);
+    }
 }
