@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Robots only have first, second and third gear
 public enum Gear
 {
     First, Second, Third
@@ -23,19 +24,22 @@ public class RobotMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //start on first gear
         SetGear(Gear.First);
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        //Rotation and movement can never occur at the same time
         if (startedRotation)
-        {
+        {   
+            //move if distant between rotation target and current rotation coordinates is larger than 0.006
             if((transform.forward - rotationTarget).magnitude > 0.006f)
             {
                 transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, rotationTarget, turnRate * rotateGear * Time.deltaTime, 0.0f));
             }
+            //set rotation angle to the target angle and disable rotation
             else
             {
                 transform.eulerAngles = new Vector3(transform.eulerAngles.x, Mathf.RoundToInt(transform.eulerAngles.y), transform.eulerAngles.z);
@@ -46,6 +50,7 @@ public class RobotMovement : MonoBehaviour
 
         else if (startedMove)
         {
+            //if the distance between the position target and the current position is larger than 0.000001, move towards it.
             if ((transform.position - positionTarget).magnitude > 0.000001f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, positionTarget, movementSpeed * movementGear * Time.deltaTime);
@@ -60,40 +65,45 @@ public class RobotMovement : MonoBehaviour
             
     }
 
+    //Call on function to move robot forward in the direction it is facing
     public void MoveForward()
     {
         positionTarget = transform.position + transform.forward * tileSize;
         startedMove = true;
     }
-
+    //Call on function to move robot backwards in the direction it is facing.
     public void MoveBackwards()
     {
         positionTarget = transform.position - transform.forward * tileSize;
         startedMove = true;
     }
-
+    //Call on function to return whether robot is moving or not
     public bool IsMoving()
     {
         return startedMove;
     }
 
+    //Call on function to rotate the robot 90 degrees to the left
     public void RotateLeft()
     {
         rotationTarget = -transform.right;
         startedRotation = true;
     }
 
+    //Call on function to rotate the robot 90 degrees to the right
     public void RotateRight()
     {
         rotationTarget = transform.right;
         startedRotation = true;
     }
-
+    
+    //Call on function to check whether robot is currently rotating
     public bool IsRotating()
     {
         return startedRotation;
     }
 
+    //Call on function to set gear to either First, Second or Third.
     public void SetGear(Gear newGear)
     {
         switch (newGear)
