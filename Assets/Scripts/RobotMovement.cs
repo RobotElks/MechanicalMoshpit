@@ -121,6 +121,8 @@ public class RobotMovement : MonoBehaviour
     //Call on function to set gear to either First, Second or Third.
     public void SetGear(Gear newGear)
     {
+        if (IsDoingInstruction()) return;
+
         switch (newGear)
         {
             case Gear.First:

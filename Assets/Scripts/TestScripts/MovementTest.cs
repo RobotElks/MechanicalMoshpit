@@ -29,5 +29,12 @@ public class MovementTest : MonoBehaviour
 
         if (Input.GetKeyDown("d"))
             movementScript.RotateRight();
+
+        if (Input.GetKeyDown("1"))
+            movementScript.SetGear(Gear.First);
+        if (Input.GetKeyDown("2"))
+            movementScript.SetGear(Gear.Second);
+        if (Input.GetKeyDown("3"))
+            movementScript.SetGear(Gear.Third);
     }
 }
