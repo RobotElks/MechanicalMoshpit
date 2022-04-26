@@ -7,8 +7,10 @@ using UnityEngine;
 public class WorldParse : MonoBehaviour
 {
     // Different tiles (Gameobject) and input file (String)
-    public GameObject tile1Prefab;
-    public GameObject tile2Prefab;
+    public GameObject tile1Grass;
+    public GameObject tile2Water;
+    public GameObject tile3Bridge;
+    public GameObject tile4Spikes;
     public String fileName;
 
     // Start is called before the first frame update
@@ -70,11 +72,21 @@ public class WorldParse : MonoBehaviour
         // Decide which tile we will use and instantiate it
         switch (sprite)
         {
+            // Grass-block
             case 1:
-                Instantiate(tile1Prefab, new Vector3(x, y, z), Quaternion.identity, transform);
+                Instantiate(tile1Grass, new Vector3(x, y, z), Quaternion.identity, transform);
                 break;
+            // Water
             case 2:
-                Instantiate(tile2Prefab, new Vector3(x, y, z), Quaternion.identity, transform);
+                Instantiate(tile2Water, new Vector3(x, y, z), Quaternion.identity, transform);
+                break;
+            // Bridge
+            case 3:
+                Instantiate(tile3Bridge, new Vector3(x, y, z), Quaternion.identity, transform);
+                break;
+            // Spikes
+            case 4:
+                Instantiate(tile4Spikes, new Vector3(x, y, z), Quaternion.identity, transform);
                 break;
         }
     }
