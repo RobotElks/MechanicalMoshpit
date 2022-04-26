@@ -246,8 +246,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c19e408a57e85b4da05c2ed3063fbbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tile1Prefab: {fileID: 1363037412436797206, guid: 73e48757161eaf74e95f7402b16fb034, type: 3}
-  tile2Prefab: {fileID: 7564878702832362823, guid: 074f7f5e38cdcc14b9c3676d3e39fbd6, type: 3}
+  tile1Prefab: {fileID: 1219471545100730, guid: 1b8fbee291cdc1046a281cb2b3b51bf7, type: 3}
+  tile2Prefab: {fileID: 1640771308685042, guid: ff78edb367a079b4a8f8ae2d128c581f, type: 3}
+  fileName: Assets/Worlds/level20x20.txt
 --- !u!4 &1244081663
 Transform:
   m_ObjectHideFlags: 0

@@ -8,18 +8,17 @@ public class WorldParse : MonoBehaviour
 {
     public GameObject tile1Prefab;
     public GameObject tile2Prefab;
+    public String fileName;
 
     // Start is called before the first frame update
     void Start()
     {
-        String[] input = File.ReadAllLines("Assets/Worlds/level1.txt");
+        String[] input = File.ReadAllLines(fileName);
         Parse(input, 0);
     }
 
     void Parse(String[] input, int n)
     {
-        //Debug.Log("In parse with n : " + n);
-        //Debug.Log("Array length : " + input.Length);
         while (n < input.Length)
         {
             String line = input[n];
@@ -57,8 +56,8 @@ public class WorldParse : MonoBehaviour
             Console.WriteLine($"Unable to parse!");
         }        
 
-        if (sprite == 0) Instantiate(tile1Prefab, new Vector3(x,y,z), Quaternion.identity);
-        else Instantiate(tile2Prefab, new Vector3(x,y,z), Quaternion.identity);
+        if (sprite == 1) Instantiate(tile1Prefab, new Vector3(x,y,z), Quaternion.identity, transform);
+        else Instantiate(tile2Prefab, new Vector3(x,y,z), Quaternion.identity, transform);
         
         Debug.Log(line);
     }
