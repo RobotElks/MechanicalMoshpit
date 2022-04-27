@@ -6,7 +6,7 @@ using Unity.Netcode;
 public class RobotMultiplayerMovement : NetworkBehaviour
 {
     public NetworkVariable<Vector3> networkPosition = new NetworkVariable<Vector3>();
-    public NetworkVariable<Vector3> networkRotation = new NetworkVariable<Vector3>();
+    public NetworkVariable<Quaternion> networkRotation = new NetworkVariable<Quaternion>();
 
     Vector3 positionTarget;
     Vector3 rotationTarget;
@@ -22,15 +22,25 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     {
         SetGear(Gear.First);
 
+        if (IsOwner)
+            GameObject.Find("Main Camera").GetComponent<CameraMultiplayer>().SetLocalPlayer(transform);
+
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
+        //Local player owns the object
         if (IsOwner)
         {
             if (Input.GetKeyDown("w"))
                 MoveForward();
+            if (Input.GetKeyDown("s"))
+                MoveBackwards();
+            if (Input.GetKeyDown("a"))
+                RotateLeft();
+            if (Input.GetKeyDown("d"))
+                RotateRight();
 
             //Rotation and movement can never occur at the same time
             if (startedRotation)
@@ -65,23 +75,24 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             }
 
 
-            UpdateNetworkInfoServerRpc(transform.position);
+            UpdateNetworkInfoServerRpc(transform.position, transform.rotation);
         }
+
+        //Update model postition and rotation to match network position
 
         else
         {
-            //Update model postition to match network position
             transform.position = networkPosition.Value;
-
+            transform.rotation = networkRotation.Value;
         }
 
     }
 
     [ServerRpc]
-    public void UpdateNetworkInfoServerRpc(Vector3 newPos)
+    public void UpdateNetworkInfoServerRpc(Vector3 localPosition, Quaternion localRotation)
     {
-        networkPosition.Value = newPos;
-
+        networkPosition.Value = localPosition;
+        networkRotation.Value = localRotation;
     }
 
 
