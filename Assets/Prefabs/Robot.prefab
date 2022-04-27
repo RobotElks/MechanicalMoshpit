@@ -247,9 +247,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fbe3b909a606d34d8ea659c3f611737, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileSize: 4
+  tileSize: 1
   movementSpeed: 1
-  turnRate: 20
+  startedMove: 0
+  startedRotation: 0
 --- !u!1 &4672780875060100228
 GameObject:
   m_ObjectHideFlags: 0
