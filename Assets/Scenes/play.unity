@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 2002923}
   - component: {fileID: 2002922}
   - component: {fileID: 2002921}
+  - component: {fileID: 2002924}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -207,6 +208,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2002924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2002920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29fea62b8ec8b3e4c9520f01a1e6eb0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 825980209}
+  mouseSensitivity: 3
+  offset: 10
+  rotationMinMax: {x: 0, y: 70}
+  zoomMinMax: {x: 5, y: 20}
 --- !u!1 &253431131
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,6 +337,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3000118029487620979, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: tileSize
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
 --- !u!1 &341376135
@@ -418,6 +440,11 @@ Transform:
 --- !u!1 &825980205 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2515647279544310218, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+  m_PrefabInstance: {fileID: 277472289}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &825980209 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
   m_PrefabInstance: {fileID: 277472289}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1128550328
