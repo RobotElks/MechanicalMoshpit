@@ -33,14 +33,14 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         //Local player owns the object
         if (IsOwner)
         {
-            if (Input.GetKeyDown("w"))
-                MoveForward();
-            if (Input.GetKeyDown("s"))
-                MoveBackwards();
-            if (Input.GetKeyDown("a"))
-                RotateLeft();
-            if (Input.GetKeyDown("d"))
-                RotateRight();
+            //if (Input.GetKeyDown("w"))
+            //    MoveForward();
+            //if (Input.GetKeyDown("s"))
+            //    MoveBackwards();
+            //if (Input.GetKeyDown("a"))
+            //    RotateLeft();
+            //if (Input.GetKeyDown("d"))
+            //    RotateRight();
 
             //Rotation and movement can never occur at the same time
             if (startedRotation)
