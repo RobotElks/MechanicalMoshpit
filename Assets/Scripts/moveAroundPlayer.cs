@@ -17,7 +17,7 @@ public class moveAroundPlayer : MonoBehaviour
     {
         if(Input.GetMouseButton(1)){
             float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
-            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * -1;
 
             rotationY += mouseX;
             rotationX += mouseY;
