@@ -8,9 +8,10 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public NetworkVariable<Vector3> networkPosition = new NetworkVariable<Vector3>();
     public NetworkVariable<Quaternion> networkRotation = new NetworkVariable<Quaternion>();
 
+
     Vector3 positionTarget;
     Vector3 rotationTarget;
-    int tileSize = 5;
+    int tileSize = 1;
     public float movementSpeed = 5.0f;
     float movementGear;
     float rotateGear;

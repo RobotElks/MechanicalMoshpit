@@ -3,53 +3,76 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using UnityEngine;
+using Unity.Netcode;
 
-public class WorldParse : MonoBehaviour
+public class MultiplayerWorldParse : MonoBehaviour
 {
     // Different tiles (Gameobject) and input file (String)
     public GameObject tile1Grass;
     public GameObject tile2Water;
     public GameObject tile3Bridge;
     public GameObject tile4Spikes;
-    public String fileName;
+    public string fileName;
+
+    public string worldString;
 
     // Start is called before the first frame update
     void Start()
     {
-        // Read content of textfile, save as a String[]
-        String[] input = File.ReadAllLines(fileName);
-        //Call Parse() with String[] and start with line 0
-        Parse(input);
+        
+
     }
 
-    public void Parse(String[] input)
+    public void LoadWorldFromFile()
     {
+        worldString = File.ReadAllText(fileName).Replace("\r\n", ";");
+        Parse();
+
+    }
+
+    public string GetWorldString()
+    {
+        return worldString;
+    }
+
+    public void SetWorldStringAndParse(string worldString)
+    {
+        this.worldString = worldString;
+        Parse();
+    }
+
+    public void Parse()
+    {
+        string[] rows = worldString.Split(";");
+
         int n = 0;
         //Iterate through every line
-        while (n < input.Length)
+        while (n < rows.Length)
         {
             // Extract line-string and check whether it contains comment or level-data
-            String line = input[n];
-            switch (line[0])
-            {
-                // Comment
-                case '#':
-                    break;
-                // Level-data
-                case '{':
-                    Load(line);
-                    break;
-                // Something is wrong with file
-                default:
-                    throw new Exception("Wrong format in level file");
-            }
+            string line = rows[n];
+
+            if (line.Length > 0)
+                switch (line[0])
+                {
+                    // Comment
+                    case '#':
+                        break;
+                    // Level-data
+                    case '{':
+                        Load(line);
+                        break;
+                    // Something is wrong with file
+                    default:
+                        throw new Exception("Wrong format in level file");
+                }
             // Go to next line
             n++;
         }
     }
 
     // Extract information form specific line
-    void Load(String line)
+    void Load(string line)
     {
         // Declare variables where we save data
         int x = 0;
@@ -57,7 +80,7 @@ public class WorldParse : MonoBehaviour
         int z = 0;
         int sprite = 0;
         // Split line into String[], while using , { and } as delimiters
-        String[] extracted = line.Split(',', '{', '}');
+        string[] extracted = line.Split(',', '{', '}');
         try
         {
             x = Int32.Parse(extracted[1]);
