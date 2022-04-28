@@ -12,7 +12,7 @@ public class MultiplayerManager : MonoBehaviour
     public GameObject NetworkManagerObject;
     UNetTransport Network;
 
-    public static int TIMEOUT_MSEC = 5000;
+    public static int TIMEOUT_MSEC = 500;
 
     void Start()
     {
@@ -27,10 +27,6 @@ public class MultiplayerManager : MonoBehaviour
         {
             StartClient();
         }
-        Debug.Log(SaveIPScript.GetSaved());
-        Debug.Log(SaveIPScript.GetWorld());
-
-
     }
     public void StartHost()
     {
