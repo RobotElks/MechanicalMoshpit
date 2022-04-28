@@ -739,6 +739,7 @@ MonoBehaviour:
     m_Y: 235
     m_Width: 77
     m_Height: 276
+
   m_fontInfo:
     Name: Liberation Sans
     PointSize: 86
@@ -1002,9 +1003,9 @@ Texture2D:
   m_DownscaleFallback: 0
   m_IsAlphaChannelOptional: 0
   serializedVersion: 2
-  m_Width: 512
-  m_Height: 512
-  m_CompleteImageSize: 262144
+  m_Width: 0
+  m_Height: 0
+  m_CompleteImageSize: 0
   m_MipsStripped: 0
   m_TextureFormat: 1
   m_MipCount: 1

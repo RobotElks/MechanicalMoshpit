@@ -8,9 +8,10 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public NetworkVariable<Vector3> networkPosition = new NetworkVariable<Vector3>();
     public NetworkVariable<Quaternion> networkRotation = new NetworkVariable<Quaternion>();
 
+
     Vector3 positionTarget;
     Vector3 rotationTarget;
-    int tileSize = 5;
+    int tileSize = 1;
     public float movementSpeed = 5.0f;
     float movementGear;
     float rotateGear;
@@ -33,14 +34,14 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         //Local player owns the object
         if (IsOwner)
         {
-            if (Input.GetKeyDown("w"))
-                MoveForward();
-            if (Input.GetKeyDown("s"))
-                MoveBackwards();
-            if (Input.GetKeyDown("a"))
-                RotateLeft();
-            if (Input.GetKeyDown("d"))
-                RotateRight();
+            //if (Input.GetKeyDown("w"))
+            //    MoveForward();
+            //if (Input.GetKeyDown("s"))
+            //    MoveBackwards();
+            //if (Input.GetKeyDown("a"))
+            //    RotateLeft();
+            //if (Input.GetKeyDown("d"))
+            //    RotateRight();
 
             //Rotation and movement can never occur at the same time
             if (startedRotation)
@@ -70,7 +71,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 {
                     //transform.position = positionTarget;
                     startedMove = false;
-
                 }
             }
 
@@ -79,7 +79,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         }
 
         //Update model postition and rotation to match network position
-
         else
         {
             transform.position = networkPosition.Value;
