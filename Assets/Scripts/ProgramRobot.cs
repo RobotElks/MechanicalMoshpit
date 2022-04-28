@@ -17,13 +17,14 @@ public class ProgramRobot : MonoBehaviour
 
     public Button removeButton;
     public Button runButton;
+    public Button stopButton;
 
     public Button moveForwardButton;
     string moveForwardString = "Move Forward ";
 
     public Button moveBackwardButton;
     string moveBackwardString = "Move Backward ";
-    
+
     public Button turnRightButton;
     string turnRightString = "Turn Right ";
 
@@ -38,8 +39,14 @@ public class ProgramRobot : MonoBehaviour
         runButton = runButton.GetComponent<Button>();
         runButton.onClick.AddListener(sendProgramToRobot);
 
+        stopButton = stopButton.GetComponent<Button>();
+        stopButton.onClick.AddListener(stopProgram);
+
         removeButton = removeButton.GetComponent<Button>();
         removeButton.onClick.AddListener(removeLastInstruction);
+
+        // moveForwardButton = moveForwardButton.GetComponent<Button>();
+        // moveForwardButton.onClick.AddListener(addInstructionToProgram(moveForwardString, gearValue));
 
         moveForwardButton = moveForwardButton.GetComponent<Button>();
         moveForwardButton.onClick.AddListener(addMoveForwardToProgram);
@@ -57,32 +64,43 @@ public class ProgramRobot : MonoBehaviour
 
     }
 
-    void Update(){
+    void Update()
+    {
         gearValue = gear.GetComponent<Slider>().value;
     }
+    // void addInstructionToProgram(string instruction, float gearValue)
+    // {
+    //     textInstructions.text = textInstructions.text + instruction + gearValue + "\n";
+    // }
 
-    void addMoveForwardToProgram(){
+    void addMoveForwardToProgram()
+    {
         textInstructions.text = textInstructions.text + moveForwardString + gearValue + "\n";
     }
 
-    void addMoveBackwardToProgram(){
+    void addMoveBackwardToProgram()
+    {
         textInstructions.text = textInstructions.text + moveBackwardString + gearValue + "\n";
     }
 
-    void addTurnRightToProgram(){
+    void addTurnRightToProgram()
+    {
         textInstructions.text = textInstructions.text + turnRightString + gearValue + "\n";
     }
 
-    void addTurnLeftToProgram(){
+    void addTurnLeftToProgram()
+    {
         textInstructions.text = textInstructions.text + turnLeftString + gearValue + "\n";
     }
 
-    void removeLastInstruction(){
+    void removeLastInstruction()
+    {
         string[] seperateInstructions = textInstructions.text.Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
         seperateInstructions = seperateInstructions.SkipLast(1).ToArray();
         string instructionsString = String.Join("\n", seperateInstructions);
         textInstructions.text = instructionsString;
-        if(textInstructions.text.Length != 0){
+        if (textInstructions.text.Length != 0)
+        {
             textInstructions.text = textInstructions.text + "\n";
         }
     }
@@ -90,10 +108,12 @@ public class ProgramRobot : MonoBehaviour
     /// <summary>
     /// Takes string instruction and return the method for the instrucion for the queue
     /// </summary>
-    private Instructions getInstruction(String subInstruction){
-    Instructions instruction = default;
+    private Instructions getInstruction(String subInstruction)
+    {
+        Instructions instruction = default;
 
-        switch(subInstruction){
+        switch (subInstruction)
+        {
             case "Forward":
                 instruction = Instructions.MoveForward;
                 break;
@@ -122,7 +142,9 @@ public class ProgramRobot : MonoBehaviour
     /// <summary>
     /// Enqueue the instructions and load them into the robot and then executes the program
     /// </summary>
-    private void sendProgramToRobot(){
+    private void sendProgramToRobot()
+    {
+        instructionsQueue.Clear();
         enqueueProgram();
         instructionScript.LoadInstructions(instructionsQueue);
         instructionScript.StartExecute();
@@ -131,13 +153,22 @@ public class ProgramRobot : MonoBehaviour
     /// <summary>
     /// Convert the program list into a queue of method instructions
     /// </summary>
-    private void enqueueProgram(){
+    private void enqueueProgram()
+    {
         String[] program = textInstructions.text.Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
-        foreach(string instruction in program){
-           String[] subInstruction = instruction.Split(' ');
-           instructionsQueue.Enqueue(getInstruction(subInstruction[2]));
-           instructionsQueue.Enqueue(getInstruction(subInstruction[1]));
+        foreach (string instruction in program)
+        {
+            String[] subInstruction = instruction.Split(' ');
+            instructionsQueue.Enqueue(getInstruction(subInstruction[2]));
+            instructionsQueue.Enqueue(getInstruction(subInstruction[1]));
         }
     }
+
+    private void stopProgram()
+    {
+        instructionScript.StopExecute();
+        instructionsQueue.Clear();
+    }
+
 
 }
