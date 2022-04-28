@@ -28,7 +28,7 @@ public class MultiplayerWorldParse : MonoBehaviour
 
     public void LoadWorldFromFile()
     {
-        SetWorldString(File.ReadAllText(fileName).Replace("\r\n", ";"));
+        SetWorldString(File.ReadAllText(fileName).Replace("\r", ""));
     }
 
     public string GetWorldString()
@@ -67,7 +67,7 @@ public class MultiplayerWorldParse : MonoBehaviour
             return;
 
         //Debug.Log("Parsing world");
-        string[] rows = worldString.Split(";");
+        string[] rows = worldString.Split("\n");
 
         int n = 0;
         //Iterate through every line
