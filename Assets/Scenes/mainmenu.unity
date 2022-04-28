@@ -979,7 +979,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 413789784}
-  - component: {fileID: 413789785}
   m_Layer: 5
   m_Name: JoinMenu
   m_TagString: Untagged
@@ -1011,18 +1010,6 @@ RectTransform:
   m_AnchoredPosition: {x: -0.0000052452, y: -0.0000016689}
   m_SizeDelta: {x: 377.283, y: 355.673}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &413789785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 413789783}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fc43dbbfab389441ac1607ebd9dc818, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &655789681
 GameObject:
   m_ObjectHideFlags: 0
@@ -2557,6 +2544,7 @@ MonoBehaviour:
   SaveIp: {fileID: 1253345376}
   addressInput: {fileID: 2119460119}
   saved: 
+  host: 0
 --- !u!4 &1253345378
 Transform:
   m_ObjectHideFlags: 0
@@ -2657,9 +2645,33 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1253345377}
+        m_TargetAssemblyTypeName: SaveIP, Assembly-CSharp
+        m_MethodName: SaveOwnIPAddress
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 765645658}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: PlayGameAsHost
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1253345377}
+        m_TargetAssemblyTypeName: SaveIP, Assembly-CSharp
+        m_MethodName: starthosting
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4015,7 +4027,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1253345377}
         m_TargetAssemblyTypeName: SaveIP, Assembly-CSharp
         m_MethodName: SaveIPAddress
-        m_Mode: 0
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
