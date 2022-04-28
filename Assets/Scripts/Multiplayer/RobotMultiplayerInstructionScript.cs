@@ -16,6 +16,10 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
     {
         movementScript = GetComponent<RobotMultiplayerMovement>();
 
+        if(IsOwner)
+        {
+            GameObject.Find("ProgrammingInterface Multiplayer Variant").GetComponent<ProgramMuiltiplayerRobot>().instructionScript = this;
+        }
         
     }
 
@@ -55,31 +59,6 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
 
                 instructionsQueue.Enqueue(instruction);
             }
-
-
-            //DEBUG
-            if (Input.GetKeyDown("space"))
-            {
-                Queue<Instructions> instructions = new Queue<Instructions>();
-                instructions.Enqueue(Instructions.MoveForward);
-                instructions.Enqueue(Instructions.RotateRight);
-                instructions.Enqueue(Instructions.MoveForward);
-                instructions.Enqueue(Instructions.ThirdGear);
-
-                instructions.Enqueue(Instructions.RotateLeft);
-                instructions.Enqueue(Instructions.MoveBackward);
-
-                instructions.Enqueue(Instructions.RotateRight);
-                instructions.Enqueue(Instructions.MoveBackward);
-                instructions.Enqueue(Instructions.RotateLeft);
-                instructions.Enqueue(Instructions.FirstGear);
-
-                LoadInstructions(instructions);
-                StartExecute();
-            }
-
-            if (Input.GetKeyDown(KeyCode.Return))
-                StopExecute();
         }
 
 
