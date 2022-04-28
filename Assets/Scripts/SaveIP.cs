@@ -10,11 +10,14 @@ using Unity.Netcode;
 public class SaveIP : MonoBehaviour
 {
     public GameObject SaveIp;
+    public GameObject Maps;
     public TMP_InputField addressInput;
     [SerializeField]
     private string saved;
     [SerializeField]
     private bool isHost;
+    [SerializeField]
+    private string world;
        // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +31,16 @@ public class SaveIP : MonoBehaviour
 
     public string GetSaved(){
         return saved;
+    }
+
+    public string GetWorld()
+    {
+        return world;
+    }
+
+    public void SetWorld()
+    {
+        world = Maps.GetComponent<mapSelection>().GetMap();
     }
 
     public bool IsHost(){
