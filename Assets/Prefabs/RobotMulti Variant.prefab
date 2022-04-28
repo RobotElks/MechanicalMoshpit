@@ -16,6 +16,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4
       objectReference: {fileID: 0}
@@ -80,8 +92,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67bc07781d5e7a64ba3c86cfad413f0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Position:
+  networkPosition:
     m_InternalValue: {x: 0, y: 0, z: 0}
+  networkRotation:
+    m_InternalValue: {x: 0, y: 0, z: 0, w: 0}
+  movementSpeed: 5
+  startedRotation: 0
+--- !u!114 &-3771028748239154682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5462321247307863178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b9423bb607ca754e8784f9cd7760119, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2096430636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,3 +126,15 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &8788691864623942989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5462321247307863178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9824b9db6b35be44e90ef77240326608, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

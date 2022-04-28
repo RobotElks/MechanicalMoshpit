@@ -19,11 +19,12 @@ public class WorldParse : MonoBehaviour
         // Read content of textfile, save as a String[]
         String[] input = File.ReadAllLines(fileName);
         //Call Parse() with String[] and start with line 0
-        Parse(input, 0);
+        Parse(input);
     }
 
-    void Parse(String[] input, int n)
+    public void Parse(String[] input)
     {
+        int n = 0;
         //Iterate through every line
         while (n < input.Length)
         {
