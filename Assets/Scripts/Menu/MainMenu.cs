@@ -7,12 +7,12 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGameAsHost()
     {
-        SceneManager.LoadScene("Multiplayer");
+        SceneManager.LoadScene("MultiplayerIstructions");
     }
 
     public void PlayGameAsClient()
     {
-        SceneManager.LoadScene("Multiplayer");
+        SceneManager.LoadScene("MultiplayerIstructions");
     }
 
     public void QuitGame()
