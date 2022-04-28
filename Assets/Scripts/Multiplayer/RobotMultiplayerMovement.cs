@@ -71,7 +71,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 {
                     //transform.position = positionTarget;
                     startedMove = false;
-
                 }
             }
 
@@ -80,7 +79,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         }
 
         //Update model postition and rotation to match network position
-
         else
         {
             transform.position = networkPosition.Value;

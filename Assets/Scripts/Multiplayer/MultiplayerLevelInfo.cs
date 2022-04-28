@@ -7,41 +7,50 @@ using Unity.Collections;
 
 public class MultiplayerLevelInfo : NetworkBehaviour
 {
-    string levelFile = "Assets/Worlds/level20x20.txt";
+    RobotMultiplayerMovement movementScript;
+    MultiplayerWorldParse worldScript;
 
-    //NetworkVariable<> levelInformation = new NetworkVariable<>();
-    public NetworkList<char> networkLevelInformation;
-    public NetworkVariable<bool> savedLevel;
-
-    public void Awake()
-    {
-        networkLevelInformation = new NetworkList<char>();
-        savedLevel = new NetworkVariable<bool>(false);
-    }
+    NetworkVariable<Vector3> spawnPoint = new NetworkVariable<Vector3>();
+    
 
     public override void OnNetworkSpawn()
     {
-        if(IsServer)
+        movementScript = GetComponent<RobotMultiplayerMovement>();
+        worldScript = GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>();
+
+
+        if (NetworkManager.Singleton.IsHost)
         {
             if (IsOwner)
             {
-                GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>().LoadWorldFromFile();
+                worldScript.LoadWorldFromFile();
+                
+                transform.position = worldScript.GetSpawnPoint();
             }
 
+            //Gets loaded world from host
             else
             {
-                string worldString = GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>().GetWorldString();
+                string worldString = worldScript.GetWorldString();
                 LoadWorldClientRpc(worldString);
+
+                SetSpawnPointClientRpc(worldScript.GetSpawnPoint());
             }
         }
-
     }
 
     [ClientRpc]
     void LoadWorldClientRpc(string worldString)
     {
-        GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>().SetWorldStringAndParse(worldString);
+        worldScript.SetWorldString(worldString);
     }
+
+    [ClientRpc]
+    void SetSpawnPointClientRpc(Vector3 point)
+    {
+        transform.position = point;
+    }
+
 
     
 

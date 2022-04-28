@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System;
 using System.IO;
 using UnityEngine;
 using Unity.Netcode;
@@ -12,22 +11,24 @@ public class MultiplayerWorldParse : MonoBehaviour
     public GameObject tile2Water;
     public GameObject tile3Bridge;
     public GameObject tile4Spikes;
+
+    public List<GameObject> avaliableSpawnPoints = new List<GameObject>();
+    public List<GameObject> usedSpawnPoints = new List<GameObject>();
+
     public string fileName;
 
-    public string worldString;
+    public string worldString = "";
 
     // Start is called before the first frame update
     void Start()
     {
-        
 
     }
 
+
     public void LoadWorldFromFile()
     {
-        worldString = File.ReadAllText(fileName).Replace("\r\n", ";");
-        Parse();
-
+        SetWorldString(File.ReadAllText(fileName).Replace("\r\n", ";"));
     }
 
     public string GetWorldString()
@@ -35,14 +36,37 @@ public class MultiplayerWorldParse : MonoBehaviour
         return worldString;
     }
 
-    public void SetWorldStringAndParse(string worldString)
+    public void SetWorldString(string newWorldString)
     {
-        this.worldString = worldString;
-        Parse();
+        if (newWorldString != worldString)
+        {
+            worldString = newWorldString;
+            BuildWorld();
+        }
     }
 
-    public void Parse()
+    public Vector3 GetSpawnPoint()
     {
+        if (avaliableSpawnPoints.Count == 0)
+            return Vector3.zero;
+
+        int i = Random.Range(0, avaliableSpawnPoints.Count - 1);
+
+        Vector3 point = avaliableSpawnPoints[i].transform.position;
+
+        usedSpawnPoints.Add(avaliableSpawnPoints[i]);
+        avaliableSpawnPoints.RemoveAt(i);
+
+        return point;
+    }
+
+    public void BuildWorld()
+    {
+
+        if (transform.childCount > 0)
+            return;
+
+        //Debug.Log("Parsing world");
         string[] rows = worldString.Split(";");
 
         int n = 0;
@@ -64,7 +88,8 @@ public class MultiplayerWorldParse : MonoBehaviour
                         break;
                     // Something is wrong with file
                     default:
-                        throw new Exception("Wrong format in level file");
+                        Debug.Log("Wrong format in level file");
+                        break;
                 }
             // Go to next line
             n++;
@@ -78,24 +103,35 @@ public class MultiplayerWorldParse : MonoBehaviour
         int x = 0;
         int y = 0;
         int z = 0;
-        int sprite = 0;
+        int tileID = 0;
         // Split line into String[], while using , { and } as delimiters
         string[] extracted = line.Split(',', '{', '}');
         try
         {
-            x = Int32.Parse(extracted[1]);
-            y = Int32.Parse(extracted[2]);
-            z = Int32.Parse(extracted[3]);
-            sprite = Int32.Parse(extracted[4]);
+            x = int.Parse(extracted[1]);
+            y = int.Parse(extracted[2]);
+            z = int.Parse(extracted[3]);
+            tileID = int.Parse(extracted[4]);
         }
-        catch (FormatException)
+        catch
         {
-            Console.WriteLine($"Unable to parse!");
+            Debug.Log($"Unable to parse!");
         }
 
         // Decide which tile we will use and instantiate it
-        switch (sprite)
+        switch (tileID)
         {
+            //Spawnpoint
+            case 0:
+                GameObject sp = new GameObject();
+                sp.transform.position = new Vector3(x, y, z);
+                sp.name = "SpawnPoint" + (avaliableSpawnPoints.Count + 1);
+                sp.transform.parent = this.transform;
+
+
+                avaliableSpawnPoints.Add(sp);
+                break;
+
             // Grass-block
             case 1:
                 Instantiate(tile1Grass, new Vector3(x, y, z), Quaternion.identity, transform);
