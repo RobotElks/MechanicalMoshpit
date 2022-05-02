@@ -18,6 +18,8 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     bool startedMove = false;
     public bool startedRotation = false;
     float turnRate = 1.0f;
+    Vector3 lastPosition;
+    Vector3 lastRotation;
 
     public override void OnNetworkSpawn()
     {
@@ -27,6 +29,8 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             GameObject.Find("Main Camera").GetComponent<CameraMultiplayer>().SetLocalPlayer(transform);
 
     }
+
+
 
     // Update is called once per frame
     void Update()
@@ -54,7 +58,8 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 //set rotation angle to the target angle and disable rotation
                 else
                 {
-                    transform.eulerAngles = new Vector3(transform.eulerAngles.x, Mathf.RoundToInt(transform.eulerAngles.y), transform.eulerAngles.z);
+                    lastRotation = new Vector3(transform.eulerAngles.x, Mathf.RoundToInt(transform.eulerAngles.y), transform.eulerAngles.z);
+                    transform.eulerAngles = lastRotation;
                     startedRotation = false;
                 }
             }
@@ -70,6 +75,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 else
                 {
                     //transform.position = positionTarget;
+                    lastPosition = transform.position;
                     startedMove = false;
                 }
             }
@@ -94,7 +100,25 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         networkRotation.Value = localRotation;
     }
 
+    public Vector3 GetLastPosition()
+    {
+        return lastPosition;
+    }
 
+    public Vector3 GetLastRotation()
+    {
+        return lastRotation;
+    }
+
+    public Vector3 GetTargetPosition()
+    {
+        return positionTarget;
+    }
+
+    public Vector3 GetTargetRotation()
+    {
+        return rotationTarget;
+    }
     public bool IsDoingInstruction()
     {
         return (IsRotating() || IsMoving());
@@ -168,9 +192,5 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 rotateGear = 2;
                 break;
         }
-
     }
-
-
-
 }
