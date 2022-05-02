@@ -9,7 +9,7 @@ using Unity.Netcode;
 
 public class SaveIP : MonoBehaviour
 {
-    public GameObject SaveIp;
+    //public GameObject SaveIp;
     public GameObject Maps;
     public TMP_InputField addressInput;
     [SerializeField]
@@ -21,7 +21,7 @@ public class SaveIP : MonoBehaviour
        // Start is called before the first frame update
     void Start()
     {
-        DontDestroyOnLoad(SaveIp);
+        DontDestroyOnLoad(this.gameObject);
     }
 
     public void SaveIPAddress(){
