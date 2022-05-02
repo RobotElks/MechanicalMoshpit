@@ -16,11 +16,17 @@ public class RobotCollision : MonoBehaviour
 
     private void PlayerCollision(Collision collision)
     {
-        RobotMultiplayerMovement robotMovement = collision.collider.gameObject.GetComponent<RobotMultiplayerMovement>();
+        GameObject otherRobot = collision.gameObject;
+        RobotMultiplayerMovement robotMovement = otherRobot.GetComponent<RobotMultiplayerMovement>();
+
+
+
         Debug.Log("Last position: " + robotMovement.GetLastPosition());
-        Debug.Log("Last Rotation: " + robotMovement.GetLastRotation());
+        Debug.Log("Last rotation: " + robotMovement.GetLastRotation());
         Debug.Log("Target position: " + robotMovement.GetTargetPosition());
-        Debug.Log("Target position: " + robotMovement.GetTargetRotation());
+        Debug.Log("Target rotation: " + robotMovement.GetTargetRotation());
+        this.GetComponent<Rigidbody>().isKinematic = true;
+        Debug.Log("------------------------------------");
 
     }
 }
