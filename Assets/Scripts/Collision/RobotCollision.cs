@@ -21,31 +21,30 @@ public class RobotCollision : MonoBehaviour
 
         Vector3 otherForward = otherRobot.transform.forward;
 
-        //Debug.Log("Last position: " + robotMovement.GetLastPosition());
-        //Debug.Log("Last rotation: " + robotMovement.GetLastRotation());
-        //Debug.Log("Target position: " + robotMovement.GetTargetPosition());
-        //Debug.Log("Target rotation: " + robotMovement.GetTargetRotation());
-        this.GetComponent<Rigidbody>().isKinematic = true;
-        //Debug.Log(otherForward);
-        Debug.Log("------------------------------------");
+        //this.GetComponent<Rigidbody>().isKinematic = true;
 
-        Vector3 coll = transform.forward + otherForward;
         //Frontal Collision
-        if((transform.forward + otherForward).magnitude < 0.001f) {
+        if ((transform.forward + otherForward).magnitude < 0.001f)
+        {
+
             //Check if other is moving or not 
         }
 
-        else 
+        else
         {
-            //List<ContactPoint> contactPoints = new List<ContactPoint>();
-            //collision.GetContacts(contactPoints);
+            BoxCollider boxCollider = GetComponent<BoxCollider>();
 
-            //collision.collider.GetComponent<BoxCollider>().sc
+            RaycastHit hit;
 
-            ContactPoint contact = collision.contacts[0];
+            if (!Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, boxCollider.size.x))
+            {
+                transform.position += otherForward * 2;
 
-            Debug.Log(transform.position);
-            Debug.Log(contact.thisCollider) ;
+                Debug.Log("Got hit from the side " + this.name);
+                
+            }
+
+
         }
 
     }

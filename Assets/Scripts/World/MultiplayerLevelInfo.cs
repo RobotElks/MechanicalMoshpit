@@ -11,7 +11,7 @@ public class MultiplayerLevelInfo : NetworkBehaviour
     MultiplayerWorldParse worldScript;
 
     NetworkVariable<Vector3> spawnPoint = new NetworkVariable<Vector3>();
-    
+
 
     public override void OnNetworkSpawn()
     {
@@ -24,7 +24,7 @@ public class MultiplayerLevelInfo : NetworkBehaviour
             if (IsOwner)
             {
                 worldScript.LoadWorldFromFile();
-                
+
                 transform.position = worldScript.GetSpawnPoint();
             }
 
@@ -37,6 +37,7 @@ public class MultiplayerLevelInfo : NetworkBehaviour
                 SetSpawnPointClientRpc(worldScript.GetSpawnPoint());
             }
         }
+     
     }
 
     [ClientRpc]
@@ -52,7 +53,7 @@ public class MultiplayerLevelInfo : NetworkBehaviour
     }
 
 
-    
+
 
 
 }
