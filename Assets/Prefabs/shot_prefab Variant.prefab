@@ -93,7 +93,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11489952, guid: 9a0c3383523899643a8d0661cfaca4e4, type: 3}
       propertyPath: m_endPos.z
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a0c3383523899643a8d0661cfaca4e4, type: 3}
@@ -113,5 +113,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 7.8040996}
-  m_Center: {x: 0, y: 0, z: -0.32932544}
+  m_Size: {x: 1, y: 1, z: 0.19502546}
+  m_Center: {x: 0, y: 0, z: 0.1179597}
