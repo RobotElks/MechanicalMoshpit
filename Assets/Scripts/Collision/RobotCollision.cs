@@ -7,7 +7,14 @@ public class RobotCollision : NetworkBehaviour
 {
     RobotMultiplayerMovement movementScript;
 
+    int singleRobotRaycastMask;
 
+    private void Start()
+    {
+        singleRobotRaycastMask = ~LayerMask.NameToLayer("RobotsRaycast");
+    }
+
+    
 
     //Might need refactoring later (switch case)
     private void OnCollisionEnter(Collision collision)
@@ -42,7 +49,9 @@ public class RobotCollision : NetworkBehaviour
                 if ((movingDir + otherMovingDir).magnitude < 0.001f)
                 {
                     //Do priority check
-                    Debug.Log(this.name + " do priority check");
+                    float gearDiff = movementScript.GetGear() - otherRobotMovementScript.GetGear();
+                    if (gearDiff == 0) movementScript.Push(otherMovingDir);
+                    else if (gearDiff < 0) movementScript.Push(otherMovingDir);
                 }
 
 
@@ -50,19 +59,22 @@ public class RobotCollision : NetworkBehaviour
                 else
                 {
                     //Change to multiple rays from the robot
-                    CapsuleCollider capsuleCollider = GetComponent<CapsuleCollider>();
-                    RaycastHit rayHit;
-                    bool colliderInfront = Physics.Raycast(transform.position, movingDir, out rayHit, capsuleCollider.radius * 3);
 
-                    if (colliderInfront && rayHit.collider.gameObject != robotCollision.collider.gameObject)
-                        colliderInfront = false;
+                    int oldLayer = otherRobot.layer;
+                    otherRobot.layer = LayerMask.NameToLayer("RobotsRaycast");
+
+                    CapsuleCollider capsuleCollider = GetComponent<CapsuleCollider>();
+
+                    bool colliderInfront = Physics.Raycast(transform.position -transform.right * capsuleCollider.radius, movingDir, capsuleCollider.radius * 3, singleRobotRaycastMask);
+
+
 
                     //Got hit from the side
-                    if (!colliderInfront)
-                    {
-
+                    if (!colliderInfront)            
                         movementScript.Push(otherMovingDir);
-                    }
+                    
+
+                    otherRobot.layer = oldLayer;
 
                 }
             }

@@ -7,9 +7,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1913729984608981218, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2020658856189352716, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2515647279544310218, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_Name
       value: RobotMulti Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515647279544310218, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2515647279544310218, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_TagString
@@ -99,6 +111,22 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4672780875060100228, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5282194066963920888, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6030303899228802399, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7220361785532062625, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3000118029487620979, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
@@ -140,7 +168,6 @@ MonoBehaviour:
   networkInstruction:
     m_InternalValue: 0
   movementSpeed: 1
-  startedRotation: 0
   currentInstruction: 7
 --- !u!114 &-3771028748239154682
 MonoBehaviour:
@@ -155,18 +182,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &-3064798021628563626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5462321247307863178}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e932189c3b68e94fbb9520571098902, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-1453851870942703961
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

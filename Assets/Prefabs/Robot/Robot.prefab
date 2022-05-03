@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7579142118394467973}
   - component: {fileID: 9026361896483614647}
   - component: {fileID: 8943227600458557351}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SmallTank_WheelsSmallBottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 7236525295323935195}
   - component: {fileID: 8010763487466308465}
   - component: {fileID: 4772950984822143873}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SmallTank_WheelsSmallUpper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 3430948954217506177}
   - component: {fileID: 3000118029487621005}
   - component: {fileID: 3000118029487620979}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Robot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,7 +262,7 @@ GameObject:
   - component: {fileID: 4524999351933207567}
   - component: {fileID: 5733633733032895759}
   - component: {fileID: 3583455992932504125}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SmallTank_WheelsBigFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -345,7 +345,7 @@ GameObject:
   - component: {fileID: 3079502709742714978}
   - component: {fileID: 9069278546132572148}
   - component: {fileID: 8371949616608894735}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SmallTank_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -428,7 +428,7 @@ GameObject:
   - component: {fileID: 321082285039379429}
   - component: {fileID: 4164955296281886840}
   - component: {fileID: 7413903975402149400}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SmallTank_WheelsBigBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -511,7 +511,7 @@ GameObject:
   - component: {fileID: 5772131484356093778}
   - component: {fileID: 1133091711168008574}
   - component: {fileID: 8300767165519396537}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SmallTank_Tower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
