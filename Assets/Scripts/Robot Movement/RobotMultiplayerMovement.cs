@@ -7,7 +7,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 {
     public NetworkVariable<Vector3> networkPosition = new NetworkVariable<Vector3>();
     public NetworkVariable<Quaternion> networkRotation = new NetworkVariable<Quaternion>();
-
+    public NetworkVariable<Instructions> networkInstruction = new NetworkVariable<Instructions>();
 
     Vector3 positionTarget;
     Vector3 rotationTarget;
@@ -20,6 +20,8 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     float turnRate = 1.0f;
     Vector3 lastPosition;
     Vector3 lastRotation;
+
+    Instructions currentInstruction = Instructions.None;
 
     public override void OnNetworkSpawn()
     {
@@ -64,6 +66,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                     lastRotation = new Vector3(transform.eulerAngles.x, Mathf.RoundToInt(transform.eulerAngles.y), transform.eulerAngles.z);
                     transform.eulerAngles = lastRotation;
                     startedRotation = false;
+                    currentInstruction = Instructions.None;
                 }
             }
 
@@ -80,11 +83,13 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                     //transform.position = positionTarget;
                     lastPosition = transform.position;
                     startedMove = false;
+                    currentInstruction = Instructions.None;
                 }
+
             }
 
 
-            UpdateNetworkInfoServerRpc(transform.position, transform.rotation);
+            UpdateNetworkInfoServerRpc(transform.position, transform.rotation, currentInstruction);
         }
 
         //Update model postition and rotation to match network position
@@ -92,15 +97,17 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         {
             transform.position = networkPosition.Value;
             transform.rotation = networkRotation.Value;
+            currentInstruction = networkInstruction.Value;
         }
 
     }
 
     [ServerRpc]
-    public void UpdateNetworkInfoServerRpc(Vector3 localPosition, Quaternion localRotation)
+    public void UpdateNetworkInfoServerRpc(Vector3 localPosition, Quaternion localRotation, Instructions localInstruction)
     {
         networkPosition.Value = localPosition;
         networkRotation.Value = localRotation;
+        networkInstruction.Value = localInstruction;
     }
 
     public Vector3 GetLastPosition()
@@ -133,6 +140,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         if (IsDoingInstruction()) return;
         positionTarget = transform.position + transform.forward * tileSize;
         startedMove = true;
+        currentInstruction = Instructions.MoveForward;
     }
     //Call on function to move robot backwards in the direction it is facing.
     public void MoveBackwards()
@@ -140,6 +148,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         if (IsDoingInstruction()) return;
         positionTarget = transform.position - transform.forward * tileSize;
         startedMove = true;
+        currentInstruction = Instructions.MoveBackward;
     }
     //Call on function to return whether robot is moving or not
     public bool IsMoving()
@@ -154,6 +163,8 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
         rotationTarget = -transform.right;
         startedRotation = true;
+        currentInstruction = Instructions.RotateLeft;
+
     }
 
     //Call on function to rotate the robot 90 degrees to the right
@@ -162,6 +173,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         if (IsDoingInstruction()) return;
         rotationTarget = transform.right;
         startedRotation = true;
+        currentInstruction = Instructions.RotateRight;
     }
 
     //Call on function to check whether robot is currently rotating
@@ -202,5 +214,18 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         BoxCollider boxCollider = GetComponent<BoxCollider>();
 
         return transform.position - new Vector3(0, boxCollider.size.y / 2, 0);
+    }
+
+    public Instructions GetCurrentInstruction()
+    {
+        return currentInstruction;
+    }
+
+    public Vector3 GetMovingDirection()
+    {
+        if (currentInstruction == Instructions.MoveBackward)
+            return -transform.forward;
+        else
+            return transform.forward;
     }
 }
