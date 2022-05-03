@@ -5,15 +5,14 @@ using UnityEngine;
 public class HealthPoints : MonoBehaviour
 {
     public int healthPoints = 100;
-
-
-
+    ParticleSystem smoke;
 
     public void getHit(int damage){
         if((healthPoints - damage) > 0){
             healthPoints = healthPoints - damage;
         }
         else{
+            healthPoints = 0;
             killed();
         }
     }
@@ -36,6 +35,12 @@ public class HealthPoints : MonoBehaviour
                 c.enabled = false;
             }
         }
-        //this.renderer.material.color = Color.red;
+        //this.GetComponent<MeshRenderer>().material.color = Color.red;
+        //this.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
+        this.transform.Find("SmallTank_Base").GetComponent<MeshRenderer>().material.color = Color.black;
+        this.transform.Find("SmallTank_Tower").GetComponent<MeshRenderer>().material.color = Color.black;
+        //this.transform.Find("Smoke").SetActive(true);
+        smoke = this.GetComponentInChildren<ParticleSystem>();
+        smoke.enableEmission = true;
     }
 }
