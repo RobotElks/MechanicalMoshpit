@@ -18,9 +18,14 @@ public class CannonBehavior : MonoBehaviour {
 		}
 	}
 
+	public void setPowerZero(){
+		power = 0f;
+	}
+
 	public void shoot(){
 		//m_shotPrefab.GetComponent<Light>().color = new Color.yellow;
 		GameObject go = GameObject.Instantiate(shotPrefab, shot_spawn.transform.position, muzzle.rotation) as GameObject;
-		GameObject.Destroy(go, power);
+		Physics.IgnoreCollision(go.GetComponent<Collider>(), this.GetComponent<Collider>());
+		//GameObject.Destroy(go, power);
 	}
 }

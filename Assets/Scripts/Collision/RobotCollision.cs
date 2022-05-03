@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class RobotCollision : MonoBehaviour
 {
-
+    //CannonBehavior CannonScript;
+    //CannonScript = robot.GetComponent<CannonBehavior>();
     //Might need refactoring later (switch case)
     private void OnCollisionEnter(Collision collision)
     {
@@ -12,6 +13,12 @@ public class RobotCollision : MonoBehaviour
         {
             PlayerCollision(collision);
         }
+
+        else if (collision.collider.CompareTag("Laser"))
+        {
+            LaserCollision(collision);
+        }
+
     }
 
     private void PlayerCollision(Collision collision)
@@ -43,9 +50,13 @@ public class RobotCollision : MonoBehaviour
                 Debug.Log("Got hit from the side " + this.name);
                 
             }
-
-
         }
 
+    }
+
+    private void LaserCollision(Collision collider){
+        Debug.Log("COLLISION LASER");
+        GameObject laser = collider.gameObject;
+        Destroy(laser, 0.1f);
     }
 }
