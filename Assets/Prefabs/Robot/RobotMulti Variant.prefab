@@ -137,8 +137,11 @@ MonoBehaviour:
     m_InternalValue: {x: 0, y: 0, z: 0}
   networkRotation:
     m_InternalValue: {x: 0, y: 0, z: 0, w: 0}
-  movementSpeed: 5
+  networkInstruction:
+    m_InternalValue: 0
+  movementSpeed: 1
   startedRotation: 0
+  currentInstruction: 7
 --- !u!114 &-3771028748239154682
 MonoBehaviour:
   m_ObjectHideFlags: 0

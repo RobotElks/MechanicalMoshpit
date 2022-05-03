@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class RobotCollision : MonoBehaviour
+public class RobotCollision : NetworkBehaviour
 {
     RobotMultiplayerMovement movementScript;
 
@@ -21,63 +22,60 @@ public class RobotCollision : MonoBehaviour
 
     private void PlayerCollision(Collision robotCollision)
     {
-        GameObject otherRobot = robotCollision.gameObject;
-        RobotMultiplayerMovement otherRobotMovementScript = otherRobot.GetComponent<RobotMultiplayerMovement>();
-        //Vector3 otherForward = otherRobot.transform.forward;
-
-
-
-        //this.GetComponent<Rigidbody>().isKinematic = true;
-
-        //Our robot is moving
-        if (movementScript.IsMoving())
+        if (IsOwner)
         {
-            Vector3 movingDir = movementScript.GetMovingDirection();
+            GameObject otherRobot = robotCollision.gameObject;
+            RobotMultiplayerMovement otherRobotMovementScript = otherRobot.GetComponent<RobotMultiplayerMovement>();
+            //Vector3 otherForward = otherRobot.transform.forward;
+
+
+
+            //this.GetComponent<Rigidbody>().isKinematic = true;
             Vector3 otherMovingDir = otherRobotMovementScript.GetMovingDirection();
 
-
-            //Heads on collision
-            if ((movingDir + otherMovingDir).magnitude < 0.001f)
+            //Our robot is moving
+            if (movementScript.IsMoving())
             {
-                //Do priority check
-                Debug.Log(this.name + " do priority check");
-            }
+                Vector3 movingDir = movementScript.GetMovingDirection();
 
-
-            //Side collision
-            else
-            {
-                //Change to multiple rays from the robot
-                CapsuleCollider capsuleCollider = GetComponent<CapsuleCollider>();
-                RaycastHit rayHit;
-                bool colliderInfront = Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out rayHit, capsuleCollider.radius * 3);
-
-                if (colliderInfront && rayHit.collider.gameObject != robotCollision.collider.gameObject)
-                    colliderInfront = false;
-
-                //Got hit from the side
-                if (!colliderInfront)
+                //Heads on collision
+                if ((movingDir + otherMovingDir).magnitude < 0.001f)
                 {
-                    Debug.Log(this.name + " got hit from the side");
+                    //Do priority check
+                    Debug.Log(this.name + " do priority check");
+                }
 
-                    Pushed(otherRobot);
+
+                //Side collision
+                else
+                {
+                    //Change to multiple rays from the robot
+                    CapsuleCollider capsuleCollider = GetComponent<CapsuleCollider>();
+                    RaycastHit rayHit;
+                    bool colliderInfront = Physics.Raycast(transform.position, movingDir, out rayHit, capsuleCollider.radius * 3);
+
+                    if (colliderInfront && rayHit.collider.gameObject != robotCollision.collider.gameObject)
+                        colliderInfront = false;
+
+                    //Got hit from the side
+                    if (!colliderInfront)
+                    {
+
+                        movementScript.Push(otherMovingDir);
+                    }
+
                 }
             }
+
+            //Our robot is not moving
+            else
+            {
+                Debug.Log(this.name + " is not moving");
+
+                movementScript.Push(otherMovingDir);
+
+            }
+
         }
-
-        //Our robot is not moving
-        else
-        {
-            Debug.Log(this.name + " is not moving");
-
-            Pushed(otherRobot);
-        }
-
-
-    }
-
-    private void Pushed(GameObject pusher)
-    {
-
     }
 }

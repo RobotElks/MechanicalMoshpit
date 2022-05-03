@@ -11,25 +11,32 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
     Vector3 positionTarget;
     Vector3 rotationTarget;
+
+    Vector3 leftToPush = Vector3.zero;
+
     int tileSize = 1;
-    public float movementSpeed = 5.0f;
+    public float movementSpeed = 1.0f;
+    float pushedSpeed;
     float movementGear;
     float rotateGear;
     bool startedMove = false;
-    public bool startedRotation = false;
+    bool startedRotation = false;
     float turnRate = 1.0f;
     Vector3 lastPosition;
     Vector3 lastRotation;
 
-    Instructions currentInstruction = Instructions.None;
+    public Instructions currentInstruction = Instructions.None;
 
     public override void OnNetworkSpawn()
     {
+        //Set gear to third to calculate pushedSpeed
+        SetGear(Gear.Third);
+        pushedSpeed = movementSpeed * movementGear * 1.5f;
         SetGear(Gear.First);
+
 
         if (IsOwner)
             GameObject.Find("Main Camera").GetComponent<CameraMultiplayer>().SetLocalPlayer(transform);
-
     }
 
 
@@ -52,7 +59,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             //if (Input.GetKeyDown("d"))
             //    RotateRight();
 
-            //Rotation and movement can never occur at the same time
+            //Rotation movement
             if (startedRotation)
             {
                 //move if distant between rotation target and current rotation coordinates is larger than 0.006
@@ -70,7 +77,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 }
             }
 
-
+            //Driving movement
             else if (startedMove)
             {
                 //if the distance between the position target and the current position is larger than 0.000001, move towards it.
@@ -89,6 +96,24 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             }
 
 
+            //Push movement
+            if(leftToPush.magnitude > 0)
+            {
+                Vector3 pushDistance = pushedSpeed * leftToPush.normalized * Time.deltaTime;
+
+                if (pushDistance.magnitude > leftToPush.magnitude)
+                    pushDistance = leftToPush;
+
+                transform.position += pushDistance;
+                positionTarget += pushDistance;
+                rotationTarget += pushDistance;
+
+                leftToPush -= pushDistance;                    
+            }
+
+
+
+            //Send current local information to the server to update other clients
             UpdateNetworkInfoServerRpc(transform.position, transform.rotation, currentInstruction);
         }
 
@@ -199,11 +224,11 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 rotateGear = 1;
                 break;
             case Gear.Second:
-                movementGear = 2;
+                movementGear = 1.5f;
                 rotateGear = 1.5f;
                 break;
             case Gear.Third:
-                movementGear = 3;
+                movementGear = 2f;
                 rotateGear = 2;
                 break;
         }
@@ -227,5 +252,15 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             return -transform.forward;
         else
             return transform.forward;
+    }
+
+    public void Push(Vector3 direction)
+    {
+        direction = direction.normalized;
+        direction.x = Mathf.Round(direction.x);
+        direction.z = Mathf.Round(direction.z);
+        direction.y = 0;
+
+        leftToPush = direction * tileSize;
     }
 }

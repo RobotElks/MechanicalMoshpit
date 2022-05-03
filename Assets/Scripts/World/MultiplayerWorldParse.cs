@@ -58,6 +58,7 @@ public class MultiplayerWorldParse : MonoBehaviour
         avaliableSpawnPoints.RemoveAt(i);
 
         return point;
+        
     }
 
     public void BuildWorld()
