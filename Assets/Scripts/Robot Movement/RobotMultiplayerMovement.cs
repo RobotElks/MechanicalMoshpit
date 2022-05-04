@@ -30,7 +30,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     {
         //Set gear to third to calculate pushedSpeed
         SetGear(Gear.Third);
-        pushedSpeed = movementSpeed * movementGear * 1.5f;
+        pushedSpeed = movementSpeed * movementGear * 5f;
         SetGear(Gear.First);
 
 
@@ -250,14 +250,14 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
     public void Push(Vector3 direction)
     {
-        //direction = direction.normalized;
-        //direction.x = Mathf.Round(direction.x);
-        //direction.z = Mathf.Round(direction.z);
-        //direction.y = 0;
+        direction.y = 0;
+        direction = direction.normalized;
+        direction.x = Mathf.Round(direction.x);
+        direction.z = Mathf.Round(direction.z);
 
-        //leftToPush = direction * tileSize;
+        leftToPush = direction * tileSize;
 
-        transform.position += direction * tileSize;
+        //transform.position += direction * tileSize;
     }
 
     public void ResetToLastPosition()

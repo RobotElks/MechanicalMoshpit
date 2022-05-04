@@ -18,13 +18,22 @@ public class RobotCollision : NetworkBehaviour
 
     //Might need refactoring later (switch case)
     // Does this risk mulltiple detections for one collision?
+    private void OnCollisionEnter(Collision collision)
+    {
+        CollisionCheck(collision);
+    }
+
     private void OnCollisionStay(Collision collision)
+    {
+        CollisionCheck(collision);
+    }
+
+    private void CollisionCheck(Collision collision)
     {
         if (collision.collider.CompareTag("Player"))
         {
             PlayerCollision(collision);
         }
-
     }
 
     private void PlayerCollision(Collision robotCollision)
