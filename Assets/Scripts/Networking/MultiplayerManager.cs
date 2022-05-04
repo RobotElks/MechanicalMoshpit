@@ -42,7 +42,7 @@ public class MultiplayerManager : MonoBehaviour
 
         while (!NetworkManager.Singleton.IsConnectedClient && timeout(startTime))
         {
-            Debug.Log("Waiting... time elapsed : " + DateTime.Now.Subtract(startTime).TotalMilliseconds);
+            //Debug.Log("Waiting... time elapsed : " + DateTime.Now.Subtract(startTime).TotalMilliseconds);
 
         }
     }

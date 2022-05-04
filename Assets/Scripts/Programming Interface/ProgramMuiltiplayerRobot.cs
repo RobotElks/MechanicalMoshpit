@@ -139,7 +139,7 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     /// <summary>
     /// Enqueue the instructions and load them into the robot and then executes the program
     /// </summary>
-    private void sendProgramToRobot()
+    public void sendProgramToRobot()
     {
         instructionsQueue.Clear();
         enqueueProgram();
@@ -161,7 +161,7 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
         }
     }
 
-    private void stopProgram()
+    public void stopProgram()
     {
         instructionScript.StopExecute();
         instructionsQueue.Clear();

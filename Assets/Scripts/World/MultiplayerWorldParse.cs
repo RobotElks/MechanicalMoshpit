@@ -11,7 +11,7 @@ public class MultiplayerWorldParse : MonoBehaviour
     public GameObject tile2Water;
     public GameObject tile3Bridge;
     public GameObject tile4Spikes;
-
+    public List<GameObject> SpawnArea = new List<GameObject>();
     public List<GameObject> avaliableSpawnPoints = new List<GameObject>();
     public List<GameObject> usedSpawnPoints = new List<GameObject>();
 
@@ -45,17 +45,24 @@ public class MultiplayerWorldParse : MonoBehaviour
         }
     }
 
+    public Vector3 GetSpawnAreaPoint()
+    {
+        int i = Random.Range(0, SpawnArea.Count - 1);
+
+        Vector3 point = SpawnArea[i].transform.position;
+
+        usedSpawnPoints.Add(SpawnArea[i]);
+        SpawnArea.RemoveAt(i);
+
+        return point;
+    }
+
     public Vector3 GetSpawnPoint()
     {
-        if (avaliableSpawnPoints.Count == 0)
-            return Vector3.zero;
-
-        int i = Random.Range(0, avaliableSpawnPoints.Count - 1);
-
-        Vector3 point = avaliableSpawnPoints[i].transform.position;
-
-        usedSpawnPoints.Add(avaliableSpawnPoints[i]);
-        avaliableSpawnPoints.RemoveAt(i);
+        GameObject spawnPoint = avaliableSpawnPoints[0];
+        Vector3 point = spawnPoint.transform.position;
+        usedSpawnPoints.Add(spawnPoint);
+        avaliableSpawnPoints.Remove(spawnPoint);
 
         return point;
     }
@@ -125,11 +132,12 @@ public class MultiplayerWorldParse : MonoBehaviour
             case 0:
                 GameObject sp = new GameObject();
                 sp.transform.position = new Vector3(x, y, z);
-                sp.name = "SpawnPoint" + (avaliableSpawnPoints.Count + 1);
+                sp.name = "SpawnPoint" + (avaliableSpawnPoints.Count + SpawnArea.Count + 1);
                 sp.transform.parent = this.transform;
-
-
-                avaliableSpawnPoints.Add(sp);
+                if (x >= 1000)
+                    SpawnArea.Add(sp);
+                else
+                    avaliableSpawnPoints.Add(sp);
                 break;
 
             // Grass-block

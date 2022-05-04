@@ -11,6 +11,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RobotMulti Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 2515647279544310218, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_RootOrder
       value: 0
