@@ -61,7 +61,7 @@ public class RobotCollision : NetworkBehaviour
                         //Do priority check
                         //Debug.Log("Heads on");
 
-                        movementScript.MoveTargetPositionBack((int)otherRobotGear);
+                        //movementScript.MoveTargetPositionBack((int)otherRobotGear);
                         movementScript.Push(otherMovingDir, (int)otherRobotGear);
 
                     }
