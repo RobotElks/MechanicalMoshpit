@@ -321,8 +321,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Maps: {fileID: 0}
   addressInput: {fileID: 0}
-  saved: 127.0.0.1
-  isHost: 0
+  saved: 192.168.1.52
+  isHost: 1
   world: Assets/Worlds/clean20x20.txt
 --- !u!1 &564763309
 GameObject:

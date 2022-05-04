@@ -78,6 +78,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 else
                 {
                     //transform.position = positionTarget;
+                    leftToPush = Vector3.zero;
                     lastPosition = transform.position;
                     currentInstruction = Instructions.None;
                 }
@@ -264,5 +265,10 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     {
         transform.position = point;
         lastPosition = point;
+    }
+
+    public void MoveTargetPositionBack()
+    {
+        positionTarget -= GetMovingDirection() * tileSize;
     }
 }

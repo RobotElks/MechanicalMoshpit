@@ -51,8 +51,14 @@ public class RobotCollision : NetworkBehaviour
                         //Do priority check
                         Debug.Log("Heads on");
                         float gearDiff = movementScript.GetGear() - otherRobotMovementScript.GetGear();
-                        if (gearDiff == 0) movementScript.ResetToLastPosition();
-                        else if (gearDiff < 0) movementScript.Push(otherMovingDir);
+                        if (gearDiff <= 0)
+                        {
+                            movementScript.MoveTargetPositionBack();
+
+                            if (gearDiff < 0)
+                                movementScript.Push(otherMovingDir);
+                        }
+
                     }
 
 
