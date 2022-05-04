@@ -44,7 +44,12 @@ public class RobotCollision : NetworkBehaviour
             RobotMultiplayerMovement otherRobotMovementScript = otherRobot.GetComponent<RobotMultiplayerMovement>();
 
             //this.GetComponent<Rigidbody>().isKinematic = true;
-            
+
+            Vector3 otherRobotForceOnThis = otherRobotMovementScript.GetForceToMe(transform.position);
+
+            Debug.Log("OtherMove: " + otherRobotMovementScript.IsMoving());
+            Debug.Log("OtherPushed: " + otherRobotMovementScript.IsPushed());
+            Debug.Log("Force: " + otherRobotForceOnThis);
 
 
             if (otherRobotMovementScript.IsMoving() || otherRobotMovementScript.IsPushed())
@@ -52,7 +57,6 @@ public class RobotCollision : NetworkBehaviour
                 Vector3 otherMovingDir = otherRobotMovementScript.GetMovingDirection();
                 Gear otherRobotGear = otherRobotMovementScript.GetGear();
 
-                Vector3 otherRobotForceOnThis = otherRobotMovementScript.GetForceToMe(transform.position);
 
 
                 //Our robot is moving
