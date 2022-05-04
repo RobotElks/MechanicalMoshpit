@@ -25,7 +25,7 @@ public class RobotCollision : NetworkBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        CollisionCheck(collision);
+        //CollisionCheck(collision);
     }
 
     private void CollisionCheck(Collision collision)
@@ -45,6 +45,7 @@ public class RobotCollision : NetworkBehaviour
 
             //this.GetComponent<Rigidbody>().isKinematic = true;
             Vector3 otherMovingDir = otherRobotMovementScript.GetMovingDirection();
+            Gear otherRobotGear = otherRobotMovementScript.GetGear();
 
 
             if (otherRobotMovementScript.IsMoving())
@@ -59,13 +60,13 @@ public class RobotCollision : NetworkBehaviour
                     {
                         //Do priority check
                         Debug.Log("Heads on");
-                        float gearDiff = movementScript.GetGear() - otherRobotMovementScript.GetGear();
+                        int gearDiff = movementScript.GetGear() - otherRobotGear;
                         if (gearDiff <= 0)
                         {
                             movementScript.MoveTargetPositionBack();
 
                             if (gearDiff < 0)
-                                movementScript.Push(otherMovingDir);
+                                movementScript.Push(otherMovingDir, (int)otherRobotGear);
                         }
 
                     }
@@ -89,7 +90,8 @@ public class RobotCollision : NetworkBehaviour
 
                         //Got hit from the side
                         if (!colliderInfront)
-                            movementScript.Push(otherMovingDir);
+                            movementScript.Push(otherMovingDir, (int)otherRobotGear);
+
 
 
                         otherRobot.layer = oldLayer;
@@ -100,7 +102,7 @@ public class RobotCollision : NetworkBehaviour
                 //Our robot is not moving
                 else
                 {
-                    movementScript.Push(otherMovingDir);
+                    movementScript.Push(otherMovingDir, (int)otherRobotGear);
                 }
             }
 

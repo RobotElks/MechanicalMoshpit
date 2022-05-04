@@ -8,7 +8,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public NetworkVariable<Vector3> networkPosition = new NetworkVariable<Vector3>();
     public NetworkVariable<Quaternion> networkRotation = new NetworkVariable<Quaternion>();
     public NetworkVariable<Instructions> networkInstruction = new NetworkVariable<Instructions>();
-    public NetworkVariable<float> networkGear = new NetworkVariable<float>();
+    public NetworkVariable<Gear> networkGear = new NetworkVariable<Gear>();
 
     Vector3 positionTarget;
     Vector3 rotationTarget;
@@ -24,7 +24,8 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     Vector3 lastPosition;
     Vector3 lastRotation;
 
-    public Instructions currentInstruction = Instructions.None;
+    Gear currentGear = Gear.None;
+    Instructions currentInstruction = Instructions.None;
 
     public override void OnNetworkSpawn()
     {
@@ -103,7 +104,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
 
             //Send current local information to the server to update other clients
-            UpdateNetworkInfoServerRpc(transform.position, transform.rotation, currentInstruction, movementGear);
+            UpdateNetworkInfoServerRpc(transform.position, transform.rotation, currentInstruction, currentGear);
         }
 
         //Update model postition and rotation to match network position
@@ -112,13 +113,13 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             transform.position = networkPosition.Value;
             transform.rotation = networkRotation.Value;
             currentInstruction = networkInstruction.Value;
-            movementGear = networkGear.Value;
+            currentGear = networkGear.Value;
         }
 
     }
 
     [ServerRpc]
-    public void UpdateNetworkInfoServerRpc(Vector3 localPosition, Quaternion localRotation, Instructions localInstruction, float localGear)
+    public void UpdateNetworkInfoServerRpc(Vector3 localPosition, Quaternion localRotation, Instructions localInstruction, Gear localGear)
     {
         networkPosition.Value = localPosition;
         networkRotation.Value = localRotation;
@@ -199,15 +200,17 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         tileSize = input;
     }
 
-    public float GetGear()
+    public Gear GetGear()
     {
-        return movementGear;
+        return currentGear;
     }
 
     //Call on function to set gear to either First, Second or Third.
     public void SetGear(Gear newGear)
     {
         if (IsDoingInstruction()) return;
+
+        currentGear = newGear;
 
         switch (newGear)
         {
@@ -248,16 +251,15 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             return transform.forward;
     }
 
-    public void Push(Vector3 direction)
+    public void Push(Vector3 direction, int numOfTiles)
     {
         direction.y = 0;
         direction = direction.normalized;
-        direction.x = Mathf.Round(direction.x);
-        direction.z = Mathf.Round(direction.z);
+        
 
-        leftToPush = direction * tileSize;
+        //leftToPush = direction * tileSize;
 
-        //transform.position += direction * tileSize;
+        transform.position += direction * tileSize * numOfTiles;
     }
 
     public void ResetToLastPosition()
