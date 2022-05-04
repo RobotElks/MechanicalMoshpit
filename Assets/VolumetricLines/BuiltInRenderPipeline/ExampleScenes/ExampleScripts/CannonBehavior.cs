@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Unity.Netcode;
 
-public class CannonBehavior : MonoBehaviour {
+public class CannonBehavior : NetworkBehaviour {
 
 	public Transform muzzle;
 	public GameObject shotPrefab;
@@ -10,10 +11,12 @@ public class CannonBehavior : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () 
-	{
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			shoot();
+	{	
+		if(IsOwner) {	
+			if (Input.GetKeyDown(KeyCode.Space))
+			{
+				shoot();
+			}
 		}
 	}
 

@@ -1,32 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class HealthPoints : MonoBehaviour
+public class HealthPoints : NetworkBehaviour
 {
-    public int healthPoints = 100;
+    public bool changeColorLocal = false;
+    NetworkVariable<int> healthPoints = new NetworkVariable<int>();
+    NetworkVariable<bool> changeColor = new NetworkVariable<bool>();
+    public int localHealth = 100;
+    RobotList robotList;
     ParticleSystem smoke;
 
-    public void getHit(int damage){
-        if((healthPoints - damage) > 0){
-            healthPoints = healthPoints - damage;
+    void Update() {
+        //if (localHealth > 0)
+            //getHit(25);
+    }
+
+    public void getHit(int damage) { 
+        
+        if(IsOwner) {
+            if((localHealth - damage) > 0){
+                localHealth = localHealth - damage;
+            }
+            else{
+                localHealth = 0;
+                Debug.Log("Killed");
+                killed();
+            }
+            UpdateHealthInfoServerRpc(localHealth);
         }
-        else{
-            healthPoints = 0;
-            killed();
+        else {
+            localHealth = healthPoints.Value;
         }
     }
+
 
     public void healPowerUp(int heal){
-        if((healthPoints + heal) < 100){
-            healthPoints = healthPoints + heal;
+        if((healthPoints.Value + heal) < 100){
+            healthPoints.Value = healthPoints.Value + heal;
         }
         else{
-            healthPoints = 100;
+            healthPoints.Value = 100;
         }
     }
 
-    public void killed(){
+    public void killed() {
         MonoBehaviour[] comps = GetComponents<MonoBehaviour>();
         foreach (MonoBehaviour c in comps)
         {
@@ -35,12 +54,26 @@ public class HealthPoints : MonoBehaviour
                 c.enabled = false;
             }
         }
-        //this.GetComponent<MeshRenderer>().material.color = Color.red;
-        //this.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
-        this.transform.Find("SmallTank_Base").GetComponent<MeshRenderer>().material.color = Color.black;
-        this.transform.Find("SmallTank_Tower").GetComponent<MeshRenderer>().material.color = Color.black;
-        //this.transform.Find("Smoke").SetActive(true);
-        smoke = this.GetComponentInChildren<ParticleSystem>();
-        smoke.enableEmission = true;
+
+        ulong localClientId = NetworkManager.Singleton.LocalClientId;
+        Debug.Log("1");
+        if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(localClientId, out NetworkClient networkClient))
+            return;
+        Debug.Log("2");
+        if(!networkClient.PlayerObject.TryGetComponent<Dead>(out var dead))
+            return;
+        Debug.Log("3");
+        dead.SetDeadServerRpc(true);
+        Debug.Log("4");
+
+
     }
+
+    [ServerRpc]
+    public void UpdateHealthInfoServerRpc(int health)
+    {
+        healthPoints.Value = health;
+    }
+
+
 }

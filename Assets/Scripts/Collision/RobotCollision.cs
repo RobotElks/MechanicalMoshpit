@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class RobotCollision : MonoBehaviour
+public class RobotCollision : NetworkBehaviour
 {
     HealthPoints healthScript;
 	void Start () {
@@ -56,10 +57,9 @@ public class RobotCollision : MonoBehaviour
         }
 
     }
-
     private void LaserCollision(Collision collider){
-        healthScript.getHit(10);
-        Debug.Log("COLLISION LASER");
+        healthScript.getHit(25);
+        //Debug.Log("COLLISION LASER");
         GameObject laser = collider.gameObject;
         Destroy(laser, 0f);
         
