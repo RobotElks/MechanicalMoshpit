@@ -37,7 +37,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         if (IsOwner)
             GameObject.Find("Main Camera").GetComponent<CameraMultiplayer>().SetLocalPlayer(transform);
 
-       
+
     }
 
 
@@ -191,7 +191,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     //Call on function to check whether robot is currently rotating
     public bool IsRotating()
     {
-        return currentInstruction == Instructions.RotateLeft || currentInstruction == Instructions.RotateRight; 
+        return currentInstruction == Instructions.RotateLeft || currentInstruction == Instructions.RotateRight;
     }
 
     public void SetTileSize(int input)
@@ -242,18 +242,22 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     {
         if (currentInstruction == Instructions.MoveBackward)
             return -transform.forward;
+        //else if (currentInstruction == Instructions.MoveForward)
+        //    return transform.forward;
         else
             return transform.forward;
     }
 
     public void Push(Vector3 direction)
     {
-        direction = direction.normalized;
-        direction.x = Mathf.Round(direction.x);
-        direction.z = Mathf.Round(direction.z);
-        direction.y = 0;
+        //direction = direction.normalized;
+        //direction.x = Mathf.Round(direction.x);
+        //direction.z = Mathf.Round(direction.z);
+        //direction.y = 0;
 
-        leftToPush = direction * tileSize;
+        //leftToPush = direction * tileSize;
+
+        transform.position += direction * tileSize;
     }
 
     public void ResetToLastPosition()
@@ -271,4 +275,11 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     {
         positionTarget -= GetMovingDirection() * tileSize;
     }
+
+    private void SetTargetPosition(Vector3 newTargetPostion)
+    {
+
+    }
+
+
 }

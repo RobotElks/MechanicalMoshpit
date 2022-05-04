@@ -33,15 +33,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -166,6 +166,8 @@ MonoBehaviour:
   networkRotation:
     m_InternalValue: {x: 0, y: 0, z: 0, w: 0}
   networkInstruction:
+    m_InternalValue: 0
+  networkGear:
     m_InternalValue: 0
   movementSpeed: 1
   currentInstruction: 7

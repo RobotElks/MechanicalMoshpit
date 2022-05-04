@@ -12,19 +12,19 @@ public class RobotCollision : NetworkBehaviour
     private void Start()
     {
         singleRobotRaycastMask = ~LayerMask.NameToLayer("RobotsRaycast");
+        movementScript = GetComponent<RobotMultiplayerMovement>();
     }
 
 
-
     //Might need refactoring later (switch case)
-    private void OnCollisionEnter(Collision collision)
+    // Does this risk mulltiple detections for one collision?
+    private void OnCollisionStay(Collision collision)
     {
         if (collision.collider.CompareTag("Player"))
         {
             PlayerCollision(collision);
         }
 
-        movementScript = GetComponent<RobotMultiplayerMovement>();
     }
 
     private void PlayerCollision(Collision robotCollision)
