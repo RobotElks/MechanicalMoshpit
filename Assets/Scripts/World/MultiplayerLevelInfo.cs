@@ -51,6 +51,13 @@ public class MultiplayerLevelInfo : NetworkBehaviour
         transform.position = point;
     }
 
+    public bool GetIfOwner()
+    {
+        if (IsOwner)
+            return true;
+        return false;
+    }
+
 
     
 

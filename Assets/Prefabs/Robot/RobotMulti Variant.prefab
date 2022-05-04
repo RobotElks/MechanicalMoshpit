@@ -11,6 +11,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RobotMulti Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 2515647279544310218, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -126,6 +130,19 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &8382979641427952412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5462321247307863178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e315195036d10a040af132ca8e9a0b53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  programRobot: {fileID: 817535773861131450, guid: 0b6f013c32e63104fb309e33994dd0b3, type: 3}
 --- !u!114 &8788691864623942989
 MonoBehaviour:
   m_ObjectHideFlags: 0

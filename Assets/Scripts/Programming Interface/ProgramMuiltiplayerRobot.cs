@@ -18,6 +18,8 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     public Button removeButton;
     public Button runButton;
     public Button stopButton;
+    public Slider energySlider;
+    float energyValue = 100f;
 
     public Button moveForwardButton;
     string moveForwardString = "Move Forward ";
@@ -32,6 +34,11 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     string turnLeftString = "Turn Left ";
 
     public RobotMultiplayerInstructionScript instructionScript;
+    public GameObject robot;
+    RobotEnergy energyScript;
+    
+    public int movingEnergy = 5;
+
 
     void Start()
     {
@@ -61,38 +68,73 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
 
     }
 
+    public void SetRobot(GameObject playerRobot)
+    {
+        robot = playerRobot;
+        energyScript = robot.GetComponent<RobotEnergy>();
+    }
     void Update()
     {
         gearValue = gear.GetComponent<Slider>().value;
+        energySlider.value -= (energySlider.value - energyValue) * Time.deltaTime;
     }
     // void addInstructionToProgram(string instruction, float gearValue)
     // {
     //     textInstructions.text = textInstructions.text + instruction + gearValue + "\n";
     // }
 
+    void SetEnergySlider()
+    {
+        energyValue = energyScript.energyPoints.Value;
+    }
     void addMoveForwardToProgram()
     {
-        textInstructions.text = textInstructions.text + moveForwardString + gearValue + "\n";
+        if(energyScript.energyPoints.Value >= movingEnergy * gearValue){
+            textInstructions.text = textInstructions.text + moveForwardString + gearValue + "\n";
+            energyScript.useEnergy(movingEnergy*gearValue);
+            SetEnergySlider();
+        }
     }
 
     void addMoveBackwardToProgram()
     {
-        textInstructions.text = textInstructions.text + moveBackwardString + gearValue + "\n";
+        if(energyScript.energyPoints.Value >= movingEnergy * gearValue){
+            textInstructions.text = textInstructions.text + moveBackwardString + gearValue + "\n";
+            energyScript.useEnergy(movingEnergy*gearValue);
+            SetEnergySlider();
+
+        }
     }
 
     void addTurnRightToProgram()
     {
-        textInstructions.text = textInstructions.text + turnRightString + gearValue + "\n";
+        if(energyScript.energyPoints.Value >= movingEnergy * gearValue){
+            textInstructions.text = textInstructions.text + turnRightString + gearValue + "\n";
+            energyScript.useEnergy(movingEnergy*gearValue);
+            SetEnergySlider();
+        }
     }
 
     void addTurnLeftToProgram()
     {
-        textInstructions.text = textInstructions.text + turnLeftString + gearValue + "\n";
+        if(energyScript.energyPoints.Value >= movingEnergy * gearValue){
+            textInstructions.text = textInstructions.text + turnLeftString + gearValue + "\n";
+            energyScript.useEnergy(movingEnergy*gearValue);
+            SetEnergySlider();
+
+        }
     }
 
     void removeLastInstruction()
     {
+        if(textInstructions.text == "") return;
         string[] seperateInstructions = textInstructions.text.Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+
+        int gear = int.Parse(seperateInstructions[(seperateInstructions.Length - 1)].Split(' ')[2]);
+        energyScript.restoreEnergy(gear*movingEnergy);
+        SetEnergySlider();
+        Debug.Log(energyScript.energyPoints.Value);
+        
         seperateInstructions = seperateInstructions.SkipLast(1).ToArray();
         string instructionsString = String.Join("\n", seperateInstructions);
         textInstructions.text = instructionsString;
