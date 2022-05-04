@@ -9,6 +9,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public NetworkVariable<Quaternion> networkRotation = new NetworkVariable<Quaternion>();
     public NetworkVariable<Instructions> networkInstruction = new NetworkVariable<Instructions>();
     public NetworkVariable<Gear> networkGear = new NetworkVariable<Gear>();
+    public NetworkVariable<Vector3> networkLeftToPush = new NetworkVariable<Vector3>();
 
     Vector3 positionTarget;
     Vector3 rotationTarget;
@@ -104,7 +105,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
 
             //Send current local information to the server to update other clients
-            UpdateNetworkInfoServerRpc(transform.position, transform.rotation, currentInstruction, currentGear);
+            UpdateNetworkInfoServerRpc(transform.position, transform.rotation, currentInstruction, currentGear, leftToPush);
         }
 
         //Update model postition and rotation to match network position
@@ -114,17 +115,19 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             transform.rotation = networkRotation.Value;
             currentInstruction = networkInstruction.Value;
             currentGear = networkGear.Value;
+            leftToPush = networkLeftToPush.Value;
         }
 
     }
 
     [ServerRpc]
-    public void UpdateNetworkInfoServerRpc(Vector3 localPosition, Quaternion localRotation, Instructions localInstruction, Gear localGear)
+    public void UpdateNetworkInfoServerRpc(Vector3 localPosition, Quaternion localRotation, Instructions localInstruction, Gear localGear, Vector3 localLeftToPush)
     {
         networkPosition.Value = localPosition;
         networkRotation.Value = localRotation;
         networkInstruction.Value = localInstruction;
         networkGear.Value = localGear;
+        networkLeftToPush.Value = localLeftToPush;
     }
 
     public Vector3 GetLastPosition()
@@ -149,6 +152,11 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public bool IsDoingInstruction()
     {
         return (IsRotating() || IsMoving());
+    }
+
+    public bool IsPushed()
+    {
+        return leftToPush.magnitude != 0;
     }
 
     //Call on function to move robot forward in the direction it is facing
@@ -229,13 +237,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         }
     }
 
-    public Vector3 GetRobotMiddle()
-    {
-        BoxCollider boxCollider = GetComponent<BoxCollider>();
-
-        return transform.position - new Vector3(0, boxCollider.size.y / 2, 0);
-    }
-
     public Instructions GetCurrentInstruction()
     {
         return currentInstruction;
@@ -255,8 +256,9 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     {
         direction.y = 0;
         direction = direction.normalized;
-        
 
+
+        //TODO: This will cause the robot to be of-sync with the tiles if pused when already having a leftToPush != 0. Change to += and change GetForceToMe() accordingly
         leftToPush = direction * tileSize * numOfTiles;
         //transform.position += direction * tileSize * numOfTiles;
     }
@@ -277,8 +279,32 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         positionTarget -= GetMovingDirection() * tileSize * numOfTiles;
     }
 
-    private void SetTargetPosition(Vector3 newTargetPostion)
+    public Vector3 GetForceToMe(Vector3 myPosition)
     {
+        Vector3 posDiff = (myPosition - transform.position).normalized;
+
+        float scalarPush = Vector3.Dot(posDiff, leftToPush.normalized);
+
+        Vector3 moveDir = GetMovingDirection().normalized;
+        if (!IsMoving())
+            moveDir *= 0;
+
+        float scalarMove = Vector3.Dot(posDiff, moveDir);
+
+        if(scalarPush >= scalarMove)
+        {
+            Vector3 force = Vector3.zero;
+            force.x = Mathf.Ceil(leftToPush.x);
+            force.y = Mathf.Ceil(leftToPush.y);
+            force.z = Mathf.Ceil(leftToPush.z);
+
+            return force;
+        }
+
+        else
+        {
+            return moveDir * (int)currentGear;
+        }
 
     }
 

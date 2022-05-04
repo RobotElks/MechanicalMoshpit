@@ -5,14 +5,14 @@ using Unity.Netcode;
 
 public class RobotCollision : NetworkBehaviour
 {
-    RobotMultiplayerMovement movementScript;
+    RobotMultiplayerMovement thisRobotMovementScript;
 
     int singleRobotRaycastMask;
 
     private void Start()
     {
         singleRobotRaycastMask = ~LayerMask.NameToLayer("RobotsRaycast");
-        movementScript = GetComponent<RobotMultiplayerMovement>();
+        thisRobotMovementScript = GetComponent<RobotMultiplayerMovement>();
     }
 
 
@@ -44,25 +44,31 @@ public class RobotCollision : NetworkBehaviour
             RobotMultiplayerMovement otherRobotMovementScript = otherRobot.GetComponent<RobotMultiplayerMovement>();
 
             //this.GetComponent<Rigidbody>().isKinematic = true;
-            Vector3 otherMovingDir = otherRobotMovementScript.GetMovingDirection();
-            Gear otherRobotGear = otherRobotMovementScript.GetGear();
+            
 
 
-            if (otherRobotMovementScript.IsMoving())
+            if (otherRobotMovementScript.IsMoving() || otherRobotMovementScript.IsPushed())
             {
+                Vector3 otherMovingDir = otherRobotMovementScript.GetMovingDirection();
+                Gear otherRobotGear = otherRobotMovementScript.GetGear();
+
+                Vector3 otherRobotForceOnThis = otherRobotMovementScript.GetForceToMe(transform.position);
+
+
                 //Our robot is moving
-                if (movementScript.IsMoving())
+                if (thisRobotMovementScript.IsMoving() || thisRobotMovementScript.IsPushed())
                 {
-                    Vector3 movingDir = movementScript.GetMovingDirection();
+
+                    Vector3 thisMovingDir = thisRobotMovementScript.GetMovingDirection();
 
                     //Heads on collision
-                    if ((movingDir + otherMovingDir).magnitude < 0.001f)
+                    if ((thisMovingDir + otherMovingDir).magnitude < 0.001f)
                     {
                         //Do priority check
                         //Debug.Log("Heads on");
 
                         //movementScript.MoveTargetPositionBack((int)otherRobotGear);
-                        movementScript.Push(otherMovingDir, (int)otherRobotGear);
+                        thisRobotMovementScript.Push(otherMovingDir, (int)otherRobotGear);
 
                     }
 
@@ -77,15 +83,15 @@ public class RobotCollision : NetworkBehaviour
 
                         CapsuleCollider capsuleCollider = GetComponent<CapsuleCollider>();
 
-                        bool colliderInfront = Physics.Raycast(transform.position - transform.right * capsuleCollider.radius, movingDir, capsuleCollider.radius * 3, singleRobotRaycastMask);
+                        bool colliderInfront = Physics.Raycast(transform.position - transform.right * capsuleCollider.radius, thisMovingDir, capsuleCollider.radius * 3, singleRobotRaycastMask);
 
                         if (!colliderInfront)
-                            Physics.Raycast(transform.position + transform.right * capsuleCollider.radius, movingDir, capsuleCollider.radius * 3, singleRobotRaycastMask);
+                            Physics.Raycast(transform.position + transform.right * capsuleCollider.radius, thisMovingDir, capsuleCollider.radius * 3, singleRobotRaycastMask);
 
 
                         //Got hit from the side
                         if (!colliderInfront)
-                            movementScript.Push(otherMovingDir, (int)otherRobotGear);
+                            thisRobotMovementScript.Push(otherMovingDir, (int)otherRobotGear);
 
 
 
@@ -97,7 +103,7 @@ public class RobotCollision : NetworkBehaviour
                 //Our robot is not moving
                 else
                 {
-                    movementScript.Push(otherMovingDir, (int)otherRobotGear);
+                    thisRobotMovementScript.Push(otherRobotForceOnThis, (int)otherRobotForceOnThis.magnitude);
                 }
             }
 
