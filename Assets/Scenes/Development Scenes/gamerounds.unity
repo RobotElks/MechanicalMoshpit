@@ -1177,7 +1177,7 @@ MonoBehaviour:
   Maps: {fileID: 0}
   addressInput: {fileID: 0}
   saved: 127.0.0.1
-  isHost: 1
+  isHost: 0
   world: 
 --- !u!4 &859534948
 Transform:

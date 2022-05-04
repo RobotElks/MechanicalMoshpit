@@ -120,7 +120,7 @@ public class MultiplayerLevelInfo : NetworkBehaviour
             transform.position = spawnPoint;
         }
         else {
-            SetSpawnPointClientRpc(spawnPoint);
+            //SetSpawnPointClientRpc(spawnPoint);
         }
     }
 

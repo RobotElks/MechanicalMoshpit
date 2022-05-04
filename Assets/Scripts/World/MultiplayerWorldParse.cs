@@ -59,11 +59,20 @@ public class MultiplayerWorldParse : MonoBehaviour
 
     public Vector3 GetSpawnPoint()
     {
-        GameObject spawnPoint = avaliableSpawnPoints[0];
-        Vector3 point = spawnPoint.transform.position;
-        usedSpawnPoints.Add(spawnPoint);
+        int i = Random.Range(0, 1);
+        GameObject spawnPoint;
+        if(i == 1)
+        {
+            spawnPoint = avaliableSpawnPoints[0];
+        }
+        else
+        {
+            spawnPoint = avaliableSpawnPoints[avaliableSpawnPoints.Count-1];
+        }
+        
         avaliableSpawnPoints.Remove(spawnPoint);
-
+        usedSpawnPoints.Add(spawnPoint);
+        Vector3 point = spawnPoint.transform.position;
         return point;
     }
 
