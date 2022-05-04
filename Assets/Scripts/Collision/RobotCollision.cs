@@ -14,7 +14,7 @@ public class RobotCollision : NetworkBehaviour
         singleRobotRaycastMask = ~LayerMask.NameToLayer("RobotsRaycast");
     }
 
-    
+
 
     //Might need refactoring later (switch case)
     private void OnCollisionEnter(Collision collision)
@@ -33,59 +33,60 @@ public class RobotCollision : NetworkBehaviour
         {
             GameObject otherRobot = robotCollision.gameObject;
             RobotMultiplayerMovement otherRobotMovementScript = otherRobot.GetComponent<RobotMultiplayerMovement>();
-            //Vector3 otherForward = otherRobot.transform.forward;
-
-
 
             //this.GetComponent<Rigidbody>().isKinematic = true;
             Vector3 otherMovingDir = otherRobotMovementScript.GetMovingDirection();
 
-            //Our robot is moving
-            if (movementScript.IsMoving())
-            {
-                Vector3 movingDir = movementScript.GetMovingDirection();
 
-                //Heads on collision
-                if ((movingDir + otherMovingDir).magnitude < 0.001f)
+            if (otherRobotMovementScript.IsMoving())
+            {
+                //Our robot is moving
+                if (movementScript.IsMoving())
                 {
-                    //Do priority check
-                    float gearDiff = movementScript.GetGear() - otherRobotMovementScript.GetGear();
-                    if (gearDiff == 0) movementScript.Push(otherMovingDir);
-                    else if (gearDiff < 0) movementScript.Push(otherMovingDir);
+                    Vector3 movingDir = movementScript.GetMovingDirection();
+
+                    //Heads on collision
+                    if ((movingDir + otherMovingDir).magnitude < 0.001f)
+                    {
+                        //Do priority check
+                        Debug.Log("Heads on");
+                        float gearDiff = movementScript.GetGear() - otherRobotMovementScript.GetGear();
+                        if (gearDiff == 0) movementScript.ResetToLastPosition();
+                        else if (gearDiff < 0) movementScript.Push(otherMovingDir);
+                    }
+
+
+                    //Side collision
+                    else
+                    {
+                        //Change to multiple rays from the robot
+
+                        int oldLayer = otherRobot.layer;
+                        otherRobot.layer = LayerMask.NameToLayer("RobotsRaycast");
+
+                        CapsuleCollider capsuleCollider = GetComponent<CapsuleCollider>();
+
+                        bool colliderInfront = Physics.Raycast(transform.position - transform.right * capsuleCollider.radius, movingDir, capsuleCollider.radius * 3, singleRobotRaycastMask);
+
+                        if (!colliderInfront)
+                            Physics.Raycast(transform.position + transform.right * capsuleCollider.radius, movingDir, capsuleCollider.radius * 3, singleRobotRaycastMask);
+
+
+                        //Got hit from the side
+                        if (!colliderInfront)
+                            movementScript.Push(otherMovingDir);
+
+
+                        otherRobot.layer = oldLayer;
+
+                    }
                 }
 
-
-                //Side collision
+                //Our robot is not moving
                 else
                 {
-                    //Change to multiple rays from the robot
-
-                    int oldLayer = otherRobot.layer;
-                    otherRobot.layer = LayerMask.NameToLayer("RobotsRaycast");
-
-                    CapsuleCollider capsuleCollider = GetComponent<CapsuleCollider>();
-
-                    bool colliderInfront = Physics.Raycast(transform.position -transform.right * capsuleCollider.radius, movingDir, capsuleCollider.radius * 3, singleRobotRaycastMask);
-
-
-
-                    //Got hit from the side
-                    if (!colliderInfront)            
-                        movementScript.Push(otherMovingDir);
-                    
-
-                    otherRobot.layer = oldLayer;
-
+                    movementScript.Push(otherMovingDir);
                 }
-            }
-
-            //Our robot is not moving
-            else
-            {
-                Debug.Log(this.name + " is not moving");
-
-                movementScript.Push(otherMovingDir);
-
             }
 
         }

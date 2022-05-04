@@ -49,7 +49,7 @@ public class MultiplayerLevelInfo : NetworkBehaviour
     [ClientRpc]
     void SetSpawnPointClientRpc(Vector3 point)
     {
-        transform.position = point;
+        movementScript.SetSpawn(point);    
     }
 
 

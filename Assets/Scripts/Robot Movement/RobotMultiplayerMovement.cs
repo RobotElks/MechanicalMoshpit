@@ -20,8 +20,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     float pushedSpeed;
     float movementGear;
     float rotateGear;
-    bool startedMove = false;
-    bool startedRotation = false;
     float turnRate = 1.0f;
     Vector3 lastPosition;
     Vector3 lastRotation;
@@ -38,6 +36,8 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
         if (IsOwner)
             GameObject.Find("Main Camera").GetComponent<CameraMultiplayer>().SetLocalPlayer(transform);
+
+       
     }
 
 
@@ -50,17 +50,8 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         //Local player owns the object
         if (IsOwner)
         {
-            //if (Input.GetKeyDown("w"))
-            //    MoveForward();
-            //if (Input.GetKeyDown("s"))
-            //    MoveBackwards();
-            //if (Input.GetKeyDown("a"))
-            //    RotateLeft();
-            //if (Input.GetKeyDown("d"))
-            //    RotateRight();
-
             //Rotation movement
-            if (startedRotation)
+            if (IsRotating())
             {
                 //move if distant between rotation target and current rotation coordinates is larger than 0.006
                 if ((transform.forward - rotationTarget).magnitude > 0.006f)
@@ -72,13 +63,12 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 {
                     lastRotation = new Vector3(transform.eulerAngles.x, Mathf.RoundToInt(transform.eulerAngles.y), transform.eulerAngles.z);
                     transform.eulerAngles = lastRotation;
-                    startedRotation = false;
                     currentInstruction = Instructions.None;
                 }
             }
 
             //Driving movement
-            else if (startedMove)
+            else if (IsMoving())
             {
                 //if the distance between the position target and the current position is larger than 0.000001, move towards it.
                 if ((transform.position - positionTarget).magnitude > 0.000001f)
@@ -89,7 +79,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 {
                     //transform.position = positionTarget;
                     lastPosition = transform.position;
-                    startedMove = false;
                     currentInstruction = Instructions.None;
                 }
 
@@ -165,7 +154,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     {
         if (IsDoingInstruction()) return;
         positionTarget = transform.position + transform.forward * tileSize;
-        startedMove = true;
         currentInstruction = Instructions.MoveForward;
     }
     //Call on function to move robot backwards in the direction it is facing.
@@ -173,13 +161,12 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     {
         if (IsDoingInstruction()) return;
         positionTarget = transform.position - transform.forward * tileSize;
-        startedMove = true;
         currentInstruction = Instructions.MoveBackward;
     }
     //Call on function to return whether robot is moving or not
     public bool IsMoving()
     {
-        return startedMove;
+        return currentInstruction == Instructions.MoveForward || currentInstruction == Instructions.MoveBackward;
     }
 
     //Call on function to rotate the robot 90 degrees to the left
@@ -188,7 +175,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         if (IsDoingInstruction()) return;
 
         rotationTarget = -transform.right;
-        startedRotation = true;
         currentInstruction = Instructions.RotateLeft;
 
     }
@@ -198,14 +184,13 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     {
         if (IsDoingInstruction()) return;
         rotationTarget = transform.right;
-        startedRotation = true;
         currentInstruction = Instructions.RotateRight;
     }
 
     //Call on function to check whether robot is currently rotating
     public bool IsRotating()
     {
-        return startedRotation;
+        return currentInstruction == Instructions.RotateLeft || currentInstruction == Instructions.RotateRight; 
     }
 
     public void SetTileSize(int input)
@@ -268,5 +253,16 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         direction.y = 0;
 
         leftToPush = direction * tileSize;
+    }
+
+    public void ResetToLastPosition()
+    {
+        positionTarget = lastPosition;
+    }
+
+    public void SetSpawn(Vector3 point)
+    {
+        transform.position = point;
+        lastPosition = point;
     }
 }
