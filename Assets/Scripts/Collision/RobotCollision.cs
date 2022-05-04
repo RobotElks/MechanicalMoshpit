@@ -59,15 +59,10 @@ public class RobotCollision : NetworkBehaviour
                     if ((movingDir + otherMovingDir).magnitude < 0.001f)
                     {
                         //Do priority check
-                        Debug.Log("Heads on");
-                        int gearDiff = movementScript.GetGear() - otherRobotGear;
-                        if (gearDiff <= 0)
-                        {
-                            movementScript.MoveTargetPositionBack();
+                        //Debug.Log("Heads on");
 
-                            if (gearDiff < 0)
-                                movementScript.Push(otherMovingDir, (int)otherRobotGear);
-                        }
+                        movementScript.MoveTargetPositionBack((int)otherRobotGear);
+                        movementScript.Push(otherMovingDir, (int)otherRobotGear);
 
                     }
 

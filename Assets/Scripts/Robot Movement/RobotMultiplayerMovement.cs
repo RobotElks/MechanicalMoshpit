@@ -273,9 +273,9 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         lastPosition = point;
     }
 
-    public void MoveTargetPositionBack()
+    public void MoveTargetPositionBack(int numOfTiles)
     {
-        positionTarget -= GetMovingDirection() * tileSize;
+        positionTarget -= GetMovingDirection() * tileSize * numOfTiles;
     }
 
     private void SetTargetPosition(Vector3 newTargetPostion)
