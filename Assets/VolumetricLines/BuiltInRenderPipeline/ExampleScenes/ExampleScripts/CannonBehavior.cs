@@ -12,19 +12,19 @@ public class CannonBehavior : NetworkBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{	
-		if(IsOwner) {	
-			if (Input.GetKeyDown(KeyCode.Space))
-			{
-				shoot();
-			}
-		}
+		//if(IsOwner) {	
+		//	if (Input.GetKeyDown(KeyCode.Space))
+		//	{
+		//		shoot();
+		//	}
+		//}
 	}
 
 
 	public void shoot(){
 		//m_shotPrefab.GetComponent<Light>().color = new Color.yellow;
-		GameObject go = GameObject.Instantiate(shotPrefab, shot_spawn.transform.position, muzzle.rotation) as GameObject;
-		Physics.IgnoreCollision(go.GetComponent<Collider>(), GetComponent<Collider>());
-		GameObject.Destroy(go, 3f);
+		GameObject laser = GameObject.Instantiate(shotPrefab, shot_spawn.transform.position, muzzle.rotation);
+		Physics.IgnoreCollision(laser.GetComponent<BoxCollider>(), GetComponent<CapsuleCollider>(), true);
+		GameObject.Destroy(laser, 3f);
 	}
 }

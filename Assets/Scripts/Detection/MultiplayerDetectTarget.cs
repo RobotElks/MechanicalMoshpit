@@ -8,7 +8,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
 {
     //public float range;
     RobotList robotList;
-    CannonBehavior CannonScript;
+    CannonBehavior cannonScript;
     Dead deadScript;
     //RobotMovement MovementScript;
     //private bool reload = true;
@@ -20,7 +20,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CannonScript = this.GetComponent<CannonBehavior>();
+        cannonScript = this.GetComponent<CannonBehavior>();
         //MovementScript = this.GetComponent<RobotMovement>();
 
         //CheckIfTargetInScope();
@@ -61,7 +61,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
 
     private void ShootTarget(){
         
-        CannonScript.shoot();
+        cannonScript.shoot();
     }
 
     // Update is called once per frame
@@ -77,8 +77,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
                 deadScript = robot.GetComponent<Dead>();
                 if (!deadScript.IsDead()) {
                     nextShotTime = Time.time + reloadTime; 
-                    robot.GetComponent<Rigidbody>().WakeUp();
-
+                    
                     ShootTarget();
                 }
             }

@@ -65,8 +65,9 @@ public class RobotCollision : NetworkBehaviour
             }
         }
     }
+
     private void LaserCollision(Collision collider){
-        healthScript.getHit(1);
+        healthScript.getHit(50);
         GameObject laser = collider.gameObject;
         Destroy(laser, 0f);
         
