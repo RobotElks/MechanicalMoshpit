@@ -22,8 +22,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     float movementGear;
     float rotateGear;
     float turnRate = 1.0f;
-    Vector3 lastPosition;
-    Vector3 lastRotation;
+
 
     Gear currentGear = Gear.None;
     Instructions currentInstruction = Instructions.None;
@@ -64,8 +63,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 //set rotation angle to the target angle and disable rotation
                 else
                 {
-                    lastRotation = new Vector3(transform.eulerAngles.x, Mathf.RoundToInt(transform.eulerAngles.y), transform.eulerAngles.z);
-                    transform.eulerAngles = lastRotation;
+                    transform.eulerAngles = new Vector3(transform.eulerAngles.x, Mathf.RoundToInt(transform.eulerAngles.y), transform.eulerAngles.z); ;
                     currentInstruction = Instructions.None;
                 }
             }
@@ -81,8 +79,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 else
                 {
                     //transform.position = positionTarget;
-                    //leftToPush = Vector3.zero;
-                    lastPosition = transform.position;
                     currentInstruction = Instructions.None;
                 }
 
@@ -126,16 +122,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         networkInstruction.Value = localInstruction;
         networkGear.Value = localGear;
         networkLeftToPush.Value = localLeftToPush;
-    }
-
-    public Vector3 GetLastPosition()
-    {
-        return lastPosition;
-    }
-
-    public Vector3 GetLastRotation()
-    {
-        return lastRotation;
     }
 
     public Vector3 GetTargetPosition()
@@ -244,8 +230,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     {
         if (currentInstruction == Instructions.MoveBackward)
             return -transform.forward;
-        //else if (currentInstruction == Instructions.MoveForward)
-        //    return transform.forward;
         else
             return transform.forward;
     }
@@ -260,18 +244,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         positionTarget += direction * 0.3f;
 
         leftToPush += direction * tileSize * numOfTiles - direction * 0.3f;
-        //transform.position += direction * tileSize * numOfTiles;
-    }
-
-    public void ResetToLastPosition()
-    {
-        positionTarget = lastPosition;
-    }
-
-    public void SetSpawn(Vector3 point)
-    {
-        transform.position = point;
-        lastPosition = point;
     }
 
     public void MoveTargetPositionBack(int numOfTiles)
@@ -300,7 +272,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
         Vector3 force = Vector3.zero;
 
-        if (IsPushed())
+        if (IsPushed() && Vector3.Dot(leftToPush.normalized, posDiff) > 0)
         {
             force = posDiff;
 
@@ -312,11 +284,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         else if (IsMoving() && Vector3.Dot(movDir, posDiff) > 0.95f)
             force = movDir * (int)currentGear;
 
-
-        //if (IsMoving() && Vector3.Dot(movDir, force) > 0.95f)
-        //{
-        //    force = movDir * (int)currentGear;
-        //}
         return force;
     }
 }
