@@ -52,7 +52,7 @@ public class RobotCollision : NetworkBehaviour
         }
     }
     private void LaserCollision(Collision collider){
-        healthScript.getHit(25);
+        healthScript.getHit(1);
         //Debug.Log("COLLISION LASER");
         GameObject laser = collider.gameObject;
         Destroy(laser, 0f);

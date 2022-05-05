@@ -137,7 +137,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_LocalPosition.y
@@ -145,7 +145,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_LocalRotation.w
@@ -197,7 +197,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3430948954217506177, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_Constraints
-      value: 122
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3430948954217506177, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_IsKinematic
@@ -337,6 +337,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd5469b34c7db64e96c59fcd15b1348, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5619687528541984221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5462321247307863178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e315195036d10a040af132ca8e9a0b53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  energyPoints:
+    m_InternalValue: 0
 --- !u!114 &6926984100591272678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -392,18 +406,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9824b9db6b35be44e90ef77240326608, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5619687528541984221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5462321247307863178}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e315195036d10a040af132ca8e9a0b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  energyPoints:
-    m_InternalValue: 0
-  programRobotScript: {fileID: 0}

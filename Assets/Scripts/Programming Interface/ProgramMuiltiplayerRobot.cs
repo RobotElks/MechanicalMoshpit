@@ -34,10 +34,11 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     string turnLeftString = "Turn Left ";
 
     public RobotMultiplayerInstructionScript instructionScript;
-    public GameObject robot;
+    GameObject robot;
     RobotEnergy energyScript;
     
     public int movingEnergy = 5;
+    public float restoredEnergyPerRound = 30f;
 
 
     void Start()
@@ -76,7 +77,7 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     void Update()
     {
         gearValue = gear.GetComponent<Slider>().value;
-        energySlider.value -= (energySlider.value - energyValue) * Time.deltaTime;
+        energySlider.value -= (energySlider.value - energyValue) * Time.deltaTime * 2;
     }
     // void addInstructionToProgram(string instruction, float gearValue)
     // {
@@ -87,6 +88,7 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     {
         energyValue = energyScript.energyPoints.Value;
     }
+
     void addMoveForwardToProgram()
     {
         if(energyScript.energyPoints.Value >= movingEnergy * gearValue){
@@ -203,8 +205,16 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
         }
     }
 
+    public void GameStarted()
+    {
+        energyScript.restoreEnergy(100);
+        SetEnergySlider();
+    }
+
     public void stopProgram()
     {
+        energyScript.restoreEnergy(restoredEnergyPerRound);
+        SetEnergySlider();
         instructionScript.StopExecute();
         instructionsQueue.Clear();
     }

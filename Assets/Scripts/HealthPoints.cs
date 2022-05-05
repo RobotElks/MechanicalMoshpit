@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.UI;
 
 public class HealthPoints : NetworkBehaviour
 {
@@ -12,10 +13,22 @@ public class HealthPoints : NetworkBehaviour
     RobotList robotList;
     ParticleSystem smoke;
 
+    Slider healthSlider;
+
+    void Start()
+    {
+        if(IsOwner)
+        healthSlider = GameObject.Find("HealthBar").GetComponent<Slider>();
+    }
+
     void Update() {
         //if (localHealth > 0)
-            //getHit(25);
+        //getHit(25);
+        //healthSlider.value -= (healthSlider.value - (float)localHealth) * Time.deltaTime * 2;
+        healthSlider.value = (float)localHealth;
+
     }
+
 
     public void getHit(int damage) { 
         
