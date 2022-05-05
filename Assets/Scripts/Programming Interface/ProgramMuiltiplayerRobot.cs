@@ -18,8 +18,6 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     public Button removeButton;
     public Button runButton;
     public Button stopButton;
-    public Slider energySlider;
-    float energyValue = 100f;
 
     public Button moveForwardButton;
     string moveForwardString = "Move Forward ";
@@ -77,24 +75,18 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     void Update()
     {
         gearValue = gear.GetComponent<Slider>().value;
-        energySlider.value -= (energySlider.value - energyValue) * Time.deltaTime * 2;
     }
     // void addInstructionToProgram(string instruction, float gearValue)
     // {
     //     textInstructions.text = textInstructions.text + instruction + gearValue + "\n";
     // }
 
-    void SetEnergySlider()
-    {
-        energyValue = energyScript.networkEnergyPoints.Value;
-    }
 
     void addMoveForwardToProgram()
     {
         if(energyScript.networkEnergyPoints.Value >= movingEnergy * gearValue){
             textInstructions.text = textInstructions.text + moveForwardString + gearValue + "\n";
             energyScript.useEnergy(movingEnergy*gearValue);
-            SetEnergySlider();
         }
     }
 
@@ -103,7 +95,6 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
         if(energyScript.networkEnergyPoints.Value >= movingEnergy * gearValue){
             textInstructions.text = textInstructions.text + moveBackwardString + gearValue + "\n";
             energyScript.useEnergy(movingEnergy*gearValue);
-            SetEnergySlider();
 
         }
     }
@@ -113,7 +104,6 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
         if(energyScript.networkEnergyPoints.Value >= movingEnergy * gearValue){
             textInstructions.text = textInstructions.text + turnRightString + gearValue + "\n";
             energyScript.useEnergy(movingEnergy*gearValue);
-            SetEnergySlider();
         }
     }
 
@@ -122,7 +112,6 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
         if(energyScript.networkEnergyPoints.Value >= movingEnergy * gearValue){
             textInstructions.text = textInstructions.text + turnLeftString + gearValue + "\n";
             energyScript.useEnergy(movingEnergy*gearValue);
-            SetEnergySlider();
 
         }
     }
@@ -134,7 +123,6 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
 
         int gear = int.Parse(seperateInstructions[(seperateInstructions.Length - 1)].Split(' ')[2]);
         energyScript.restoreEnergy(gear*movingEnergy);
-        SetEnergySlider();
         
         seperateInstructions = seperateInstructions.SkipLast(1).ToArray();
         string instructionsString = String.Join("\n", seperateInstructions);
@@ -207,13 +195,11 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     public void GameStarted()
     {
         energyScript.restoreEnergy(100);
-        SetEnergySlider();
     }
 
     public void stopProgram()
     {
         energyScript.restoreEnergy(restoredEnergyPerRound);
-        SetEnergySlider();
         instructionScript.StopExecute();
         instructionsQueue.Clear();
     }
