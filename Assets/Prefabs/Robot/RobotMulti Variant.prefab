@@ -289,7 +289,6 @@ MonoBehaviour:
   networkLeftToPush:
     m_InternalValue: {x: 0, y: 0, z: 0}
   movementSpeed: 1
-  pushedCheck: 0
 --- !u!114 &-3771028748239154682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -384,7 +383,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   changeColorLocal: 0
-  localHealth: 100
 --- !u!114 &8015023296398355661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,20 +398,6 @@ MonoBehaviour:
   muzzle: {fileID: 4124722095279352338}
   shotPrefab: {fileID: 8253658233895520516, guid: c8dc72b05dfb199478565d2a7f514582, type: 3}
   shot_spawn: {fileID: 771040921620256189}
---- !u!114 &8382979641427952412
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5462321247307863178}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18eb53c7dfac98446840635c0a544ca0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colorBase: {fileID: 2092041003023258191}
-  colorTower: {fileID: 1879531725587117049}
 --- !u!114 &8788691864623942989
 MonoBehaviour:
   m_ObjectHideFlags: 0

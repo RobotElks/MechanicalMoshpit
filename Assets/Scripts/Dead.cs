@@ -14,7 +14,6 @@ public class Dead : NetworkBehaviour
 
     [ServerRpc]
     public void SetDeadServerRpc(bool isDead) {
-        Debug.Log("Changing BOOL");
         dead.Value = isDead;
     }
 
@@ -30,7 +29,6 @@ public class Dead : NetworkBehaviour
     }
 
     private void ChangeColor(bool oldBool, bool newBool) {
-        Debug.Log("Changing Color");
         if (!IsClient) return;
      
         colorBase.material.SetColor("_Color", Color.black);

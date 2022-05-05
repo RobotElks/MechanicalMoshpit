@@ -28,8 +28,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     Gear currentGear = Gear.None;
     Instructions currentInstruction = Instructions.None;
 
-    public bool pushedCheck = false;
-
     public override void OnNetworkSpawn()
     {
         //Set gear to third to calculate pushedSpeed
@@ -100,10 +98,9 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             }
 
             //Send current local information to the server to update other clients
-            UpdateNetworkInfoServerRpc(transform.position, transform.rotation, currentInstruction, currentGear, leftToPush);
             rb = GetComponent<Rigidbody>();
             rb.freezeRotation = false;
-            UpdateNetworkInfoServerRpc(transform.position, transform.rotation);
+            UpdateNetworkInfoServerRpc(transform.position, transform.rotation, currentInstruction, currentGear, leftToPush);
             rb.freezeRotation = true;
         }
 
@@ -116,7 +113,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             currentGear = networkGear.Value;
             leftToPush = networkLeftToPush.Value;
         }
-        pushedCheck = IsPushed();
     }
 
     [ServerRpc]

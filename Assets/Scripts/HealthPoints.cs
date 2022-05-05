@@ -38,7 +38,6 @@ public class HealthPoints : NetworkBehaviour
             }
             else{
                 localHealth = 0;
-                Debug.Log("Killed");
                 killed();
             }
             UpdateHealthInfoServerRpc(localHealth);
@@ -73,24 +72,16 @@ public class HealthPoints : NetworkBehaviour
         if(!IsHost) {
             if(!NetworkManager.Singleton.LocalClient.PlayerObject.TryGetComponent<Dead>(out var dead))
                 return;
-            Debug.Log("1");
             dead.SetDeadServerRpc(true);
         }
         else {
             if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(localClientId, out NetworkClient networkClient))
                 return;
-            Debug.Log("2");
             if(!networkClient.PlayerObject.TryGetComponent<Dead>(out var dead))
                 return;
             dead.SetDeadServerRpc(true);
         }
         
-
-        Debug.Log("3");
-        
-        Debug.Log("4");
-
-
     }
 
     [ServerRpc]
