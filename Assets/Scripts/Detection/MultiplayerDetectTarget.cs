@@ -78,7 +78,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
                 if (!deadScript.IsDead()) {
                     nextShotTime = Time.time + reloadTime; 
                     robot.GetComponent<Rigidbody>().WakeUp();
-                    Debug.Log(robot.GetComponent<Rigidbody>().IsSleeping());
+
                     ShootTarget();
                 }
             }

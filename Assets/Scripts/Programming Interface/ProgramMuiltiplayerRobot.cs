@@ -86,12 +86,12 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
 
     void SetEnergySlider()
     {
-        energyValue = energyScript.energyPoints.Value;
+        energyValue = energyScript.networkEnergyPoints.Value;
     }
 
     void addMoveForwardToProgram()
     {
-        if(energyScript.energyPoints.Value >= movingEnergy * gearValue){
+        if(energyScript.networkEnergyPoints.Value >= movingEnergy * gearValue){
             textInstructions.text = textInstructions.text + moveForwardString + gearValue + "\n";
             energyScript.useEnergy(movingEnergy*gearValue);
             SetEnergySlider();
@@ -100,7 +100,7 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
 
     void addMoveBackwardToProgram()
     {
-        if(energyScript.energyPoints.Value >= movingEnergy * gearValue){
+        if(energyScript.networkEnergyPoints.Value >= movingEnergy * gearValue){
             textInstructions.text = textInstructions.text + moveBackwardString + gearValue + "\n";
             energyScript.useEnergy(movingEnergy*gearValue);
             SetEnergySlider();
@@ -110,7 +110,7 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
 
     void addTurnRightToProgram()
     {
-        if(energyScript.energyPoints.Value >= movingEnergy * gearValue){
+        if(energyScript.networkEnergyPoints.Value >= movingEnergy * gearValue){
             textInstructions.text = textInstructions.text + turnRightString + gearValue + "\n";
             energyScript.useEnergy(movingEnergy*gearValue);
             SetEnergySlider();
@@ -119,7 +119,7 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
 
     void addTurnLeftToProgram()
     {
-        if(energyScript.energyPoints.Value >= movingEnergy * gearValue){
+        if(energyScript.networkEnergyPoints.Value >= movingEnergy * gearValue){
             textInstructions.text = textInstructions.text + turnLeftString + gearValue + "\n";
             energyScript.useEnergy(movingEnergy*gearValue);
             SetEnergySlider();
@@ -135,7 +135,7 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
         int gear = int.Parse(seperateInstructions[(seperateInstructions.Length - 1)].Split(' ')[2]);
         energyScript.restoreEnergy(gear*movingEnergy);
         SetEnergySlider();
-        Debug.Log(energyScript.energyPoints.Value);
+        Debug.Log(energyScript.networkEnergyPoints.Value);
         
         seperateInstructions = seperateInstructions.SkipLast(1).ToArray();
         string instructionsString = String.Join("\n", seperateInstructions);

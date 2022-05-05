@@ -5,17 +5,25 @@ using Unity.Netcode;
 
 public class RobotEnergy : NetworkBehaviour
 {
-    public NetworkVariable<float> energyPoints = new NetworkVariable<float>();
+    public NetworkVariable<float> networkEnergyPoints = new NetworkVariable<float>();
 
     ProgramMuiltiplayerRobot programRobotScript;
 
-    void Start(){
-        energyPoints.Value = 100f;
+    public override void OnNetworkSpawn()
+    {
+        EnergyStartServerRPC();
         GameObject programRobot = GameObject.Find("ProgrammingInterface Multiplayer Variant");
         programRobotScript = programRobot.GetComponent<ProgramMuiltiplayerRobot>();
         if(IsOwner){
             programRobotScript.SetRobot(gameObject);
         }
+    }
+
+    [ServerRpc]
+    public void EnergyStartServerRPC()
+    {
+        networkEnergyPoints.Value = 100f;
+
     }
 
     public void useEnergy(float energy){
@@ -24,11 +32,11 @@ public class RobotEnergy : NetworkBehaviour
 
     [ServerRpc]
     public void useEnergyServerRpc(float energy){
-        if(energyPoints.Value - energy > 0f){
-            energyPoints.Value = energyPoints.Value - energy;
+        if(networkEnergyPoints.Value - energy > 0f){
+            networkEnergyPoints.Value = networkEnergyPoints.Value - energy;
         }
         else{
-            energyPoints.Value = 0f;
+            networkEnergyPoints.Value = 0f;
         }
     }
 
@@ -38,11 +46,11 @@ public class RobotEnergy : NetworkBehaviour
 
     [ServerRpc]
     public void restoreEnergyServerRpc(float energy){
-        if(energyPoints.Value + energy < 100f){
-            energyPoints.Value = energyPoints.Value + energy;
+        if(networkEnergyPoints.Value + energy < 100f){
+            networkEnergyPoints.Value = networkEnergyPoints.Value + energy;
         }
         else{
-            energyPoints.Value = 100f;
+            networkEnergyPoints.Value = 100f;
         }
     }
 
