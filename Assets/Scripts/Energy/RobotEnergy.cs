@@ -30,12 +30,10 @@ public class RobotEnergy : NetworkBehaviour
         else{
             energyPoints.Value = 0f;
         }
-        Debug.Log(energyPoints.Value);
     }
 
     public void restoreEnergy(float energy){
         restoreEnergyServerRpc(energy);
-        Debug.Log(energyPoints.Value);
     }
 
     [ServerRpc]

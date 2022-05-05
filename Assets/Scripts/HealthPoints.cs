@@ -15,53 +15,65 @@ public class HealthPoints : NetworkBehaviour
 
     Slider healthSlider;
 
-    void Start()
+    public override void OnNetworkSpawn()
     {
-        if(IsOwner)
-        healthSlider = GameObject.Find("HealthBar").GetComponent<Slider>();
+        if (IsOwner)
+            healthSlider = GameObject.Find("Hud").transform.Find("HealthBar").GetComponent<Slider>();
     }
 
-    void Update() {
+    void Update()
+    {
         //if (localHealth > 0)
         //getHit(25);
         //healthSlider.value -= (healthSlider.value - (float)localHealth) * Time.deltaTime * 2;
-        healthSlider.value = (float)localHealth;
+
+        if (IsOwner)
+            healthSlider.value = (float)localHealth;
 
     }
 
 
-    public void getHit(int damage) { 
-        
-        if(IsOwner) {
-            if((localHealth - damage) > 0){
+    public void getHit(int damage)
+    {
+
+        if (IsOwner)
+        {
+            if ((localHealth - damage) > 0)
+            {
                 localHealth = localHealth - damage;
             }
-            else{
+            else
+            {
                 localHealth = 0;
                 killed();
             }
             UpdateHealthInfoServerRpc(localHealth);
         }
-        else {
+        else
+        {
             localHealth = healthPoints.Value;
         }
     }
 
 
-    public void healPowerUp(int heal){
-        if((healthPoints.Value + heal) < 100){
+    public void healPowerUp(int heal)
+    {
+        if ((healthPoints.Value + heal) < 100)
+        {
             healthPoints.Value = healthPoints.Value + heal;
         }
-        else{
+        else
+        {
             healthPoints.Value = 100;
         }
     }
 
-    public void killed() {
+    public void killed()
+    {
         MonoBehaviour[] comps = GetComponents<MonoBehaviour>();
         foreach (MonoBehaviour c in comps)
         {
-            if (c.GetType() != typeof(HealthPoints)) 
+            if (c.GetType() != typeof(HealthPoints))
             {
                 c.enabled = false;
             }
@@ -69,19 +81,21 @@ public class HealthPoints : NetworkBehaviour
 
         ulong localClientId = NetworkManager.Singleton.LocalClientId;
 
-        if(!IsHost) {
-            if(!NetworkManager.Singleton.LocalClient.PlayerObject.TryGetComponent<Dead>(out var dead))
+        if (!IsHost)
+        {
+            if (!NetworkManager.Singleton.LocalClient.PlayerObject.TryGetComponent<Dead>(out var dead))
                 return;
             dead.SetDeadServerRpc(true);
         }
-        else {
+        else
+        {
             if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(localClientId, out NetworkClient networkClient))
                 return;
-            if(!networkClient.PlayerObject.TryGetComponent<Dead>(out var dead))
+            if (!networkClient.PlayerObject.TryGetComponent<Dead>(out var dead))
                 return;
             dead.SetDeadServerRpc(true);
         }
-        
+
     }
 
     [ServerRpc]

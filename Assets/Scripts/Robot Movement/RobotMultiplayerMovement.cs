@@ -237,7 +237,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
     public void Push(Vector3 direction, int numOfTiles)
     {
-        Debug.Log("Got Pushed: " + direction + " " + numOfTiles);
         direction.y = 0;
         direction = direction.normalized;
 
