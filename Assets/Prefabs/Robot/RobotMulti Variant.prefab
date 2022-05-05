@@ -92,6 +92,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 140303af3bc083c479ba91c3ca2b2903, type: 3}
+--- !u!198 &7747196155271262595 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 248133985888110761, guid: 140303af3bc083c479ba91c3ca2b2903, type: 3}
+  m_PrefabInstance: {fileID: 7562138957998668074}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7577112741290184000
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -181,10 +186,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3430948954217506177, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_Constraints
-      value: 0
+      value: 122
       objectReference: {fileID: 0}
     - target: {fileID: 3430948954217506177, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3430948954217506177, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_CollisionDetection
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
@@ -285,6 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18eb53c7dfac98446840635c0a544ca0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  smoke: {fileID: 7747196155271262595}
   colorBase: {fileID: 2092041003023258191}
   colorTower: {fileID: 1879531725587117049}
 --- !u!114 &4249979566322862251

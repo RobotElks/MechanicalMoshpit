@@ -9,6 +9,7 @@ public class DetectTarget : MonoBehaviour
     public Transform target;
     CannonBehavior CannonScript;
     RobotMovement MovementScript;
+    Dead deadScript;
     //private bool reload = true;
     //public float fireRate = 0.5f;
     //private float nextFire = 0.0f;
@@ -46,8 +47,9 @@ public class DetectTarget : MonoBehaviour
     }
 
     private void ShootTarget(){
-        
-        CannonScript.shoot();
+        deadScript = GetComponent<Dead>();
+        if (!deadScript.IsDead())
+            CannonScript.shoot();
     }
 
     // Update is called once per frame

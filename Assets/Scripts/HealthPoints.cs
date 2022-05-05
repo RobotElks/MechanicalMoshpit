@@ -8,7 +8,7 @@ public class HealthPoints : NetworkBehaviour
     public bool changeColorLocal = false;
     NetworkVariable<int> healthPoints = new NetworkVariable<int>();
     NetworkVariable<bool> changeColor = new NetworkVariable<bool>();
-    public int localHealth = 100;
+    int localHealth = 100;
     RobotList robotList;
     ParticleSystem smoke;
 
@@ -56,14 +56,25 @@ public class HealthPoints : NetworkBehaviour
         }
 
         ulong localClientId = NetworkManager.Singleton.LocalClientId;
-        Debug.Log("1");
-        if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(localClientId, out NetworkClient networkClient))
-            return;
-        Debug.Log("2");
-        if(!networkClient.PlayerObject.TryGetComponent<Dead>(out var dead))
-            return;
+
+        if(!IsHost) {
+            if(!NetworkManager.Singleton.LocalClient.PlayerObject.TryGetComponent<Dead>(out var dead))
+                return;
+            Debug.Log("1");
+            dead.SetDeadServerRpc(true);
+        }
+        else {
+            if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(localClientId, out NetworkClient networkClient))
+                return;
+            Debug.Log("2");
+            if(!networkClient.PlayerObject.TryGetComponent<Dead>(out var dead))
+                return;
+            dead.SetDeadServerRpc(true);
+        }
+        
+
         Debug.Log("3");
-        dead.SetDeadServerRpc(true);
+        
         Debug.Log("4");
 
 

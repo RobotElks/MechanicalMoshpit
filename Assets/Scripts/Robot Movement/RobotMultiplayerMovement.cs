@@ -7,7 +7,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 {
     public NetworkVariable<Vector3> networkPosition = new NetworkVariable<Vector3>();
     public NetworkVariable<Quaternion> networkRotation = new NetworkVariable<Quaternion>();
-
+    Rigidbody rb;
 
     Vector3 positionTarget;
     Vector3 rotationTarget;
@@ -82,9 +82,10 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                     startedMove = false;
                 }
             }
-
-
+            rb = GetComponent<Rigidbody>();
+            rb.freezeRotation = false;
             UpdateNetworkInfoServerRpc(transform.position, transform.rotation);
+            rb.freezeRotation = true;
         }
 
         //Update model postition and rotation to match network position

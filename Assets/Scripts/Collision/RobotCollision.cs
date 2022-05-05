@@ -13,6 +13,7 @@ public class RobotCollision : NetworkBehaviour
     //Might need refactoring later (switch case)
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("COLLISION");
         if (collision.collider.CompareTag("Player"))
         {
             PlayerCollision(collision);
@@ -24,6 +25,21 @@ public class RobotCollision : NetworkBehaviour
         }
         
 
+    }
+    void OnControllerColliderHit(ControllerColliderHit hit){
+        Debug.Log("COLLISION2");
+        hit.gameObject.transform.position = Vector3.zero;
+        if (hit.controller.CompareTag("Player"))
+        {
+            //PlayerCollision(hit);
+        }
+
+        else if (hit.controller.CompareTag("Laser"))
+        {
+            hit.rigidbody.isKinematic = true;
+            //LaserCollision(hit);
+        }
+        
     }
 
     private void PlayerCollision(Collision collision)

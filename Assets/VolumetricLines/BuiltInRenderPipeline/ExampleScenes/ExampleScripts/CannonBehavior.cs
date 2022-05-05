@@ -24,7 +24,7 @@ public class CannonBehavior : NetworkBehaviour {
 	public void shoot(){
 		//m_shotPrefab.GetComponent<Light>().color = new Color.yellow;
 		GameObject go = GameObject.Instantiate(shotPrefab, shot_spawn.transform.position, muzzle.rotation) as GameObject;
-		Physics.IgnoreCollision(go.GetComponent<Collider>(), this.GetComponent<Collider>());
+		Physics.IgnoreCollision(go.GetComponent<Collider>(), GetComponent<Collider>());
 		GameObject.Destroy(go, 3f);
 	}
 }
