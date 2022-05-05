@@ -38,18 +38,28 @@ public class GameRoundsManager : MonoBehaviour
     public List<GameObject> notReady = new List<GameObject>();
     public List<GameObject> Ready = new List<GameObject>();
 
+    public RobotList robotList;
+
+    void Start()
+    {
+        robotList = GameObject.Find("RobotList").GetComponent<RobotList>();
+        worldScript = GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>();
+
+    }
+
     public void ToggleReady()
     {
-        if(isReady)
+        if (isReady)
         {
             NotReadyForGame();
             readyButtonText.GetComponent<TextMeshProUGUI>().text = "Ready";
             isReady = false;
         }
-        else{
+        else
+        {
             ReadyForGame();
             readyButtonText.GetComponent<TextMeshProUGUI>().text = "Not Ready";
-            isReady = true; 
+            isReady = true;
         }
 
     }
@@ -59,8 +69,8 @@ public class GameRoundsManager : MonoBehaviour
         foreach (GameObject robot in notReady)
         {
             levelInfo = robot.GetComponent<MultiplayerLevelInfo>();
-            if(levelInfo.SetReady()) break;
-        }  
+            if (levelInfo.SetReady()) break;
+        }
     }
 
     public void NotReadyForGame()
@@ -68,13 +78,14 @@ public class GameRoundsManager : MonoBehaviour
         foreach (GameObject robot in Ready)
         {
             levelInfo = robot.GetComponent<MultiplayerLevelInfo>();
-            if(levelInfo.SetNotReady()) break;
-        }  
+            if (levelInfo.SetNotReady()) break;
+        }
     }
 
     public void StartEarly()
     {
-        if(notReady.Count == 0){
+        if (notReady.Count == 0)
+        {
             StartCountDown();
             startEarlyButton.SetActive(false);
         }
@@ -82,7 +93,7 @@ public class GameRoundsManager : MonoBehaviour
 
     public void StartGame()
     {
-        GameObject[] robots = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] robots = robotList.GetRobots();
         foreach (GameObject robot in robots)
         {
             levelInfo = robot.GetComponent<MultiplayerLevelInfo>();
@@ -94,9 +105,10 @@ public class GameRoundsManager : MonoBehaviour
 
     }
 
-    public void StartCountDown() {
+    public void StartCountDown()
+    {
         hasStarted = true;
-        GameObject[] robots = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] robots = robotList.GetRobots();
         programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
         foreach (GameObject robot in robots)
         {
@@ -105,7 +117,8 @@ public class GameRoundsManager : MonoBehaviour
         }
     }
 
-    public void TimerSet(float time){
+    public void TimerSet(float time)
+    {
         timer = time;
         finnishedButton.SetActive(false);
     }
@@ -130,9 +143,11 @@ public class GameRoundsManager : MonoBehaviour
         isExecuting = true;
     }
 
-    public void FinishedProgramming(){
+    public void FinishedProgramming()
+    {
+        
         programmingInterface.SetActive(false);
-        GameObject[] robots = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] robots = robotList.GetRobots();
         foreach (GameObject robot in robots)
         {
             levelInfo = robot.GetComponent<MultiplayerLevelInfo>();
@@ -141,51 +156,49 @@ public class GameRoundsManager : MonoBehaviour
     }
 
 
-    void Start()
-    {
-        worldScript = GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>();
-
-    }
-
     // Update is called once per frame
     void Update()
     {
-        if(isCountdowning)
-        {
-            timer -= Time.deltaTime;
-            countdownText.text = timer.ToString("0");
-            if (timer <= 0.0f) {
-                isCountdowning = false;
-                readyButton.SetActive(false);
-                countdownText.enabled = false;
-                StartGame();
-                finnishedButton.SetActive(true);
+            if (isCountdowning)
+            {
+                timer -= Time.deltaTime;
+                countdownText.text = timer.ToString("0");
+                if (timer <= 0.0f)
+                {
+                    isCountdowning = false;
+                    readyButton.SetActive(false);
+                    countdownText.enabled = false;
+                    StartGame();
+                    finnishedButton.SetActive(true);
+                }
             }
-        }
 
-        if(isProgramming)
-        {
-            timer -= Time.deltaTime;
-            countdownText.text = timer.ToString("0");
-            if (timer <= 0.0f) {
-                isProgramming = false;
-                readyButton.SetActive(false);
-                countdownText.enabled = false;
-                StartExecutionPhase();
+            if (isProgramming)
+            {
+                timer -= Time.deltaTime;
+                countdownText.text = timer.ToString("0");
+                if (timer <= 0.0f)
+                {
+                    isProgramming = false;
+                    readyButton.SetActive(false);
+                    countdownText.enabled = false;
+                    StartExecutionPhase();
+                }
             }
-        }
 
-        if(isExecuting)
-        {
-            timer -= Time.deltaTime;
-            countdownText.text = timer.ToString("0");
-            if (timer <= 0.0f) {
-                isExecuting = false;
-                readyButton.SetActive(false);
-                countdownText.enabled = false;
-                StartProgrammingPhase();
+            if (isExecuting)
+            {
+                timer -= Time.deltaTime;
+                countdownText.text = timer.ToString("0");
+                if (timer <= 0.0f)
+                {
+                    isExecuting = false;
+                    readyButton.SetActive(false);
+                    countdownText.enabled = false;
+                    StartProgrammingPhase();
+                }
             }
-        }
+        
     }
-            
+
 }

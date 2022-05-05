@@ -13,7 +13,7 @@ public class MultiplayerLevelInfo : NetworkBehaviour
     GameRoundsManager gameRound;
 
     NetworkVariable<Vector3> spawnPoint = new NetworkVariable<Vector3>();
-    
+
     public void StartCountDown()
     {
         StartCountdownClientRpc();
@@ -35,33 +35,40 @@ public class MultiplayerLevelInfo : NetworkBehaviour
     }
 
     [ServerRpc]
-    void SetReadyServerRpc() {
+    void SetReadyServerRpc()
+    {
         gameRound.Ready.Add(gameObject);
         gameRound.notReady.Remove(gameObject);
         SetReadyClientRpc();
-        if(gameRound.Ready.Count > 3 && gameRound.notReady.Count == 0){
+        if (gameRound.Ready.Count > 3 && gameRound.notReady.Count == 0)
+        {
             gameRound.StartCountDown();
         }
     }
 
     [ServerRpc]
-    void SetNotReadyServerRpc() {
+    void SetNotReadyServerRpc()
+    {
         gameRound.notReady.Add(gameObject);
         gameRound.Ready.Remove(gameObject);
         SetNotReadyClientRpc();
     }
 
     [ClientRpc]
-    void SetReadyClientRpc() {
-        if(!gameRound.Ready.Contains(gameObject)){
+    void SetReadyClientRpc()
+    {
+        if (!gameRound.Ready.Contains(gameObject))
+        {
             gameRound.Ready.Add(gameObject);
             gameRound.notReady.Remove(gameObject);
         }
     }
 
     [ClientRpc]
-    void SetNotReadyClientRpc() {
-        if(!gameRound.notReady.Contains(gameObject)){
+    void SetNotReadyClientRpc()
+    {
+        if (!gameRound.notReady.Contains(gameObject))
+        {
             gameRound.notReady.Add(gameObject);
             gameRound.Ready.Remove(gameObject);
         }
@@ -94,7 +101,7 @@ public class MultiplayerLevelInfo : NetworkBehaviour
             if (IsOwner)
             {
                 worldScript.LoadWorldFromFile();
-                
+
                 transform.position = worldScript.GetSpawnAreaPoint();
             }
 
@@ -110,18 +117,22 @@ public class MultiplayerLevelInfo : NetworkBehaviour
 
     }
 
-    public void StartGame() {
+    public void StartGame()
+    {
         Vector3 spawnPoint = worldScript.GetSpawnPoint();
-        if (IsOwner) {
+        if (IsOwner)
+        {
             transform.position = spawnPoint;
         }
-        else {
+        else
+        {
             //SetSpawnPointClientRpc(spawnPoint);
         }
     }
 
     [ClientRpc]
-    void StartCountdownClientRpc(){
+    void StartCountdownClientRpc()
+    {
         gameRound.runButton.SetActive(false);
         gameRound.stopButton.SetActive(false);
         gameRound.readyButton.SetActive(false);
@@ -147,13 +158,16 @@ public class MultiplayerLevelInfo : NetworkBehaviour
     void SetHasStartedClientRpc(bool hasStarted)
     {
         gameRound.hasStarted = hasStarted;
-        if(hasStarted){
+        if (hasStarted)
+        {
             SetAsSpectator();
         }
     }
 
-    public void SetTimer(float time){
-        SetTimerServerRpc(time);
+    public void SetTimer(float time)
+    {
+        if (IsOwner)
+            SetTimerServerRpc(time);
     }
 
     [ServerRpc]
