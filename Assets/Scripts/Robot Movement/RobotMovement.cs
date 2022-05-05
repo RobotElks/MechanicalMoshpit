@@ -5,7 +5,7 @@ using UnityEngine;
 //Robots only have first, second and third gear
 public enum Gear
 {
-    First, Second, Third
+    None, First, Second, Third
 }
 
 public class RobotMovement : MonoBehaviour

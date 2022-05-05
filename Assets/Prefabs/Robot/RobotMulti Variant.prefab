@@ -99,9 +99,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1913729984608981218, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2020658856189352716, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2515647279544310218, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_Name
       value: RobotMulti Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515647279544310218, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2515647279544310218, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_TagString
@@ -113,15 +125,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3000118029487620976, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -175,17 +187,37 @@ PrefabInstance:
       propertyPath: m_Size.z
       value: 0.9
       objectReference: {fileID: 0}
+    - target: {fileID: 3000118029487621005, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3430948954217506177, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3430948954217506177, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_Constraints
-      value: 0
+      value: 122
       objectReference: {fileID: 0}
     - target: {fileID: 3430948954217506177, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_IsKinematic
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4672780875060100228, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5282194066963920888, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6030303899228802399, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7220361785532062625, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3000118029487620979, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
@@ -215,6 +247,20 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2515647279544310218, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
   m_PrefabInstance: {fileID: 7577112741290184000}
   m_PrefabAsset: {fileID: 0}
+--- !u!136 &-8980763217622073128
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5462321247307863178}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.45
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &-6839859807886187643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,8 +277,14 @@ MonoBehaviour:
     m_InternalValue: {x: 0, y: 0, z: 0}
   networkRotation:
     m_InternalValue: {x: 0, y: 0, z: 0, w: 0}
-  movementSpeed: 5
-  startedRotation: 0
+  networkInstruction:
+    m_InternalValue: 0
+  networkGear:
+    m_InternalValue: 0
+  networkLeftToPush:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  movementSpeed: 1
+  pushedCheck: 0
 --- !u!114 &-3771028748239154682
 MonoBehaviour:
   m_ObjectHideFlags: 0

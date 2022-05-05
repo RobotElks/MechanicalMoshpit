@@ -5,7 +5,7 @@ using UnityEngine;
 //Instructions to run on robots
 public enum Instructions
 {
-    MoveForward, MoveBackward, RotateLeft, RotateRight, FirstGear, SecondGear, ThirdGear
+    MoveForward, MoveBackward, RotateLeft, RotateRight, FirstGear, SecondGear, ThirdGear, None
 }
 
 public class RobotInstructionScript : MonoBehaviour

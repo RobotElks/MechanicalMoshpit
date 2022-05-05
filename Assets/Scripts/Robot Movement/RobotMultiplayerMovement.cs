@@ -7,30 +7,41 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 {
     public NetworkVariable<Vector3> networkPosition = new NetworkVariable<Vector3>();
     public NetworkVariable<Quaternion> networkRotation = new NetworkVariable<Quaternion>();
-
+    public NetworkVariable<Instructions> networkInstruction = new NetworkVariable<Instructions>();
+    public NetworkVariable<Gear> networkGear = new NetworkVariable<Gear>();
+    public NetworkVariable<Vector3> networkLeftToPush = new NetworkVariable<Vector3>();
 
     Vector3 positionTarget;
     Vector3 rotationTarget;
+
+    Vector3 leftToPush = Vector3.zero;
+
     int tileSize = 1;
-    public float movementSpeed = 5.0f;
+    public float movementSpeed = 1.0f;
+    float pushedSpeed;
     float movementGear;
     float rotateGear;
-    bool startedMove = false;
-    public bool startedRotation = false;
     float turnRate = 1.0f;
-    Vector3 lastPosition;
-    Vector3 lastRotation;
+
+
+    Gear currentGear = Gear.None;
+    Instructions currentInstruction = Instructions.None;
+
+    public bool pushedCheck = false;
 
     public override void OnNetworkSpawn()
     {
+        //Set gear to third to calculate pushedSpeed
+        SetGear(Gear.Third);
+        pushedSpeed = movementSpeed * movementGear * 2f;
         SetGear(Gear.First);
+
 
         if (IsOwner)
             GameObject.Find("Main Camera").GetComponent<CameraMultiplayer>().SetLocalPlayer(transform);
 
+
     }
-
-
 
     // Update is called once per frame
     void Update()
@@ -41,17 +52,8 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         //Local player owns the object
         if (IsOwner)
         {
-            //if (Input.GetKeyDown("w"))
-            //    MoveForward();
-            //if (Input.GetKeyDown("s"))
-            //    MoveBackwards();
-            //if (Input.GetKeyDown("a"))
-            //    RotateLeft();
-            //if (Input.GetKeyDown("d"))
-            //    RotateRight();
-
-            //Rotation and movement can never occur at the same time
-            if (startedRotation)
+            //Rotation movement
+            if (IsRotating())
             {
                 //move if distant between rotation target and current rotation coordinates is larger than 0.006
                 if ((transform.forward - rotationTarget).magnitude > 0.006f)
@@ -61,14 +63,13 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 //set rotation angle to the target angle and disable rotation
                 else
                 {
-                    lastRotation = new Vector3(transform.eulerAngles.x, Mathf.RoundToInt(transform.eulerAngles.y), transform.eulerAngles.z);
-                    transform.eulerAngles = lastRotation;
-                    startedRotation = false;
+                    transform.eulerAngles = new Vector3(transform.eulerAngles.x, Mathf.RoundToInt(transform.eulerAngles.y), transform.eulerAngles.z); ;
+                    currentInstruction = Instructions.None;
                 }
             }
 
-
-            else if (startedMove)
+            //Driving movement
+            else if (IsMoving())
             {
                 //if the distance between the position target and the current position is larger than 0.000001, move towards it.
                 if ((transform.position - positionTarget).magnitude > 0.000001f)
@@ -78,13 +79,27 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 else
                 {
                     //transform.position = positionTarget;
-                    lastPosition = transform.position;
-                    startedMove = false;
+                    currentInstruction = Instructions.None;
                 }
+
             }
 
+            //Push movement
+            if (leftToPush.magnitude > 0)
+            {
+                Vector3 pushDistance = pushedSpeed * leftToPush.normalized * Time.deltaTime;
 
-            UpdateNetworkInfoServerRpc(transform.position, transform.rotation);
+                if (pushDistance.magnitude > leftToPush.magnitude)
+                    pushDistance = leftToPush;
+
+                transform.position += pushDistance;
+                positionTarget += pushDistance;
+
+                leftToPush -= pushDistance;
+            }
+
+            //Send current local information to the server to update other clients
+            UpdateNetworkInfoServerRpc(transform.position, transform.rotation, currentInstruction, currentGear, leftToPush);
         }
 
         //Update model postition and rotation to match network position
@@ -92,25 +107,21 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         {
             transform.position = networkPosition.Value;
             transform.rotation = networkRotation.Value;
+            currentInstruction = networkInstruction.Value;
+            currentGear = networkGear.Value;
+            leftToPush = networkLeftToPush.Value;
         }
-
+        pushedCheck = IsPushed();
     }
 
     [ServerRpc]
-    public void UpdateNetworkInfoServerRpc(Vector3 localPosition, Quaternion localRotation)
+    public void UpdateNetworkInfoServerRpc(Vector3 localPosition, Quaternion localRotation, Instructions localInstruction, Gear localGear, Vector3 localLeftToPush)
     {
         networkPosition.Value = localPosition;
         networkRotation.Value = localRotation;
-    }
-
-    public Vector3 GetLastPosition()
-    {
-        return lastPosition;
-    }
-
-    public Vector3 GetLastRotation()
-    {
-        return lastRotation;
+        networkInstruction.Value = localInstruction;
+        networkGear.Value = localGear;
+        networkLeftToPush.Value = localLeftToPush;
     }
 
     public Vector3 GetTargetPosition()
@@ -127,24 +138,29 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         return (IsRotating() || IsMoving());
     }
 
+    public bool IsPushed()
+    {
+        return leftToPush.magnitude != 0;
+    }
+
     //Call on function to move robot forward in the direction it is facing
     public void MoveForward()
     {
         if (IsDoingInstruction()) return;
         positionTarget = transform.position + transform.forward * tileSize;
-        startedMove = true;
+        currentInstruction = Instructions.MoveForward;
     }
     //Call on function to move robot backwards in the direction it is facing.
     public void MoveBackwards()
     {
         if (IsDoingInstruction()) return;
         positionTarget = transform.position - transform.forward * tileSize;
-        startedMove = true;
+        currentInstruction = Instructions.MoveBackward;
     }
     //Call on function to return whether robot is moving or not
     public bool IsMoving()
     {
-        return startedMove;
+        return currentInstruction == Instructions.MoveForward || currentInstruction == Instructions.MoveBackward;
     }
 
     //Call on function to rotate the robot 90 degrees to the left
@@ -153,7 +169,8 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         if (IsDoingInstruction()) return;
 
         rotationTarget = -transform.right;
-        startedRotation = true;
+        currentInstruction = Instructions.RotateLeft;
+
     }
 
     //Call on function to rotate the robot 90 degrees to the right
@@ -161,13 +178,13 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     {
         if (IsDoingInstruction()) return;
         rotationTarget = transform.right;
-        startedRotation = true;
+        currentInstruction = Instructions.RotateRight;
     }
 
     //Call on function to check whether robot is currently rotating
     public bool IsRotating()
     {
-        return startedRotation;
+        return currentInstruction == Instructions.RotateLeft || currentInstruction == Instructions.RotateRight;
     }
 
     public void SetTileSize(int input)
@@ -175,10 +192,17 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         tileSize = input;
     }
 
+    public Gear GetGear()
+    {
+        return currentGear;
+    }
+
     //Call on function to set gear to either First, Second or Third.
     public void SetGear(Gear newGear)
     {
         if (IsDoingInstruction()) return;
+
+        currentGear = newGear;
 
         switch (newGear)
         {
@@ -187,20 +211,79 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 rotateGear = 1;
                 break;
             case Gear.Second:
-                movementGear = 2;
+                movementGear = 1.5f;
                 rotateGear = 1.5f;
                 break;
             case Gear.Third:
-                movementGear = 3;
+                movementGear = 2f;
                 rotateGear = 2;
                 break;
         }
     }
 
-    public Vector3 GetRobotMiddle()
+    public Instructions GetCurrentInstruction()
     {
-        BoxCollider boxCollider = GetComponent<BoxCollider>();
+        return currentInstruction;
+    }
 
-        return transform.position - new Vector3(0, boxCollider.size.y / 2, 0);
+    public Vector3 GetMovingDirection()
+    {
+        if (currentInstruction == Instructions.MoveBackward)
+            return -transform.forward;
+        else
+            return transform.forward;
+    }
+
+    public void Push(Vector3 direction, int numOfTiles)
+    {
+        Debug.Log("Got Pushed: " + direction + " " + numOfTiles);
+        direction.y = 0;
+        direction = direction.normalized;
+
+        transform.position += direction * 0.3f;
+        positionTarget += direction * 0.3f;
+
+        leftToPush += direction * tileSize * numOfTiles - direction * 0.3f;
+    }
+
+    public void MoveTargetPositionBack(int numOfTiles)
+    {
+        positionTarget -= GetMovingDirection() * tileSize * numOfTiles;
+    }
+
+    public Vector3 GetForceToMe(Vector3 myPosition)
+    {
+        Vector3 posDiff = (myPosition - transform.position);
+        Vector3 movDir = GetMovingDirection();
+        posDiff.y = 0;
+        posDiff = posDiff.normalized;
+        float max = Mathf.Max(Mathf.Abs(posDiff.x), Mathf.Abs(posDiff.z));
+
+        if (Mathf.Abs(posDiff.x) == max)
+        {
+            posDiff.x = Mathf.Sign(posDiff.x);
+            posDiff.z = 0;
+        }
+        else
+        {
+            posDiff.z = Mathf.Sign(posDiff.z);
+            posDiff.x = 0;
+        }
+
+        Vector3 force = Vector3.zero;
+
+        if (IsPushed() && Vector3.Dot(leftToPush.normalized, posDiff) > 0)
+        {
+            force = posDiff;
+
+            if (IsMoving() && Vector3.Dot(movDir, force) > 0.95f)
+                force *= (int)currentGear;
+
+        }
+
+        else if (IsMoving() && Vector3.Dot(movDir, posDiff) > 0.95f)
+            force = movDir * (int)currentGear;
+
+        return force;
     }
 }

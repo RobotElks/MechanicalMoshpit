@@ -74,6 +74,7 @@ public class MultiplayerWorldParse : MonoBehaviour
         usedSpawnPoints.Add(spawnPoint);
         Vector3 point = spawnPoint.transform.position;
         return point;
+        
     }
 
     public void BuildWorld()

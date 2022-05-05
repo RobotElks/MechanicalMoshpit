@@ -6,12 +6,21 @@ using Unity.Netcode;
 public class RobotCollision : NetworkBehaviour
 {
     HealthPoints healthScript;
+    RobotMultiplayerMovement thisRobotMovementScript;
+
 	void Start () {
-		healthScript = this.GetComponent<HealthPoints>();		
+		healthScript = this.GetComponent<HealthPoints>();
+        thisRobotMovementScript = GetComponent<RobotMultiplayerMovement>();
+
 	}
 
-    //Might need refactoring later (switch case)
+
     private void OnCollisionEnter(Collision collision)
+    {
+        CollisionCheck(collision);
+    }
+
+    private void CollisionCheck(Collision collision)
     {
         if (collision.collider.CompareTag("Player"))
         {
@@ -26,36 +35,21 @@ public class RobotCollision : NetworkBehaviour
 
     }
 
-    private void PlayerCollision(Collision collision)
+    private void PlayerCollision(Collision robotCollision)
     {
-        GameObject otherRobot = collision.gameObject;
-        RobotMultiplayerMovement robotMovement = otherRobot.GetComponent<RobotMultiplayerMovement>();
 
-        Vector3 otherForward = otherRobot.transform.forward;
-
-        //this.GetComponent<Rigidbody>().isKinematic = true;
-
-        //Frontal Collision
-        if ((transform.forward + otherForward).magnitude < 0.001f)
+        if (IsOwner)
         {
 
-            //Check if other is moving or not 
-        }
+            RobotMultiplayerMovement otherRobotMovementScript = robotCollision.gameObject.GetComponent<RobotMultiplayerMovement>();
 
-        else
-        {
-            BoxCollider boxCollider = GetComponent<BoxCollider>();
-
-            RaycastHit hit;
-
-            if (!Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, boxCollider.size.x))
+            if (otherRobotMovementScript.IsMoving() || otherRobotMovementScript.IsPushed())
             {
-                transform.position += otherForward * 2;
+                Vector3 otherRobotForceOnThis = otherRobotMovementScript.GetForceToMe(transform.position);
+                thisRobotMovementScript.Push(otherRobotForceOnThis, (int)otherRobotForceOnThis.magnitude);
 
-                Debug.Log("Got hit from the side " + this.name);
             }
         }
-
     }
     private void LaserCollision(Collision collider){
         healthScript.getHit(25);
