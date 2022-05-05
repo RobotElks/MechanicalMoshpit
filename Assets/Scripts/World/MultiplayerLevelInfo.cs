@@ -29,7 +29,6 @@ public class MultiplayerLevelInfo : NetworkBehaviour
 
     public bool SetNotReady()
     {
-        Debug.Log("setting notready");
         if (!IsOwner) return false;
         SetNotReadyServerRpc();
         return true;
@@ -47,7 +46,6 @@ public class MultiplayerLevelInfo : NetworkBehaviour
 
     [ServerRpc]
     void SetNotReadyServerRpc() {
-        Debug.Log("Ta bort");
         gameRound.notReady.Add(gameObject);
         gameRound.Ready.Remove(gameObject);
         SetNotReadyClientRpc();
@@ -63,7 +61,6 @@ public class MultiplayerLevelInfo : NetworkBehaviour
 
     [ClientRpc]
     void SetNotReadyClientRpc() {
-        Debug.Log("Ta bort");
         if(!gameRound.notReady.Contains(gameObject)){
             gameRound.notReady.Add(gameObject);
             gameRound.Ready.Remove(gameObject);
@@ -116,7 +113,6 @@ public class MultiplayerLevelInfo : NetworkBehaviour
     public void StartGame() {
         Vector3 spawnPoint = worldScript.GetSpawnPoint();
         if (IsOwner) {
-            Debug.Log("Is Owner");
             transform.position = spawnPoint;
         }
         else {

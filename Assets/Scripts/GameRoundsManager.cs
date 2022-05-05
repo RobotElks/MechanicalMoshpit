@@ -65,10 +65,8 @@ public class GameRoundsManager : MonoBehaviour
 
     public void NotReadyForGame()
     {
-        Debug.Log("Set not ready plz");
         foreach (GameObject robot in Ready)
         {
-            Debug.Log("a robot in ready");
             levelInfo = robot.GetComponent<MultiplayerLevelInfo>();
             if(levelInfo.SetNotReady()) break;
         }  

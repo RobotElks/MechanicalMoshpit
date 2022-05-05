@@ -35,7 +35,6 @@ public class RobotCollision : NetworkBehaviour
 
     }
     void OnControllerColliderHit(ControllerColliderHit hit){
-        Debug.Log("COLLISION2");
         hit.gameObject.transform.position = Vector3.zero;
         if (hit.controller.CompareTag("Player"))
         {
@@ -68,7 +67,6 @@ public class RobotCollision : NetworkBehaviour
     }
     private void LaserCollision(Collision collider){
         healthScript.getHit(1);
-        //Debug.Log("COLLISION LASER");
         GameObject laser = collider.gameObject;
         Destroy(laser, 0f);
         

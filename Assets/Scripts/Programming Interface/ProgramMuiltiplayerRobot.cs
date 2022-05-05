@@ -135,7 +135,6 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
         int gear = int.Parse(seperateInstructions[(seperateInstructions.Length - 1)].Split(' ')[2]);
         energyScript.restoreEnergy(gear*movingEnergy);
         SetEnergySlider();
-        Debug.Log(energyScript.networkEnergyPoints.Value);
         
         seperateInstructions = seperateInstructions.SkipLast(1).ToArray();
         string instructionsString = String.Join("\n", seperateInstructions);

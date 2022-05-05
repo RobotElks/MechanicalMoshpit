@@ -105,7 +105,6 @@ public class MultiplayerWorldParse : MonoBehaviour
                         break;
                     // Something is wrong with file
                     default:
-                        Debug.Log("Wrong format in level file");
                         break;
                 }
             // Go to next line
