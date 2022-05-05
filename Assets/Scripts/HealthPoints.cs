@@ -15,10 +15,14 @@ public class HealthPoints : NetworkBehaviour
 
     Slider healthSlider;
 
+    GameRoundsManager roundsManager;
+
     public override void OnNetworkSpawn()
     {
         if (IsOwner)
             healthSlider = GameObject.Find("Hud").transform.Find("HealthBar").GetComponent<Slider>();
+
+        roundsManager = GameObject.Find("GameRoundsManager").GetComponent<GameRoundsManager>();
     }
 
     void Update()
@@ -35,23 +39,25 @@ public class HealthPoints : NetworkBehaviour
 
     public void getHit(int damage)
     {
-
-        if (IsOwner)
+        if (roundsManager.GameStarted())
         {
-            if ((localHealth - damage) > 0)
+            if (IsOwner)
             {
-                localHealth = localHealth - damage;
+                if ((localHealth - damage) > 0)
+                {
+                    localHealth = localHealth - damage;
+                }
+                else
+                {
+                    localHealth = 0;
+                    killed();
+                }
+                UpdateHealthInfoServerRpc(localHealth);
             }
             else
             {
-                localHealth = 0;
-                killed();
+                localHealth = healthPoints.Value;
             }
-            UpdateHealthInfoServerRpc(localHealth);
-        }
-        else
-        {
-            localHealth = healthPoints.Value;
         }
     }
 

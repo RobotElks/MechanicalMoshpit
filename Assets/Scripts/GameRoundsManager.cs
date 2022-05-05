@@ -155,6 +155,10 @@ public class GameRoundsManager : MonoBehaviour
         }
     }
 
+    public bool GameStarted()
+    {
+        return hasStarted && !isCountdowning;
+    }
 
     // Update is called once per frame
     void Update()
