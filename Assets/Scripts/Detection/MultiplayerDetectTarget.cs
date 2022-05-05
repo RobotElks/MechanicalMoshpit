@@ -52,7 +52,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     private bool CheckIfTargetInScope(Transform target){
         //float distance = CalculateDistance();
         float angleBetween = CalculateAngle(target);
-        if ((angleBetween < 3f) && (angleBetween > -3f)){
+        if ((angleBetween < 0.5f) && (angleBetween > -0.5f)){
             return true;
         }
         
