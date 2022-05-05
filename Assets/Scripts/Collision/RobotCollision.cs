@@ -15,8 +15,6 @@ public class RobotCollision : NetworkBehaviour
         thisRobotMovementScript = GetComponent<RobotMultiplayerMovement>();
     }
 
-
-    //Might need refactoring later (switch case)
     // Does this risk mulltiple detections for one collision?
     private void OnCollisionEnter(Collision collision)
     {
@@ -43,14 +41,11 @@ public class RobotCollision : NetworkBehaviour
             GameObject otherRobot = robotCollision.gameObject;
             RobotMultiplayerMovement otherRobotMovementScript = otherRobot.GetComponent<RobotMultiplayerMovement>();
 
-            //this.GetComponent<Rigidbody>().isKinematic = true;
-
             Vector3 otherRobotForceOnThis = otherRobotMovementScript.GetForceToMe(transform.position);
 
             Debug.Log("OtherMove: " + otherRobotMovementScript.IsMoving());
             Debug.Log("OtherPushed: " + otherRobotMovementScript.IsPushed());
             Debug.Log("Force: " + otherRobotForceOnThis);
-
 
             if (otherRobotMovementScript.IsMoving() || otherRobotMovementScript.IsPushed())
             {
@@ -58,50 +53,49 @@ public class RobotCollision : NetworkBehaviour
                 Gear otherRobotGear = otherRobotMovementScript.GetGear();
 
 
-
                 //Our robot is moving
                 if (thisRobotMovementScript.IsMoving() || thisRobotMovementScript.IsPushed())
                 {
 
-                    Vector3 thisMovingDir = thisRobotMovementScript.GetMovingDirection();
+                    //Vector3 thisMovingDir = thisRobotMovementScript.GetMovingDirection();
 
-                    //Heads on collision
-                    if ((thisMovingDir + otherMovingDir).magnitude < 0.001f)
-                    {
-                        //Do priority check
-                        //Debug.Log("Heads on");
+                    ////Heads on collision
+                    //if ((thisMovingDir + otherMovingDir).magnitude < 0.001f)
+                    //{
+                    //    //Do priority check
+                    //    //Debug.Log("Heads on");
 
-                        //movementScript.MoveTargetPositionBack((int)otherRobotGear);
-                        thisRobotMovementScript.Push(otherMovingDir, (int)otherRobotGear);
+                    //    //movementScript.MoveTargetPositionBack((int)otherRobotGear);
+                    //    thisRobotMovementScript.Push(otherMovingDir, (int)otherRobotGear);
 
-                    }
-
-
-                    //Side collision
-                    else
-                    {
-                        //Change to multiple rays from the robot
-
-                        int oldLayer = otherRobot.layer;
-                        otherRobot.layer = LayerMask.NameToLayer("RobotsRaycast");
-
-                        CapsuleCollider capsuleCollider = GetComponent<CapsuleCollider>();
-
-                        bool colliderInfront = Physics.Raycast(transform.position - transform.right * capsuleCollider.radius, thisMovingDir, capsuleCollider.radius * 3, singleRobotRaycastMask);
-
-                        if (!colliderInfront)
-                            Physics.Raycast(transform.position + transform.right * capsuleCollider.radius, thisMovingDir, capsuleCollider.radius * 3, singleRobotRaycastMask);
+                    //}
 
 
-                        //Got hit from the side
-                        if (!colliderInfront)
-                            thisRobotMovementScript.Push(otherMovingDir, (int)otherRobotGear);
+                    ////Side collision
+                    //else
+                    //{
+                    //    //Change to multiple rays from the robot
+
+                    //    int oldLayer = otherRobot.layer;
+                    //    otherRobot.layer = LayerMask.NameToLayer("RobotsRaycast");
+
+                    //    CapsuleCollider capsuleCollider = GetComponent<CapsuleCollider>();
+
+                    //    bool colliderInfront = Physics.Raycast(transform.position - transform.right * capsuleCollider.radius, thisMovingDir, capsuleCollider.radius * 3, singleRobotRaycastMask);
+
+                    //    if (!colliderInfront)
+                    //        Physics.Raycast(transform.position + transform.right * capsuleCollider.radius, thisMovingDir, capsuleCollider.radius * 3, singleRobotRaycastMask);
+
+
+                    //    //Got hit from the side
+                    //    if (!colliderInfront)
+                    //        thisRobotMovementScript.Push(otherMovingDir, (int)otherRobotGear);
 
 
 
-                        otherRobot.layer = oldLayer;
+                    //    otherRobot.layer = oldLayer;
 
-                    }
+                    //}
                 }
 
                 //Our robot is not moving
@@ -110,7 +104,6 @@ public class RobotCollision : NetworkBehaviour
                     thisRobotMovementScript.Push(otherRobotForceOnThis, (int)otherRobotForceOnThis.magnitude);
                 }
             }
-
         }
     }
 }

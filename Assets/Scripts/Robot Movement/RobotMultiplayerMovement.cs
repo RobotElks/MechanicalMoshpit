@@ -44,7 +44,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
     }
 
-
     // Update is called once per frame
     void Update()
     {
@@ -89,7 +88,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
             }
 
-
             //Push movement
             if (leftToPush.magnitude > 0)
             {
@@ -104,8 +102,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 leftToPush -= pushDistance;
             }
 
-
-
             //Send current local information to the server to update other clients
             UpdateNetworkInfoServerRpc(transform.position, transform.rotation, currentInstruction, currentGear, leftToPush);
         }
@@ -119,9 +115,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             currentGear = networkGear.Value;
             leftToPush = networkLeftToPush.Value;
         }
-
         pushedCheck = IsPushed();
-
     }
 
     [ServerRpc]
@@ -285,34 +279,27 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
     public Vector3 GetForceToMe(Vector3 myPosition)
     {
-        
+        Vector3 posDiff = (myPosition - transform.position);
+        posDiff.y = 0;
+        posDiff = posDiff.normalized;
+        float max = Mathf.Max(Mathf.Abs(posDiff.x), Mathf.Abs(posDiff.z));
 
-        Vector3 posDiff = (myPosition - transform.position).normalized;
-
-        float scalarPush = Vector3.Dot(posDiff, leftToPush.normalized);
-
-        Vector3 moveDir = GetMovingDirection().normalized;
-        if (!IsMoving())
-            moveDir *= 0;
-
-        float scalarMove = Vector3.Dot(posDiff, moveDir);
-
-        if(scalarPush >= scalarMove)
+        if(Mathf.Abs(posDiff.x) == max)
         {
-            Vector3 force = Vector3.zero;
-            force.x = Mathf.Ceil(leftToPush.x);
-            force.y = Mathf.Ceil(leftToPush.y);
-            force.z = Mathf.Ceil(leftToPush.z);
-
-            return force;
+            posDiff.x = Mathf.Sign(posDiff.x);
+            posDiff.z = 0;
         }
-
         else
         {
-            return moveDir * (int)currentGear;
+            posDiff.z = Mathf.Sign(posDiff.z);
+            posDiff.x = 0;
         }
 
+        if (IsMoving() && Vector3.Dot(GetMovingDirection(), posDiff) > 0.95f)
+        {
+            posDiff *= (int)currentGear;
+        }
+
+        return posDiff;
     }
-
-
 }
