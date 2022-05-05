@@ -34,7 +34,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     {
         //Set gear to third to calculate pushedSpeed
         SetGear(Gear.Third);
-        pushedSpeed = movementSpeed * movementGear * 5f;
+        pushedSpeed = movementSpeed * movementGear * 2f;
         SetGear(Gear.First);
 
 
@@ -252,12 +252,13 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
     public void Push(Vector3 direction, int numOfTiles)
     {
+        Debug.Log("Got Pushed: " + direction + " " + numOfTiles);
         direction.y = 0;
         direction = direction.normalized;
 
+        transform.position += direction * 0.3f;
 
-        //TODO: This will cause the robot to be of-sync with the tiles if pused when already having a leftToPush != 0. Change to += and change GetForceToMe() accordingly
-        leftToPush += direction * tileSize * numOfTiles;
+        leftToPush += direction * tileSize * numOfTiles - direction * 0.3f;
         //transform.position += direction * tileSize * numOfTiles;
     }
 
@@ -284,7 +285,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         posDiff = posDiff.normalized;
         float max = Mathf.Max(Mathf.Abs(posDiff.x), Mathf.Abs(posDiff.z));
 
-        if(Mathf.Abs(posDiff.x) == max)
+        if (Mathf.Abs(posDiff.x) == max)
         {
             posDiff.x = Mathf.Sign(posDiff.x);
             posDiff.z = 0;

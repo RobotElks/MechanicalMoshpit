@@ -36,8 +36,11 @@ public class RobotCollision : NetworkBehaviour
 
     private void PlayerCollision(Collision robotCollision)
     {
+
         if (IsOwner)
         {
+            Debug.Log("-----------------------------------------------------");
+
             GameObject otherRobot = robotCollision.gameObject;
             RobotMultiplayerMovement otherRobotMovementScript = otherRobot.GetComponent<RobotMultiplayerMovement>();
 
