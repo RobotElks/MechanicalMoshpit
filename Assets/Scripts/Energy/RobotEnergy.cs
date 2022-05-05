@@ -11,10 +11,10 @@ public class RobotEnergy : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        EnergyStartServerRPC();
-        GameObject programRobot = GameObject.Find("ProgrammingInterface Multiplayer Variant");
-        programRobotScript = programRobot.GetComponent<ProgramMuiltiplayerRobot>();
         if(IsOwner){
+            EnergyStartServerRPC();
+            GameObject programRobot = GameObject.Find("ProgrammingInterface Multiplayer Variant");
+            programRobotScript = programRobot.GetComponent<ProgramMuiltiplayerRobot>();
             programRobotScript.SetRobot(gameObject);
         }
     }
