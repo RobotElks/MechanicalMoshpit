@@ -169,8 +169,10 @@ MonoBehaviour:
     m_InternalValue: 0
   networkGear:
     m_InternalValue: 0
+  networkLeftToPush:
+    m_InternalValue: {x: 0, y: 0, z: 0}
   movementSpeed: 1
-  currentInstruction: 7
+  pushedCheck: 0
 --- !u!114 &-3771028748239154682
 MonoBehaviour:
   m_ObjectHideFlags: 0

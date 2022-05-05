@@ -257,6 +257,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         direction = direction.normalized;
 
         transform.position += direction * 0.3f;
+        positionTarget += direction * 0.3f;
 
         leftToPush += direction * tileSize * numOfTiles - direction * 0.3f;
         //transform.position += direction * tileSize * numOfTiles;
@@ -281,6 +282,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public Vector3 GetForceToMe(Vector3 myPosition)
     {
         Vector3 posDiff = (myPosition - transform.position);
+        Vector3 movDir = GetMovingDirection();
         posDiff.y = 0;
         posDiff = posDiff.normalized;
         float max = Mathf.Max(Mathf.Abs(posDiff.x), Mathf.Abs(posDiff.z));
@@ -296,11 +298,25 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             posDiff.x = 0;
         }
 
-        if (IsMoving() && Vector3.Dot(GetMovingDirection(), posDiff) > 0.95f)
+        Vector3 force = Vector3.zero;
+
+        if (IsPushed())
         {
-            posDiff *= (int)currentGear;
+            force = posDiff;
+
+            if (IsMoving() && Vector3.Dot(movDir, force) > 0.95f)
+                force *= (int)currentGear;
+
         }
 
-        return posDiff;
+        else if (IsMoving() && Vector3.Dot(movDir, posDiff) > 0.95f)
+            force = movDir * (int)currentGear;
+
+
+        //if (IsMoving() && Vector3.Dot(movDir, force) > 0.95f)
+        //{
+        //    force = movDir * (int)currentGear;
+        //}
+        return force;
     }
 }
