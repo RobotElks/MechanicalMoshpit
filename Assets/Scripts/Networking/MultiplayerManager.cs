@@ -58,19 +58,20 @@ public class MultiplayerManager : MonoBehaviour
         GUIStyle guiStyle = new GUIStyle();
         guiStyle.fontSize = 40;
         GUILayout.BeginArea(new Rect((Screen.width / 2) - 350, 10, 900, 900));
-        if (SaveIPScript.IsHost())
-        {
-            GUILayout.Label("Hosting game! IP : " + SaveIPScript.GetSaved(), guiStyle);
-        }
-        else if (!NetworkManager.Singleton.IsConnectedClient)
-        {
-            GUILayout.Label("Not Connected! IP : " + SaveIPScript.GetSaved(), guiStyle);
-        }
-        else
-        {
-            GUILayout.Label("Connected to game! IP : " + SaveIPScript.GetSaved(), guiStyle);
 
-        }
+        //if (SaveIPScript.IsHost())
+        //{
+        //    GUILayout.Label("Hosting game! IP : " + SaveIPScript.GetSaved(), guiStyle);
+        //}
+        //else if (!NetworkManager.Singleton.IsConnectedClient)
+        //{
+        //    GUILayout.Label("Not Connected! IP : " + SaveIPScript.GetSaved(), guiStyle);
+        //}
+        //else
+        //{
+        //    GUILayout.Label("Connected to game! IP : " + SaveIPScript.GetSaved(), guiStyle);
+
+        //}
 
         GUILayout.EndArea();
     }
