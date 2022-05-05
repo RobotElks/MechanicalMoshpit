@@ -60,18 +60,17 @@ public class RobotCollision : NetworkBehaviour
                 if (thisRobotMovementScript.IsMoving() || thisRobotMovementScript.IsPushed())
                 {
 
-                    //Vector3 thisMovingDir = thisRobotMovementScript.GetMovingDirection();
+                    Vector3 thisMovingDir = thisRobotMovementScript.GetMovingDirection();
 
-                    ////Heads on collision
-                    //if ((thisMovingDir + otherMovingDir).magnitude < 0.001f)
-                    //{
-                    //    //Do priority check
-                    //    //Debug.Log("Heads on");
+                    //Got hit in our moving direction
+                    if ((thisMovingDir + otherRobotForceOnThis.normalized).magnitude < 0.001f)
+                    {
+                        //Do priority check
+                        //Debug.Log("Heads on");
 
-                    //    //movementScript.MoveTargetPositionBack((int)otherRobotGear);
-                    //    thisRobotMovementScript.Push(otherMovingDir, (int)otherRobotGear);
-
-                    //}
+                        //movementScript.MoveTargetPositionBack((int)otherRobotGear);
+                        thisRobotMovementScript.Push(otherRobotForceOnThis, (int)otherRobotForceOnThis.magnitude);
+                    }
 
 
                     ////Side collision
