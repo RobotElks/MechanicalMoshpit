@@ -91,12 +91,15 @@ public class GameRoundsManager : MonoBehaviour
             levelInfo.StartGame();
         }
         StartProgrammingPhase();
-        
+        programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().GameStarted();
+
+
     }
 
     public void StartCountDown() {
         hasStarted = true;
         GameObject[] robots = GameObject.FindGameObjectsWithTag("Player");
+        programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
         foreach (GameObject robot in robots)
         {
             levelInfo = robot.GetComponent<MultiplayerLevelInfo>();

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1173,11 +1173,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6547b188b5a3947818e6a23379a4dc81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SaveIp: {fileID: 859534946}
   Maps: {fileID: 0}
   addressInput: {fileID: 0}
   saved: 127.0.0.1
-  isHost: 0
+  isHost: 1
   world: 
 --- !u!4 &859534948
 Transform:

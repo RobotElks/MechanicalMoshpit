@@ -7,7 +7,7 @@ public class RobotEnergy : NetworkBehaviour
 {
     public NetworkVariable<float> energyPoints = new NetworkVariable<float>();
 
-    public ProgramMuiltiplayerRobot programRobotScript;
+    ProgramMuiltiplayerRobot programRobotScript;
 
     void Start(){
         energyPoints.Value = 100f;
@@ -35,6 +35,7 @@ public class RobotEnergy : NetworkBehaviour
 
     public void restoreEnergy(float energy){
         restoreEnergyServerRpc(energy);
+        Debug.Log(energyPoints.Value);
     }
 
     [ServerRpc]
