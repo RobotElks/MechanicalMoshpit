@@ -10,6 +10,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public NetworkVariable<Instructions> networkInstruction = new NetworkVariable<Instructions>();
     public NetworkVariable<Gear> networkGear = new NetworkVariable<Gear>();
     public NetworkVariable<Vector3> networkLeftToPush = new NetworkVariable<Vector3>();
+    Rigidbody rb;
 
     Vector3 positionTarget;
     Vector3 rotationTarget;
@@ -100,6 +101,10 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
             //Send current local information to the server to update other clients
             UpdateNetworkInfoServerRpc(transform.position, transform.rotation, currentInstruction, currentGear, leftToPush);
+            rb = GetComponent<Rigidbody>();
+            rb.freezeRotation = false;
+            UpdateNetworkInfoServerRpc(transform.position, transform.rotation);
+            rb.freezeRotation = true;
         }
 
         //Update model postition and rotation to match network position

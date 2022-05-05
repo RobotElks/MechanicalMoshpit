@@ -9,6 +9,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     //public float range;
     RobotList robotList;
     CannonBehavior CannonScript;
+    Dead deadScript;
     //RobotMovement MovementScript;
     //private bool reload = true;
     //public float fireRate = 0.5f;
@@ -73,10 +74,13 @@ public class MultiplayerDetectTarget : NetworkBehaviour
 
         foreach(GameObject robot in robots){
             if (robot != this.gameObject && (Time.time > nextShotTime) && CheckIfTargetInScope(robot.transform)) {
-              nextShotTime = Time.time + reloadTime; 
-               //Debug.Log(nextShotTime);
-               ShootTarget();
-               // execute block of code here
+                deadScript = robot.GetComponent<Dead>();
+                if (!deadScript.IsDead()) {
+                    nextShotTime = Time.time + reloadTime; 
+                    robot.GetComponent<Rigidbody>().WakeUp();
+                    Debug.Log(robot.GetComponent<Rigidbody>().IsSleeping());
+                    ShootTarget();
+                }
             }
         }
         

@@ -92,6 +92,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 140303af3bc083c479ba91c3ca2b2903, type: 3}
+--- !u!198 &7747196155271262595 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 248133985888110761, guid: 140303af3bc083c479ba91c3ca2b2903, type: 3}
+  m_PrefabInstance: {fileID: 7562138957998668074}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7577112741290184000
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -325,6 +330,21 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &1786611023702562909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5462321247307863178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18eb53c7dfac98446840635c0a544ca0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smoke: {fileID: 7747196155271262595}
+  colorBase: {fileID: 2092041003023258191}
+  colorTower: {fileID: 1879531725587117049}
 --- !u!114 &4249979566322862251
 MonoBehaviour:
   m_ObjectHideFlags: 0
