@@ -11,7 +11,6 @@ public class RobotCollision : NetworkBehaviour
 	void Start () {
 		healthScript = this.GetComponent<HealthPoints>();
         thisRobotMovementScript = GetComponent<RobotMultiplayerMovement>();
-
 	}
 
 

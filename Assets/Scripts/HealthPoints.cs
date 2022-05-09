@@ -9,9 +9,10 @@ public class HealthPoints : NetworkBehaviour
     public bool changeColorLocal = false;
     NetworkVariable<int> healthPoints = new NetworkVariable<int>();
     NetworkVariable<bool> changeColor = new NetworkVariable<bool>();
-    int localHealth = 100;
+    public int localHealth = 100;
     RobotList robotList;
     ParticleSystem smoke;
+    ChickenDinner chickenDinner;
 
     Slider healthSlider;
 
@@ -23,12 +24,13 @@ public class HealthPoints : NetworkBehaviour
             healthSlider = GameObject.Find("Hud").transform.Find("HealthBar").GetComponent<Slider>();
 
         roundsManager = GameObject.Find("GameRoundsManager").GetComponent<GameRoundsManager>();
+        chickenDinner = GameObject.Find("ChickenDinner").GetComponent<ChickenDinner>();
     }
 
     void Update()
     {
-        //if (localHealth > 0)
-        //getHit(25);
+        if (Input.GetKeyDown("space"))
+            getHit(25);
         //healthSlider.value -= (healthSlider.value - (float)localHealth) * Time.deltaTime * 2;
 
         if (IsOwner)
@@ -38,11 +40,12 @@ public class HealthPoints : NetworkBehaviour
 
 
     public void getHit(int damage)
-    {
+    {   
         if (roundsManager.GameStarted())
         {
             if (IsOwner)
             {
+                Debug.Log(NetworkManager.Singleton.LocalClientId);
                 if ((localHealth - damage) > 0)
                 {
                     localHealth = localHealth - damage;
