@@ -19,16 +19,25 @@ public class MultiplayerWorldParse : MonoBehaviour
 
     public string worldString = "";
 
+    GameObject worldParent;
+
+    Vector3 worldMiddle = Vector3.zero;
+
     // Start is called before the first frame update
     void Start()
     {
-
+        ClearWorld();
     }
 
 
     public void LoadWorldFromFile()
     {
         SetWorldString(File.ReadAllText(fileName).Replace("\r", ""));
+    }
+
+    public void LoadWorldFromInformation()
+    {
+        SetWorldString(GameObject.Find("Information").GetComponent<SaveIP>().GetWorldString());
     }
 
     public string GetWorldString()
@@ -61,26 +70,26 @@ public class MultiplayerWorldParse : MonoBehaviour
     {
         int i = Random.Range(0, 1);
         GameObject spawnPoint;
-        if(i == 1)
+        if (i == 1)
         {
             spawnPoint = avaliableSpawnPoints[0];
         }
         else
         {
-            spawnPoint = avaliableSpawnPoints[avaliableSpawnPoints.Count-1];
+            spawnPoint = avaliableSpawnPoints[avaliableSpawnPoints.Count - 1];
         }
-        
+
         avaliableSpawnPoints.Remove(spawnPoint);
         usedSpawnPoints.Add(spawnPoint);
         Vector3 point = spawnPoint.transform.position;
         return point;
-        
+
     }
 
     public void BuildWorld()
     {
 
-        if (transform.childCount > 0)
+        if (worldParent.transform.childCount > 0)
             return;
 
         //Debug.Log("Parsing world");
@@ -110,6 +119,8 @@ public class MultiplayerWorldParse : MonoBehaviour
             // Go to next line
             n++;
         }
+
+        worldMiddle /= 2;
     }
 
     // Extract information form specific line
@@ -134,6 +145,11 @@ public class MultiplayerWorldParse : MonoBehaviour
             Debug.Log($"Unable to parse!");
         }
 
+        if (x < 1000 && x > worldMiddle.x)
+            worldMiddle.x = x;
+        if (z > worldMiddle.z)
+            worldMiddle.z = z;
+
         // Decide which tile we will use and instantiate it
         switch (tileID)
         {
@@ -142,7 +158,7 @@ public class MultiplayerWorldParse : MonoBehaviour
                 GameObject sp = new GameObject();
                 sp.transform.position = new Vector3(x, y, z);
                 sp.name = "SpawnPoint" + (avaliableSpawnPoints.Count + SpawnArea.Count + 1);
-                sp.transform.parent = this.transform;
+                sp.transform.parent = this.worldParent.transform;
                 if (x >= 1000)
                     SpawnArea.Add(sp);
                 else
@@ -151,20 +167,38 @@ public class MultiplayerWorldParse : MonoBehaviour
 
             // Grass-block
             case 1:
-                Instantiate(tile1Grass, new Vector3(x, y, z), Quaternion.identity, transform);
+                Instantiate(tile1Grass, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
             // Water
             case 2:
-                Instantiate(tile2Water, new Vector3(x, y, z), Quaternion.identity, transform);
+                Instantiate(tile2Water, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
             // Bridge
             case 3:
-                Instantiate(tile3Bridge, new Vector3(x, y, z), Quaternion.identity, transform);
+                Instantiate(tile3Bridge, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
             // Spikes
             case 4:
-                Instantiate(tile4Spikes, new Vector3(x, y, z), Quaternion.identity, transform);
+                Instantiate(tile4Spikes, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
         }
+    }
+
+    public void ClearWorld()
+    {
+        GameObject.Destroy(worldParent);
+        worldParent = new GameObject("Generated World");
+        worldParent.transform.position = Vector3.zero;
+        worldParent.transform.parent = this.transform;
+
+        worldString = "";
+        avaliableSpawnPoints.Clear();
+        usedSpawnPoints.Clear();
+        worldMiddle = Vector3.zero;
+    }
+
+    public void MoveWorldToOrigin()
+    {
+        worldParent.transform.position = -worldMiddle;
     }
 }

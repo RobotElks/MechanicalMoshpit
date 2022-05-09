@@ -100,7 +100,7 @@ public class MultiplayerLevelInfo : NetworkBehaviour
             gameRound.startEarlyButton.SetActive(true);
             if (IsOwner)
             {
-                worldScript.LoadWorldFromFile();
+                worldScript.LoadWorldFromInformation();
 
                 transform.position = worldScript.GetSpawnAreaPoint();
             }

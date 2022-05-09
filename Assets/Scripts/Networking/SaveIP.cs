@@ -17,7 +17,7 @@ public class SaveIP : MonoBehaviour
     [SerializeField]
     private bool isHost;
     [SerializeField]
-    private string world;
+    private string worldString;
        // Start is called before the first frame update
     void Start()
     {
@@ -33,14 +33,14 @@ public class SaveIP : MonoBehaviour
         return saved;
     }
 
-    public string GetWorld()
+    public string GetWorldString()
     {
-        return world;
+        return worldString;
     }
 
-    public void SetWorld()
+    public void SetWorldString(string worldString)
     {
-        world = Maps.GetComponent<mapSelection>().GetMap();
+        this.worldString = worldString;
     }
 
     public bool IsHost(){
