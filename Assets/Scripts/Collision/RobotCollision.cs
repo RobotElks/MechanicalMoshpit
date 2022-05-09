@@ -31,6 +31,10 @@ public class RobotCollision : NetworkBehaviour
         {
             LaserCollision(collision);
         }
+        else if (collision.collider.CompareTag("Wall"))
+        {
+            WallCollision(collision);
+        }
         
 
     }
@@ -72,4 +76,13 @@ public class RobotCollision : NetworkBehaviour
         Destroy(laser, 0f);
         
     }
+
+    private void WallCollision(Collision hitWall){
+        if (IsOwner)
+        {
+            thisRobotMovementScript.MoveTargetPositionBack(1);
+            Debug.Log("Träffa vägg");
+        }
+    }
+
 }
