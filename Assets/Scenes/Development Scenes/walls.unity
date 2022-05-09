@@ -671,8 +671,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -357009771318321959, guid: a51f43fe063f096458be3071caa42f9b, type: 3}
       propertyPath: fileName
-      value: Assets/Worlds/clean20x20.txt
+      value: Assets/Worlds/walls30x30.txt
       objectReference: {fileID: 0}
+    - target: {fileID: -357009771318321959, guid: a51f43fe063f096458be3071caa42f9b, type: 3}
+      propertyPath: damageTile
+      value: 
+      objectReference: {fileID: 7564878702832362823, guid: 074f7f5e38cdcc14b9c3676d3e39fbd6, type: 3}
     - target: {fileID: -357009771318321959, guid: a51f43fe063f096458be3071caa42f9b, type: 3}
       propertyPath: tile5wall_x
       value: 
@@ -681,6 +685,30 @@ PrefabInstance:
       propertyPath: tile6wall_z
       value: 
       objectReference: {fileID: 2965143252909224037, guid: 196dd619c54eb480e86e47fbaeb4b9e2, type: 3}
+    - target: {fileID: -357009771318321959, guid: a51f43fe063f096458be3071caa42f9b, type: 3}
+      propertyPath: turningGear
+      value: 
+      objectReference: {fileID: 7564878702832362823, guid: 074f7f5e38cdcc14b9c3676d3e39fbd6, type: 3}
+    - target: {fileID: -357009771318321959, guid: a51f43fe063f096458be3071caa42f9b, type: 3}
+      propertyPath: conveyorBelt
+      value: 
+      objectReference: {fileID: 7564878702832362823, guid: 074f7f5e38cdcc14b9c3676d3e39fbd6, type: 3}
+    - target: {fileID: -357009771318321959, guid: a51f43fe063f096458be3071caa42f9b, type: 3}
+      propertyPath: tile10wall_x
+      value: 
+      objectReference: {fileID: 2965143252909224037, guid: 397aa956dc44d40f2bb761c9a96675c1, type: 3}
+    - target: {fileID: -357009771318321959, guid: a51f43fe063f096458be3071caa42f9b, type: 3}
+      propertyPath: tile11wall_z
+      value: 
+      objectReference: {fileID: 2965143252909224037, guid: 196dd619c54eb480e86e47fbaeb4b9e2, type: 3}
+    - target: {fileID: -357009771318321959, guid: a51f43fe063f096458be3071caa42f9b, type: 3}
+      propertyPath: energyStation
+      value: 
+      objectReference: {fileID: 7564878702832362823, guid: 074f7f5e38cdcc14b9c3676d3e39fbd6, type: 3}
+    - target: {fileID: -357009771318321959, guid: a51f43fe063f096458be3071caa42f9b, type: 3}
+      propertyPath: healthStation
+      value: 
+      objectReference: {fileID: 7564878702832362823, guid: 074f7f5e38cdcc14b9c3676d3e39fbd6, type: 3}
     - target: {fileID: 4883484550195873208, guid: a51f43fe063f096458be3071caa42f9b, type: 3}
       propertyPath: m_Name
       value: Load World Multiplayer
@@ -2699,7 +2727,7 @@ MonoBehaviour:
   addressInput: {fileID: 0}
   saved: 127.0.0.1
   isHost: 1
-  world: Assets/Worlds/clean20x20.txt
+  world: Assets/Worlds/walls30x30.txt
 --- !u!4 &1825430577
 Transform:
   m_ObjectHideFlags: 0

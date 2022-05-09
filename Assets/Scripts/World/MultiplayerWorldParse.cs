@@ -11,8 +11,13 @@ public class MultiplayerWorldParse : MonoBehaviour
     public GameObject tile2Water;
     public GameObject tile3Bridge;
     public GameObject tile4Spikes;
-    public GameObject tile5wall_x;
-    public GameObject tile6wall_z;
+    public GameObject healthStation;
+    public GameObject energyStation;
+    public GameObject damageTile;
+    public GameObject turningGear;
+    public GameObject conveyorBelt;
+    public GameObject tile10wall_x;
+    public GameObject tile11wall_z;
 
     public List<GameObject> SpawnArea = new List<GameObject>();
     public List<GameObject> avaliableSpawnPoints = new List<GameObject>();
@@ -168,13 +173,30 @@ public class MultiplayerWorldParse : MonoBehaviour
             case 4:
                 Instantiate(tile4Spikes, new Vector3(x, y, z), Quaternion.identity, transform);
                 break;
-            // wall_x
             case 5:
-                Instantiate(tile5wall_x, new Vector3(x, y - 0.1f, z - 0.5f), Quaternion.identity, transform);
+                Instantiate(healthStation, new Vector3(x, y, z), Quaternion.identity, transform);
+                break;
+            case 6:
+                Instantiate(energyStation, new Vector3(x, y, z), Quaternion.identity, transform);
+                break;
+            // Spikes
+            case 7:
+                Instantiate(damageTile, new Vector3(x, y, z), Quaternion.identity, transform);
+                break;
+            // Turning gear
+            case 8:
+                Instantiate(turningGear, new Vector3(x, y, z), Quaternion.identity, transform);
+                break;
+            case 9:
+                Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, transform);
+                break;
+            // wall_x
+            case 10:
+                Instantiate(tile10wall_x, new Vector3(x, y - 0.1f, z - 0.5f), Quaternion.identity, transform);
                 break;
             // wall_y
-            case 6:
-                Instantiate(tile6wall_z, new Vector3(x - 0.5f, y - 0.1f, z), Quaternion.identity, transform);
+            case 11:
+                Instantiate(tile11wall_z, new Vector3(x - 0.5f, y - 0.1f, z), Quaternion.identity, transform);
                 break;
         }
     }
