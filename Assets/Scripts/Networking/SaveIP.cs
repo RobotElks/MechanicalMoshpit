@@ -41,6 +41,7 @@ public class SaveIP : MonoBehaviour
     public void SetWorldString(string worldString)
     {
         this.worldString = worldString;
+
     }
 
     public bool IsHost(){

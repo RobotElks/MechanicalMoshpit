@@ -26,9 +26,10 @@ public class MultiplayerWorldParse : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ClearWorld();
-    }
+        //ClearWorld();
 
+
+    }
 
     public void LoadWorldFromFile()
     {
@@ -47,6 +48,7 @@ public class MultiplayerWorldParse : MonoBehaviour
 
     public void SetWorldString(string newWorldString)
     {
+
         if (newWorldString != worldString)
         {
             worldString = newWorldString;
@@ -88,7 +90,6 @@ public class MultiplayerWorldParse : MonoBehaviour
 
     public void BuildWorld()
     {
-
         if (worldParent.transform.childCount > 0)
             return;
 
@@ -121,6 +122,7 @@ public class MultiplayerWorldParse : MonoBehaviour
         }
 
         worldMiddle /= 2;
+
     }
 
     // Extract information form specific line
@@ -182,14 +184,15 @@ public class MultiplayerWorldParse : MonoBehaviour
                 Instantiate(tile4Spikes, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
         }
+
+
     }
 
     public void ClearWorld()
     {
+
         GameObject.Destroy(worldParent);
-        worldParent = new GameObject("Generated World");
-        worldParent.transform.position = Vector3.zero;
-        worldParent.transform.parent = this.transform;
+        CreateWorldParent();
 
         worldString = "";
         avaliableSpawnPoints.Clear();
@@ -197,8 +200,16 @@ public class MultiplayerWorldParse : MonoBehaviour
         worldMiddle = Vector3.zero;
     }
 
+    public void CreateWorldParent()
+    {
+        worldParent = new GameObject("Generated World");
+        worldParent.transform.position = Vector3.zero;
+        worldParent.transform.parent = this.transform;
+    }
+
     public void MoveWorldToOrigin()
     {
         worldParent.transform.position = -worldMiddle;
     }
+
 }

@@ -368,7 +368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e315195036d10a040af132ca8e9a0b53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energyPoints:
+  networkEnergyPoints:
     m_InternalValue: 0
 --- !u!114 &6926984100591272678
 MonoBehaviour:
