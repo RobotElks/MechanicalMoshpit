@@ -11,6 +11,9 @@ public class MultiplayerWorldParse : MonoBehaviour
     public GameObject tile2Water;
     public GameObject tile3Bridge;
     public GameObject tile4Spikes;
+    public GameObject tile5wall_x;
+    public GameObject tile6wall_z;
+
     public List<GameObject> SpawnArea = new List<GameObject>();
     public List<GameObject> avaliableSpawnPoints = new List<GameObject>();
     public List<GameObject> usedSpawnPoints = new List<GameObject>();
@@ -164,6 +167,14 @@ public class MultiplayerWorldParse : MonoBehaviour
             // Spikes
             case 4:
                 Instantiate(tile4Spikes, new Vector3(x, y, z), Quaternion.identity, transform);
+                break;
+            // wall_x
+            case 5:
+                Instantiate(tile5wall_x, new Vector3(x, y - 0.1f, z - 0.5f), Quaternion.identity, transform);
+                break;
+            // wall_y
+            case 6:
+                Instantiate(tile6wall_z, new Vector3(x - 0.5f, y - 0.1f, z), Quaternion.identity, transform);
                 break;
         }
     }
