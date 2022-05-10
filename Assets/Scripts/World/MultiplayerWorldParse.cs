@@ -12,7 +12,7 @@ public class MultiplayerWorldParse : MonoBehaviour
     public GameObject tile4Spikes;
 
 
-    public List<Vector3> avaliableSpawnPoints = new List<Vector3>();
+    public List<Vector3> worldSpawnPoints = new List<Vector3>();
 
     public string worldString = "";
 
@@ -47,10 +47,19 @@ public class MultiplayerWorldParse : MonoBehaviour
         return new Vector3(1005, 5, 5);
     }
 
-    public Vector3 GetSpawnPoint()
+    public Vector3[] GetSpawnPoints()
     {
+        List<Vector3> sp = new List<Vector3>();
 
-        return Vector3.zero;
+        while(worldSpawnPoints.Count > 0)
+        {
+            int i = Random.Range(0, worldSpawnPoints.Count);
+            sp.Add(worldSpawnPoints[i]);
+            worldSpawnPoints.RemoveAt(i);
+        }
+
+        
+        return sp.ToArray();
     }
 
     public void BuildLobby()
@@ -61,7 +70,7 @@ public class MultiplayerWorldParse : MonoBehaviour
 
     public void BuildWorld()
     {
-        
+
         worldMiddle = Vector3.zero;
 
         //Debug.Log("Parsing world");
@@ -130,9 +139,9 @@ public class MultiplayerWorldParse : MonoBehaviour
             case 0:
                 GameObject sp = new GameObject();
                 sp.transform.position = new Vector3(x, y, z);
-                sp.name = "SpawnPoint" + (avaliableSpawnPoints.Count + 1);
+                sp.name = "SpawnPoint" + (worldSpawnPoints.Count + 1);
                 sp.transform.parent = this.worldParent.transform;
-                avaliableSpawnPoints.Add(sp.transform.position);
+                worldSpawnPoints.Add(sp.transform.position);
                 break;
 
             // Grass-block
@@ -163,7 +172,7 @@ public class MultiplayerWorldParse : MonoBehaviour
         CreateWorldParent();
 
         worldString = "";
-        avaliableSpawnPoints.Clear();
+        worldSpawnPoints.Clear();
         worldMiddle = Vector3.zero;
     }
 
