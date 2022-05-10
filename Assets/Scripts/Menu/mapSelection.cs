@@ -37,6 +37,7 @@ public class mapSelection : MonoBehaviour
         worldBuilderScript.ClearWorld();
         informationScript.SetWorldString(File.ReadAllText(maps[selectedMap]).Replace("\r", ""));
         worldBuilderScript.LoadWorldFromInformation();
+        worldBuilderScript.BuildWorld();
         worldBuilderScript.MoveWorldToOrigin();
     }
 

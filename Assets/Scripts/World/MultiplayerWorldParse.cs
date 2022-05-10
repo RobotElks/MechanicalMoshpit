@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using Unity.Netcode;
 
@@ -11,11 +10,9 @@ public class MultiplayerWorldParse : MonoBehaviour
     public GameObject tile2Water;
     public GameObject tile3Bridge;
     public GameObject tile4Spikes;
-    public List<GameObject> SpawnArea = new List<GameObject>();
-    public List<GameObject> avaliableSpawnPoints = new List<GameObject>();
-    public List<GameObject> usedSpawnPoints = new List<GameObject>();
 
-    public string fileName;
+
+    public List<Vector3> avaliableSpawnPoints = new List<Vector3>();
 
     public string worldString = "";
 
@@ -27,14 +24,8 @@ public class MultiplayerWorldParse : MonoBehaviour
     void Start()
     {
         //ClearWorld();
-
-
     }
 
-    public void LoadWorldFromFile()
-    {
-        SetWorldString(File.ReadAllText(fileName).Replace("\r", ""));
-    }
 
     public void LoadWorldFromInformation()
     {
@@ -48,50 +39,30 @@ public class MultiplayerWorldParse : MonoBehaviour
 
     public void SetWorldString(string newWorldString)
     {
-
-        if (newWorldString != worldString)
-        {
-            worldString = newWorldString;
-            BuildWorld();
-        }
+        worldString = newWorldString;
     }
 
-    public Vector3 GetSpawnAreaPoint()
+    public Vector3 GetLobbySpawnPoint()
     {
-        int i = Random.Range(0, SpawnArea.Count - 1);
-
-        Vector3 point = SpawnArea[i].transform.position;
-
-        usedSpawnPoints.Add(SpawnArea[i]);
-        SpawnArea.RemoveAt(i);
-
-        return point;
+        return new Vector3(1005, 5, 5);
     }
 
     public Vector3 GetSpawnPoint()
     {
-        int i = Random.Range(0, 1);
-        GameObject spawnPoint;
-        if (i == 1)
-        {
-            spawnPoint = avaliableSpawnPoints[0];
-        }
-        else
-        {
-            spawnPoint = avaliableSpawnPoints[avaliableSpawnPoints.Count - 1];
-        }
 
-        avaliableSpawnPoints.Remove(spawnPoint);
-        usedSpawnPoints.Add(spawnPoint);
-        Vector3 point = spawnPoint.transform.position;
-        return point;
+        return Vector3.zero;
+    }
 
+    public void BuildLobby()
+    {
+        worldString = Resources.Load<TextAsset>("lobby").text;
+        BuildWorld();
     }
 
     public void BuildWorld()
     {
-        if (worldParent.transform.childCount > 0)
-            return;
+        
+        worldMiddle = Vector3.zero;
 
         //Debug.Log("Parsing world");
         string[] rows = worldString.Split("\n");
@@ -147,7 +118,7 @@ public class MultiplayerWorldParse : MonoBehaviour
             Debug.Log($"Unable to parse!");
         }
 
-        if (x < 1000 && x > worldMiddle.x)
+        if (x > worldMiddle.x)
             worldMiddle.x = x;
         if (z > worldMiddle.z)
             worldMiddle.z = z;
@@ -159,12 +130,9 @@ public class MultiplayerWorldParse : MonoBehaviour
             case 0:
                 GameObject sp = new GameObject();
                 sp.transform.position = new Vector3(x, y, z);
-                sp.name = "SpawnPoint" + (avaliableSpawnPoints.Count + SpawnArea.Count + 1);
+                sp.name = "SpawnPoint" + (avaliableSpawnPoints.Count + 1);
                 sp.transform.parent = this.worldParent.transform;
-                if (x >= 1000)
-                    SpawnArea.Add(sp);
-                else
-                    avaliableSpawnPoints.Add(sp);
+                avaliableSpawnPoints.Add(sp.transform.position);
                 break;
 
             // Grass-block
@@ -196,7 +164,6 @@ public class MultiplayerWorldParse : MonoBehaviour
 
         worldString = "";
         avaliableSpawnPoints.Clear();
-        usedSpawnPoints.Clear();
         worldMiddle = Vector3.zero;
     }
 

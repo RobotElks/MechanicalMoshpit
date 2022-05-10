@@ -16,7 +16,8 @@ public class MultiplayerLevelInfo : NetworkBehaviour
 
     public void StartCountDown()
     {
-        StartCountdownClientRpc();
+        StartCountdownClientRpc(worldScript.GetWorldString());
+        
     }
 
     public bool SetReady()
@@ -97,31 +98,28 @@ public class MultiplayerLevelInfo : NetworkBehaviour
         gameRound.notReady.Add(gameObject);
 
         if(IsOwner)
+        {
             worldScript.CreateWorldParent();
-
+            worldScript.BuildLobby();
+            transform.position = worldScript.GetLobbySpawnPoint();
+        }
 
         if (NetworkManager.Singleton.IsHost)
         {
 
             gameRound.startEarlyButton.SetActive(true);
+
             if (IsOwner)
             {
-                
                 worldScript.LoadWorldFromInformation();
-
-                transform.position = worldScript.GetSpawnAreaPoint();
             }
 
             //Gets loaded world from host
             else
-            {
-                string worldString = worldScript.GetWorldString();
-                LoadWorldClientRpc(worldString);
-                SetSpawnPointClientRpc(worldScript.GetSpawnAreaPoint());
+            { 
                 SetHasStartedClientRpc(gameRound.hasStarted);
             }
         }
-
     }
 
     public void StartGame()
@@ -138,15 +136,20 @@ public class MultiplayerLevelInfo : NetworkBehaviour
     }
 
     [ClientRpc]
-    void StartCountdownClientRpc()
+    void StartCountdownClientRpc(string worldString)
     {
-        gameRound.runButton.SetActive(false);
-        gameRound.stopButton.SetActive(false);
-        gameRound.readyButton.SetActive(false);
-        gameRound.countdownText = gameRound.countdown.GetComponent<TextMeshProUGUI>();
-        gameRound.timer = gameRound.counterTime;
-        gameRound.countdownText.enabled = true;
-        gameRound.isCountdowning = true;
+        if (IsOwner)
+        {
+            worldScript.SetWorldString(worldString);
+            gameRound.runButton.SetActive(false);
+            gameRound.stopButton.SetActive(false);
+            gameRound.readyButton.SetActive(false);
+            gameRound.countdownText = gameRound.countdown.GetComponent<TextMeshProUGUI>();
+            gameRound.timer = gameRound.counterTime;
+            gameRound.countdownText.enabled = true;
+            gameRound.isCountdowning = true;
+            worldScript.BuildWorld();
+        }
     }
 
     [ClientRpc]
