@@ -88,6 +88,7 @@ public class MultiplayerLevelInfo : NetworkBehaviour
         gameRound.Ready.Remove(gameObject);
         gameRound.notReady.Remove(gameObject);
     }
+
     public override void OnNetworkSpawn()
     {
         movementScript = GetComponent<RobotMultiplayerMovement>();
@@ -95,13 +96,17 @@ public class MultiplayerLevelInfo : NetworkBehaviour
         gameRound = GameObject.Find("GameRoundsManager").GetComponent<GameRoundsManager>();
         gameRound.notReady.Add(gameObject);
 
+        if(IsOwner)
+            worldScript.CreateWorldParent();
+
+
         if (NetworkManager.Singleton.IsHost)
         {
+
             gameRound.startEarlyButton.SetActive(true);
             if (IsOwner)
             {
                 
-                worldScript.CreateWorldParent();
                 worldScript.LoadWorldFromInformation();
 
                 transform.position = worldScript.GetSpawnAreaPoint();
