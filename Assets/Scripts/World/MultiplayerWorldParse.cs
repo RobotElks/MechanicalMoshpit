@@ -14,8 +14,6 @@ public class MultiplayerWorldParse : MonoBehaviour
     public GameObject healthStation;
     public GameObject energyStation;
     public GameObject damageTile;
-    public GameObject turningGear;
-    public GameObject conveyorBelt;
     public GameObject tile10wall_x;
     public GameObject tile11wall_z;
 
@@ -176,13 +174,6 @@ public class MultiplayerWorldParse : MonoBehaviour
             case 4:
                 Instantiate(tile4Spikes, new Vector3(x, y, z), Quaternion.identity, transform);
                 break;
-            // wall_x
-            case 14:
-                Instantiate(tile10wall_x, new Vector3(x, y - 0.1f, z - 0.5f), Quaternion.identity, transform);
-                break;
-            // wall_y
-            case 15:
-                Instantiate(tile11wall_z, new Vector3(x - 0.5f, y - 0.1f, z), Quaternion.identity, transform);
             // Health station
             case 5:
                 Instantiate(healthStation, new Vector3(x, y, z), Quaternion.identity, transform);
@@ -215,6 +206,14 @@ public class MultiplayerWorldParse : MonoBehaviour
             case 13:
                 GameObject lefttile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, transform);
                 lefttile.transform.eulerAngles = 270f * Vector3.up;
+                break;
+            // wall_x
+            case 14:
+                Instantiate(tile10wall_x, new Vector3(x, y - 0.1f, z - 0.5f), Quaternion.identity, transform);
+                break;
+            // wall_y
+            case 15:
+                Instantiate(tile11wall_z, new Vector3(x - 0.5f, y - 0.1f, z), Quaternion.identity, transform);
                 break;
         }
     }
