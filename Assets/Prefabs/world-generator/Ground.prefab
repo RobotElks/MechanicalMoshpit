@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 1363037412436797204}
   - component: {fileID: 1363037412436797205}
   m_Layer: 0
-  m_Name: TurningTile
-  m_TagString: TurnGearRight
+  m_Name: Ground
+  m_TagString: HealthStation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 14d875106d8a1ba47b1165b29365149a, type: 2}
+  - {fileID: 2100000, guid: 8da6c9238a3813848bf3d804795f7337, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -176,44 +176,44 @@ public class MultiplayerWorldParse : MonoBehaviour
                 break;
             // Health station
             case 5:
-                Instantiate(healthStation, new Vector3(x, y-0.5f, z), Quaternion.identity, transform);
+                Instantiate(healthStation, new Vector3(x, y, z), Quaternion.identity, transform);
                 break;
             case 6:
-                Instantiate(energyStation, new Vector3(x, y-0.5f, z), Quaternion.identity, transform);
+                Instantiate(energyStation, new Vector3(x, y, z), Quaternion.identity, transform);
                 break;
             // Spikes
             case 7:
-                Instantiate(damageTile, new Vector3(x, y-0.5f, z), Quaternion.identity, transform);
+                Instantiate(damageTile, new Vector3(x, y-0.1f, z), Quaternion.identity, transform);
                 break;
             // Health station
             case 8:
-                Instantiate(leftTurningGear, new Vector3(x, y-0.5f, z), Quaternion.identity, transform);
+                Instantiate(leftTurningGear, new Vector3(x, y, z), Quaternion.identity, transform);
                 break;
             case 9:
-                Instantiate(rightTurningGear, new Vector3(x, y-0.5f, z), Quaternion.identity, transform);
+                Instantiate(rightTurningGear, new Vector3(x, y, z), Quaternion.identity, transform);
                 break;
             case 10:
-                Instantiate(conveyorBelt, new Vector3(x, y-0.5f, z), Quaternion.identity, transform);
+                Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, transform);
                 break;
             case 11:
-                GameObject backwardtile = Instantiate(conveyorBelt, new Vector3(x, y-0.5f, z), Quaternion.identity, transform);
+                GameObject backwardtile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, transform);
                 backwardtile.transform.eulerAngles = 180f * Vector3.up;
                 break;
             case 12:
-                GameObject righttile = Instantiate(conveyorBelt, new Vector3(x, y-0.5f, z), Quaternion.identity, transform);
+                GameObject righttile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, transform);
                 righttile.transform.eulerAngles = 90f * Vector3.up;
                 break;
             case 13:
-                GameObject lefttile = Instantiate(conveyorBelt, new Vector3(x, y-0.5f, z), Quaternion.identity, transform);
+                GameObject lefttile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, transform);
                 lefttile.transform.eulerAngles = 270f * Vector3.up;
                 break;
             // wall_x
             case 14:
-                Instantiate(tile10wall_x, new Vector3(x, y - 0.1f, z - 0.5f), Quaternion.identity, transform);
+                Instantiate(tile10wall_x, new Vector3(x, y + 0.4f, z - 0.5f), Quaternion.identity, transform);
                 break;
             // wall_y
             case 15:
-                Instantiate(tile11wall_z, new Vector3(x - 0.5f, y - 0.1f, z), Quaternion.identity, transform);
+                Instantiate(tile11wall_z, new Vector3(x - 0.5f, y + 0.4f, z), Quaternion.identity, transform);
                 break;
         }
     }

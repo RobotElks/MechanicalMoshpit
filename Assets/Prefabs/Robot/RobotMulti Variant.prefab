@@ -265,7 +265,7 @@ CapsuleCollider:
   m_Radius: 0.45
   m_Height: 1.1431558
   m_Direction: 1
-  m_Center: {x: 0, y: -0.071577504, z: 0}
+  m_Center: {x: 0, y: 0.03, z: 0}
 --- !u!114 &-6839859807886187643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,6 +288,7 @@ MonoBehaviour:
     m_InternalValue: 0
   networkLeftToPush:
     m_InternalValue: {x: 0, y: 0, z: 0}
+  direction: {fileID: 0}
   movementSpeed: 1
 --- !u!114 &-3771028748239154682
 MonoBehaviour:
@@ -315,6 +316,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onHealthStation: 0
   onEnergyStation: 0
+  onConveyorBelt: 0
+  onTurnLeft: 0
+  onTurnRight: 0
 --- !u!114 &2096430636
 MonoBehaviour:
   m_ObjectHideFlags: 0
