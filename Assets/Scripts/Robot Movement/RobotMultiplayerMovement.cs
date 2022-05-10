@@ -11,6 +11,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public NetworkVariable<Gear> networkGear = new NetworkVariable<Gear>();
     public NetworkVariable<Vector3> networkLeftToPush = new NetworkVariable<Vector3>();
     Rigidbody rb;
+    public GameObject direction;
 
     Vector3 positionTarget;
     Vector3 rotationTarget;
@@ -157,6 +158,22 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         if (IsDoingInstruction()) return;
         positionTarget = transform.position - transform.forward * tileSize;
         currentInstruction = Instructions.MoveBackward;
+    }
+
+    public void SetDirection(GameObject Direction)
+    {
+        direction = Direction;
+        Debug.Log("direction set");
+    }
+
+    public void MoveDirection()
+    {
+        if (IsDoingInstruction()) return;
+        Debug.Log("direction move");
+        positionTarget = transform.position + direction.transform.forward * tileSize;
+        currentInstruction = Instructions.MoveBackward;
+        
+
     }
     //Call on function to return whether robot is moving or not
     public bool IsMoving()

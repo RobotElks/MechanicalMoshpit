@@ -10,11 +10,14 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
     Queue<Instructions> instructionsQueue = new Queue<Instructions>();
     bool isExecuting = false;
     RobotMultiplayerMovement movementScript;
+    RobotCollision collisionScript;
 
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
     {
         movementScript = GetComponent<RobotMultiplayerMovement>();
+        collisionScript = GetComponent<RobotCollision>();
+
 
         if(IsOwner)
         {
@@ -28,37 +31,53 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
     {
         if (IsOwner)
         {
-            //If the program is executing, and the robot is done with last instruction, run next instruction and place it last in que
-            if (isExecuting && instructionsQueue.Count > 0 && !movementScript.IsDoingInstruction())
+            if(isExecuting && !movementScript.IsDoingInstruction())
             {
-                Instructions instruction = instructionsQueue.Dequeue();
-                switch (instruction)
-                {
-                    case Instructions.MoveForward:
-                        movementScript.MoveForward();
-                        break;
-                    case Instructions.MoveBackward:
-                        movementScript.MoveBackwards();
-                        break;
-                    case Instructions.RotateLeft:
-                        movementScript.RotateLeft();
-                        break;
-                    case Instructions.RotateRight:
-                        movementScript.RotateRight();
-                        break;
-                    case Instructions.FirstGear:
-                        movementScript.SetGear(Gear.First);
-                        break;
-                    case Instructions.SecondGear:
-                        movementScript.SetGear(Gear.Second);
-                        break;
-                    case Instructions.ThirdGear:
-                        movementScript.SetGear(Gear.Third);
-                        break;
+                if(collisionScript.onConveyorBelt){
+                    movementScript.MoveDirection();
+                    collisionScript.onConveyorBelt = false;
+                    return;
                 }
+                else if(collisionScript.onTurnLeft){
+                    movementScript.RotateLeft();
+                    collisionScript.onTurnLeft = false;
+                }
+                else if(collisionScript.onTurnRight){
+                    movementScript.RotateRight();
+                    collisionScript.onTurnRight = false;
+                }
+                if (instructionsQueue.Count > 0)
+                {
+                    Instructions instruction = instructionsQueue.Dequeue();
+                    switch (instruction)
+                    {
+                        case Instructions.MoveForward:
+                            movementScript.MoveForward();
+                            break;
+                        case Instructions.MoveBackward:
+                            movementScript.MoveBackwards();
+                            break;
+                        case Instructions.RotateLeft:
+                            movementScript.RotateLeft();
+                            break;
+                        case Instructions.RotateRight:
+                            movementScript.RotateRight();
+                            break;
+                        case Instructions.FirstGear:
+                            movementScript.SetGear(Gear.First);
+                            break;
+                        case Instructions.SecondGear:
+                            movementScript.SetGear(Gear.Second);
+                            break;
+                        case Instructions.ThirdGear:
+                            movementScript.SetGear(Gear.Third);
+                            break;
+                    }
 
-                instructionsQueue.Enqueue(instruction);
+                }
             }
+            //If the program is executing, and the robot is done with last instruction, run next instruction and place it last in que
+
         }
 
 
