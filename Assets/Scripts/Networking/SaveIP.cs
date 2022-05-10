@@ -21,7 +21,18 @@ public class SaveIP : MonoBehaviour
        // Start is called before the first frame update
     void Start()
     {
+        GameObject[] informations = GameObject.FindGameObjectsWithTag("Information");
+        foreach(GameObject info in informations)
+        {
+            if (this.gameObject != info)
+            {
+                saved = info.GetComponent<SaveIP>().GetSaved();
+                GameObject.Destroy(info);
+                addressInput.text = saved;
+            }
+        }
         DontDestroyOnLoad(this.gameObject);
+        Debug.Log("start");
     }
 
     public void SaveIPAddress(){

@@ -7,12 +7,12 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGameAsHost()
     {
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene(1);
     }
 
     public void PlayGameAsClient()
     {
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene(1);
     }
 
     public void QuitGame()

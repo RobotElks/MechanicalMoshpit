@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Robot
   - Laser
+  - Information
   layers:
   - Default
   - TransparentFX
