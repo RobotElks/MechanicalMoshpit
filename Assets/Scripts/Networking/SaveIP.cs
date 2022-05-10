@@ -32,11 +32,16 @@ public class SaveIP : MonoBehaviour
             }
         }
         DontDestroyOnLoad(this.gameObject);
-        Debug.Log("start");
     }
 
     public void SaveIPAddress(){
         saved = addressInput.text;
+        isHost = false;
+    }
+
+    public void SaveIPAddress(string newIP)
+    {
+        saved = newIP;
         isHost = false;
     }
 
