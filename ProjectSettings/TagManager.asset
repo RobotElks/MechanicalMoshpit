@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Robot
   - Laser
+  - HealthStation
+  - DamageTile
+  - EnergyStation
+  - ConveyorBelt
   layers:
   - Default
   - TransparentFX

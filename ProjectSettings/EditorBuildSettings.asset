@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Production Scenes/Game.unity
     guid: 874b2d0fec3b36d4fb62796c469f3b72
+  - enabled: 1
+    path: Assets/Scenes/Development Scenes/Better_world.unity
+    guid: 9e93a0357c4aa4b088930887e3b102d1
   m_configObjects: {}

@@ -12,7 +12,7 @@ public class HealthPoints : NetworkBehaviour
     int localHealth = 100;
     RobotList robotList;
     ParticleSystem smoke;
-
+    public int heal = 50;
     Slider healthSlider;
 
     GameRoundsManager roundsManager;
@@ -33,6 +33,7 @@ public class HealthPoints : NetworkBehaviour
 
         if (IsOwner)
             healthSlider.value = (float)localHealth;
+        if(gameObject.transform.position.y < -50) getHit(100);
 
     }
 
@@ -62,15 +63,20 @@ public class HealthPoints : NetworkBehaviour
     }
 
 
-    public void healPowerUp(int heal)
+    public void healPowerUp()
     {
-        if ((healthPoints.Value + heal) < 100)
+        if (IsOwner)
         {
-            healthPoints.Value = healthPoints.Value + heal;
-        }
-        else
-        {
-            healthPoints.Value = 100;
+            if ((healthPoints.Value + heal) < 100)
+            {
+                healthPoints.Value = healthPoints.Value + heal;
+            }
+            else
+            {
+                healthPoints.Value = 100;
+            }
+            localHealth = healthPoints.Value;
+            UpdateHealthInfoServerRpc(localHealth);
         }
     }
 

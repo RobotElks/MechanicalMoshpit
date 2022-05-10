@@ -263,9 +263,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.45
-  m_Height: 1
+  m_Height: 1.1431558
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: -0.071577504, z: 0}
 --- !u!114 &-6839859807886187643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,6 +313,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e932189c3b68e94fbb9520571098902, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHealthStation: 0
+  onEnergyStation: 0
 --- !u!114 &2096430636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -368,7 +370,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e315195036d10a040af132ca8e9a0b53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energyPoints:
+  networkEnergyPoints:
     m_InternalValue: 0
 --- !u!114 &6926984100591272678
 MonoBehaviour:
@@ -383,6 +385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   changeColorLocal: 0
+  heal: 100
 --- !u!114 &8015023296398355661
 MonoBehaviour:
   m_ObjectHideFlags: 0

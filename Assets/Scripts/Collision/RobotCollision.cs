@@ -7,6 +7,12 @@ public class RobotCollision : NetworkBehaviour
 {
     HealthPoints healthScript;
     RobotMultiplayerMovement thisRobotMovementScript;
+    public bool onHealthStation = false;
+    public bool onEnergyStation = false;
+    public bool onConveyorBelt = false;
+    public bool onTurnLeft = false;
+    public bool onTurnRight = false;
+
 
 	void Start () {
 		healthScript = this.GetComponent<HealthPoints>();
@@ -20,6 +26,19 @@ public class RobotCollision : NetworkBehaviour
         CollisionCheck(collision);
     }
 
+    void OnCollisionExit (Collision collision) 
+    {
+        if (collision.collider.CompareTag("HealthStation"))
+        {
+            onHealthStation = false;
+        }
+
+        if (collision.collider.CompareTag("EnergyStation"))
+        {
+            onEnergyStation = false;
+        }
+    }
+
     private void CollisionCheck(Collision collision)
     {
         if (collision.collider.CompareTag("Player"))
@@ -30,6 +49,35 @@ public class RobotCollision : NetworkBehaviour
         else if (collision.collider.CompareTag("Laser"))
         {
             LaserCollision(collision);
+        }
+
+        else if (collision.collider.CompareTag("HealthStation"))
+        {
+            onHealthStation = true;
+        }
+        else if (collision.collider.CompareTag("EnergyStation"))
+        {
+            onEnergyStation = true;
+        }
+        else if (collision.collider.CompareTag("DamageTile"))
+        {
+            TakeDamage();
+        }
+        else if (collision.collider.CompareTag("ConveyorBelt"))
+        {
+            onConveyorBelt = true;
+            thisRobotMovementScript.SetDirection(collision.collider.gameObject);
+            Debug.Log("hit conveyorBelt");
+        }
+        else if (collision.collider.CompareTag("TurnGearLeft"))
+        {
+            onTurnLeft = true;
+            Debug.Log("Turn Left");
+        }
+        else if (collision.collider.CompareTag("TurnGearRight"))
+        {
+            onTurnRight = true;
+            Debug.Log("Turn Right");
         }
         
 
@@ -72,4 +120,8 @@ public class RobotCollision : NetworkBehaviour
         Destroy(laser, 0f);
         
     }
+    private void TakeDamage(){
+        healthScript.getHit(20);
+    }
+
 }
