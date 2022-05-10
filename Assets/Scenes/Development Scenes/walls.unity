@@ -709,6 +709,14 @@ PrefabInstance:
       propertyPath: healthStation
       value: 
       objectReference: {fileID: 1363037412436797206, guid: 217d58de413b33b4890d34c2a1eef573, type: 3}
+    - target: {fileID: -357009771318321959, guid: a51f43fe063f096458be3071caa42f9b, type: 3}
+      propertyPath: leftTurningGear
+      value: 
+      objectReference: {fileID: 1363037412436797206, guid: 9c3084e78142fa74ea24be12bd9c8439, type: 3}
+    - target: {fileID: -357009771318321959, guid: a51f43fe063f096458be3071caa42f9b, type: 3}
+      propertyPath: rightTurningGear
+      value: 
+      objectReference: {fileID: 1363037412436797206, guid: 9c3084e78142fa74ea24be12bd9c8439, type: 3}
     - target: {fileID: 4883484550195873208, guid: a51f43fe063f096458be3071caa42f9b, type: 3}
       propertyPath: m_Name
       value: Load World Multiplayer
