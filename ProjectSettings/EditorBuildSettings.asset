@@ -11,7 +11,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Production Scenes/Game.unity
     guid: 874b2d0fec3b36d4fb62796c469f3b72
+  - enabled: 0
+    path: Assets/Scenes/Production Scenes/MultiplayerIstructions 1.unity
+    guid: b2130b309731547c896ac7a4e31ef148
+  - enabled: 0
+    path: Assets/Scenes/Old/CollisionMultiplayer.unity
+    guid: 9f048e4812ce80249a82cfe0fa403a21
   - enabled: 1
-    path: Assets/Scenes/ChickenDinner.unity
-    guid: 7fe1e6a589eaa334ea31d7f0235bef4a
+    path: Assets/Scenes/Development Scenes/walls.unity
+    guid: 0cf060c74f9d347b5837410b09b3983b
   m_configObjects: {}

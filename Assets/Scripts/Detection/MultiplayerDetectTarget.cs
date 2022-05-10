@@ -10,6 +10,9 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     RobotList robotList;
     CannonBehavior cannonScript;
     Dead deadScript;
+
+    RaycastHit hit;
+    
     //RobotMovement MovementScript;
     //private bool reload = true;
     //public float fireRate = 0.5f;
@@ -51,11 +54,22 @@ public class MultiplayerDetectTarget : NetworkBehaviour
 
     private bool CheckIfTargetInScope(Transform target){
         //float distance = CalculateDistance();
+
         float angleBetween = CalculateAngle(target);
-        if ((angleBetween < 0.5f) && (angleBetween > -0.5f)){
+        if ((angleBetween < 0.5f) && (angleBetween > -0.5f) && CheckForWalls(target)){
             return true;
         }
-        
+        return false;
+    }
+
+    private bool CheckForWalls(Transform target)
+    {
+        Vector3 angleToTarget = target.position - transform.position;
+        angleToTarget = angleToTarget.normalized;
+        if (Physics.Raycast(transform.position, angleToTarget, out hit))
+        {
+            return hit.collider.tag == "Player";
+        }
         return false;
     }
 
