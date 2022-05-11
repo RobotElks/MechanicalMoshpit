@@ -79,6 +79,9 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     }
     void Update()
     {
+        //Debug.Log(gearValue);
+        //Debug.Log(gear);
+        //Debug.Log(gear.GetComponent<Slider>().value);
         gearValue = gear.GetComponent<Slider>().value;
     }
     // void addInstructionToProgram(string instruction, float gearValue)
