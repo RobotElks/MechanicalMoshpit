@@ -131,6 +131,12 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         return positionTarget;
     }
 
+    public void ResetTargetPosition(Vector3 positionTarget)
+    {
+        this.leftToPush = Vector3.zero;
+        this.positionTarget = positionTarget;
+    }
+
     public Vector3 GetTargetRotation()
     {
         return rotationTarget;

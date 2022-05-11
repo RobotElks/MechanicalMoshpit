@@ -220,7 +220,7 @@ public class MultiplayerLevelInfo : NetworkBehaviour
                 worldScript.BuildWorld();
 
             int id = (int)NetworkManager.Singleton.LocalClientId;
-
+            movementScript.ResetTargetPosition(spawnPoints[id]);
             transform.position = spawnPoints[id];
         }
     }
