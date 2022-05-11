@@ -14,12 +14,45 @@ public class MultiplayerLevelInfo : NetworkBehaviour
     [ServerRpc]
     public void StartCountDownServerRPC()
     {
+        debugClientRpc("start server cd");
+
         Vector3[] sp = worldScript.GetSpawnPoints();
+
+        //int MAX_MAP_SIZE = 5000;
 
         GameObject[] robots = GameObject.Find("RobotList").GetComponent<RobotList>().GetRobots();
         foreach (GameObject robot in robots)
-            robot.GetComponent<MultiplayerLevelInfo>().StartCountdownClientRpc(worldScript.GetWorldString(), sp);
+        {
+            debugClientRpc("robot for each");
 
+            //string braveNewWorld = worldScript.GetWorldString();
+            //int index = 0;
+          
+            //int length = braveNewWorld.Length;
+            //Debug.Log("Map string length: " + length);
+            //Debug.Log("index + 5000 : " + (int)(index + MAX_MAP_SIZE));
+            //while (length > (int)(index + MAX_MAP_SIZE))
+            //{
+            //    Debug.Log("index : " + index);
+
+            //    // map needs to be split over the network
+            //    robot.GetComponent<MultiplayerLevelInfo>().getWorldClientRpc(braveNewWorld.Substring(index, MAX_MAP_SIZE));
+            //    index += MAX_MAP_SIZE;
+
+            //}
+
+            //robot.GetComponent<MultiplayerLevelInfo>().getWorldClientRpc(braveNewWorld.Substring(index, length-index));
+            robot.GetComponent<MultiplayerLevelInfo>().StartCountdownClientRpc(sp);
+
+
+        }
+
+    }
+
+    [ClientRpc]
+    void debugClientRpc(string msg)
+    {
+        Debug.Log("debug : " + msg);
     }
 
     public bool SetReady()
@@ -106,6 +139,8 @@ public class MultiplayerLevelInfo : NetworkBehaviour
             worldScript.CreateWorldParent();
             worldScript.BuildLobby();
             transform.position = worldScript.GetLobbySpawnPoint();
+            SendWorldServerRpc();
+
         }
 
         if (NetworkManager.Singleton.IsHost)
@@ -127,17 +162,52 @@ public class MultiplayerLevelInfo : NetworkBehaviour
         }
     }
 
+    [ServerRpc]
+    void SendWorldServerRpc()
+    {
+        // SEND OVER GAME MAP TO CLIENTS
+        int MAX_MAP_SIZE = 5000;
+        string braveNewWorld = worldScript.GetWorldString();
+        int index = 0;
+
+        int length = braveNewWorld.Length;
+        Debug.Log("Map string length: " + length);
+        Debug.Log("index + 5000 : " + (int)(index + MAX_MAP_SIZE));
+        while (length > (int)(index + MAX_MAP_SIZE))
+        {
+            Debug.Log("index : " + index);
+
+            // map needs to be split over the network
+            GetWorldClientRpc(braveNewWorld.Substring(index, MAX_MAP_SIZE));
+            index += MAX_MAP_SIZE;
+
+        }
+
+        GetWorldClientRpc(braveNewWorld.Substring(index, length - index));
+    }
+
     public void StartGame()
     {
 
     }
 
     [ClientRpc]
-    void StartCountdownClientRpc(string worldString, Vector3[] spawnPoints)
+    void GetWorldClientRpc(string part)
+    {
+        Debug.Log("Update World String");
+        if (IsOwner)
+            worldScript.BuildWorldString(part);
+        //worldScript.SetWorldString(worldString);
+
+    }
+
+    [ClientRpc]
+    void StartCountdownClientRpc(Vector3[] spawnPoints)
     {
         if (IsOwner)
         {
-            worldScript.SetWorldString(worldString);
+            Debug.Log("Start Count Down");
+            //worldScript.SetWorldString(worldString);
             gameRound.runButton.SetActive(false);
             gameRound.stopButton.SetActive(false);
             gameRound.readyButton.SetActive(false);
