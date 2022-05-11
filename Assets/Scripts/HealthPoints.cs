@@ -9,19 +9,24 @@ public class HealthPoints : NetworkBehaviour
     public bool changeColorLocal = false;
     NetworkVariable<int> healthPoints = new NetworkVariable<int>();
     NetworkVariable<bool> changeColor = new NetworkVariable<bool>();
+    //NetworkVariable<float> abovePlayerHealth = new NetworkVariable<float>();
     public int localHealth = 100;
     RobotList robotList;
     ParticleSystem smoke;
     ChickenDinner chickenDinner;
     public int heal = 50;
-    Slider healthSlider;
-
+    public Slider healthSlider;
+    public Slider abovePlayerHealth;
     GameRoundsManager roundsManager;
 
     public override void OnNetworkSpawn()
     {
         if (IsOwner)
-            healthSlider = GameObject.Find("Hud").transform.Find("HealthBar").GetComponent<Slider>();
+        {
+        healthSlider = GameObject.Find("Hud").transform.Find("HealthBar").GetComponent<Slider>();
+        }
+
+        abovePlayerHealth = this.GetComponentInChildren<Slider>();
 
         roundsManager = GameObject.Find("GameRoundsManager").GetComponent<GameRoundsManager>();
         chickenDinner = GameObject.Find("ChickenDinner").GetComponent<ChickenDinner>();
@@ -32,10 +37,15 @@ public class HealthPoints : NetworkBehaviour
         if (Input.GetKeyDown("space"))
             getHit(25);
         //healthSlider.value -= (healthSlider.value - (float)localHealth) * Time.deltaTime * 2;
-
+/*
         if (IsOwner)
+        {
             healthSlider.value = (float)localHealth;
-        if(gameObject.transform.position.y < -50) getHit(100);
+            abovePlayerHealth.value = (float)localHealth;
+        }
+*/
+
+        if (gameObject.transform.position.y < -50) getHit(100);
 
     }
 
@@ -46,10 +56,11 @@ public class HealthPoints : NetworkBehaviour
         {
             if (IsOwner)
             {
-                Debug.Log(NetworkManager.Singleton.LocalClientId);
                 if ((localHealth - damage) > 0)
                 {
                     localHealth = localHealth - damage;
+                    healthSlider.value = (float)localHealth;
+                    abovePlayerHealth.value = (float)localHealth;
                 }
                 else
                 {
@@ -57,10 +68,14 @@ public class HealthPoints : NetworkBehaviour
                     killed();
                 }
                 UpdateHealthInfoServerRpc(localHealth);
+                
             }
             else
             {
                 localHealth = healthPoints.Value;
+                Debug.Log("Healthpoints: " + healthPoints.Value);
+                healthSlider.value = (float)healthPoints.Value;
+                abovePlayerHealth.value = (float)healthPoints.Value;
             }
         }
     }
@@ -117,6 +132,13 @@ public class HealthPoints : NetworkBehaviour
     public void UpdateHealthInfoServerRpc(int health)
     {
         healthPoints.Value = health;
+        healthSlider.value = health;
+    }
+
+    [ClientRpc]
+    public void UpdateHealthSliderClientRpc(int health)
+    {
+        healthSlider.value = health;
     }
 
 
