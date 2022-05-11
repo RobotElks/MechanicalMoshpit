@@ -51,7 +51,10 @@ public class LeaveGame : MonoBehaviour
     }
     public void LeaveGameToMenu()
     {
+        // send serverRPC? that client is shutting down.
         NetworkManager.Singleton.Shutdown();
+        GameObject networkManager = GameObject.Find("NetworkManager");
+        Destroy(networkManager);
         SceneManager.LoadScene(0);
     }
 }

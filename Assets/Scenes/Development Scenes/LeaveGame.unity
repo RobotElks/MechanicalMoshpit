@@ -2257,7 +2257,7 @@ MonoBehaviour:
   timer: 0
   countdown: {fileID: 825898391}
   countdownText: {fileID: 0}
-  robot: {fileID: 5462321247307863178, guid: e1d0b23eeb189e1408405e6234bc7eb1, type: 3}
+  ownRobotLevelScript: {fileID: 0}
   readyButton: {fileID: 1697900215}
   readyButtonText: {fileID: 25722656}
   startEarlyButton: {fileID: 1266017944}
