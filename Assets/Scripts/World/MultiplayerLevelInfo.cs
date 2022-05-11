@@ -20,6 +20,8 @@ public class MultiplayerLevelInfo : NetworkBehaviour
         foreach (GameObject robot in robots)
             robot.GetComponent<MultiplayerLevelInfo>().StartCountdownClientRpc(worldScript.GetWorldString(), sp);
 
+        
+
     }
 
     public bool SetReady()

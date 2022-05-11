@@ -6,10 +6,7 @@ using Unity.Netcode;
 public class MultiplayerWorldParse : MonoBehaviour
 {
     // Different tiles (Gameobject) and input file (String)
-    public GameObject tile1Grass;
-    public GameObject tile2Water;
-    public GameObject tile3Bridge;
-    public GameObject tile4Spikes;
+    public GameObject tile1Ground;
     public GameObject healthStation;
     public GameObject energyStation;
     public GameObject damageTile;
@@ -59,14 +56,14 @@ public class MultiplayerWorldParse : MonoBehaviour
     {
         List<Vector3> sp = new List<Vector3>();
 
-        while(worldSpawnPoints.Count > 0)
+        while (worldSpawnPoints.Count > 0)
         {
             int i = Random.Range(0, worldSpawnPoints.Count);
             sp.Add(worldSpawnPoints[i]);
             worldSpawnPoints.RemoveAt(i);
         }
 
-        
+
         return sp.ToArray();
     }
 
@@ -154,59 +151,48 @@ public class MultiplayerWorldParse : MonoBehaviour
 
             // Grass-block
             case 1:
-                Instantiate(tile1Grass, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
-                break;
-            // Water
-            case 2:
-                Instantiate(tile2Water, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
-                break;
-            // Bridge
-            case 3:
-                Instantiate(tile3Bridge, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
-                break;
-            // Spikes
-            case 4:
-                Instantiate(tile4Spikes, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
+                Instantiate(tile1Ground, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
             // Health station
-            case 5:
+            case 2:
                 Instantiate(healthStation, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
-            case 6:
+            case 3:
                 Instantiate(energyStation, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
             // Spikes
-            case 7:
-                Instantiate(damageTile, new Vector3(x, y-0.1f, z), Quaternion.identity, worldParent.transform);
+            case 4:
+                Instantiate(damageTile, new Vector3(x, y - 0.1f, z), Quaternion.identity, worldParent.transform);
                 break;
             // Health station
-            case 8:
+            case 5:
                 Instantiate(leftTurningGear, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
-            case 9:
+            case 6:
                 Instantiate(rightTurningGear, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
-            case 10:
+            case 7:
                 Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
-            case 11:
+            case 8:
+                GameObject righttile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
+                righttile.transform.eulerAngles = 90f * Vector3.up;
+
+                break;
+            case 9:
                 GameObject backwardtile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 backwardtile.transform.eulerAngles = 180f * Vector3.up;
                 break;
-            case 12:
-                GameObject righttile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
-                righttile.transform.eulerAngles = 90f * Vector3.up;
-                break;
-            case 13:
+            case 10:
                 GameObject lefttile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 lefttile.transform.eulerAngles = 270f * Vector3.up;
                 break;
             // wall_x
-            case 14:
+            case 11:
                 Instantiate(tile10wall_x, new Vector3(x, y + 0.4f, z - 0.5f), Quaternion.identity, worldParent.transform);
                 break;
             // wall_y
-            case 15:
+            case 12:
                 Instantiate(tile11wall_z, new Vector3(x - 0.5f, y + 0.4f, z), Quaternion.identity, worldParent.transform);
                 break;
         }
