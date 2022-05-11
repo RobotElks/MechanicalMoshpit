@@ -46,4 +46,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelTileBlock: {fileID: 8171514074441227513, guid: 5b6d0c9de802b5049af7b5c257d4eb36, type: 3}
   worldOrigin: {fileID: 0}
+  tilePrefabs:
+  - {fileID: 1363037412436797206, guid: ea4e323efd1513f4181b5be459e8e127, type: 3}
+  - {fileID: 1363037412436797206, guid: af79172900dac4d4ea653205b964ce93, type: 3}
+  - {fileID: 1363037412436797206, guid: a14facc5b11cba64bbb69e093ffc8346, type: 3}
+  - {fileID: 1363037412436797206, guid: 9d0f46e6464cc4f4f9122f7f11212c46, type: 3}
+  - {fileID: 1363037412436797206, guid: 9c3084e78142fa74ea24be12bd9c8439, type: 3}
+  - {fileID: 1363037412436797206, guid: 1c9c1f295bb782c4d813d2540acf16e9, type: 3}
+  - {fileID: 1363037412436797206, guid: e757863ff9015574a9861284bef6cc74, type: 3}
+  - {fileID: 1363037412436797206, guid: e757863ff9015574a9861284bef6cc74, type: 3}
+  - {fileID: 1363037412436797206, guid: e757863ff9015574a9861284bef6cc74, type: 3}
+  - {fileID: 1363037412436797206, guid: e757863ff9015574a9861284bef6cc74, type: 3}
   worldSize: {x: 30, y: 30}
+  camera: {fileID: 0}

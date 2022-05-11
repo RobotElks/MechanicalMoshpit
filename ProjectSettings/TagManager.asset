@@ -12,6 +12,9 @@ TagManager:
   - EnergyStation
   - ConveyorBelt
   - Information
+  - TurnGearLeft
+  - TurnGearRight
+  - LevelEditorBlock
   layers:
   - Default
   - TransparentFX

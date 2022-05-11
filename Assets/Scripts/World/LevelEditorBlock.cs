@@ -4,23 +4,28 @@ using UnityEngine;
 
 public class LevelEditorBlock : MonoBehaviour
 {
-    public List<GameObject> tilePrefabs = new List<GameObject>();
     List<GameObject> visableTiles = new List<GameObject>();
 
-    public int currentTile = 1;
+    public int currentTile = 0;
 
-    int firstConveryorBelt = 6;
+    
 
     // Start is called before the first frame update
     void Start()
     {
         //Debug.Log(tilePrefabs.Count);
 
+
+    }
+
+    public void SetTileList(List<GameObject> tilePrefabs, int firstConveryorBelt)
+    {
         for (int i = 0; i < tilePrefabs.Count; i++)
         {
             GameObject tile = Instantiate(tilePrefabs[i], this.transform.position, Quaternion.identity, this.transform);
             tile.SetActive(false);
             tile.GetComponent<BoxCollider>().enabled = false;
+
             //Rotate conveoyrbelts
             if (i > firstConveryorBelt && i < firstConveryorBelt + 4)
             {
@@ -43,14 +48,21 @@ public class LevelEditorBlock : MonoBehaviour
     public void NextTile()
     {
         visableTiles[currentTile].SetActive(false);
-        currentTile = (currentTile + 1 + tilePrefabs.Count) % tilePrefabs.Count;
+        currentTile = (currentTile + 1 + visableTiles.Count) % visableTiles.Count;
         visableTiles[currentTile].SetActive(true);
     }
 
     public void PreviousTile()
     {
         visableTiles[currentTile].SetActive(false);
-        currentTile = (currentTile - 1 + tilePrefabs.Count) % tilePrefabs.Count;
+        currentTile = (currentTile - 1 + visableTiles.Count) % visableTiles.Count;
         visableTiles[currentTile].SetActive(true);
     }
+
+    public void SetTile(int tileNumber)
+    {
+        currentTile = tileNumber - 1;
+    }
+
+    public int CurrentTile { get { return currentTile; }}
 }
