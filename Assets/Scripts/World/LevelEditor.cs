@@ -12,6 +12,8 @@ public class LevelEditor : MonoBehaviour
 
     GameObject worldParent;
 
+    public Camera camera;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,7 +34,31 @@ public class LevelEditor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetMouseButtonDown(0))
+        { // if left button pressed...
+            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                if(hit.collider.gameObject.CompareTag("LevelEditorBlock"))
+                {
+                    hit.collider.GetComponent<LevelEditorBlock>().NextTile();
+                }
+            }
+        }
 
+        if (Input.GetMouseButtonDown(1))
+        { // if left button pressed...
+            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.collider.gameObject.CompareTag("LevelEditorBlock"))
+                {
+                    hit.collider.GetComponent<LevelEditorBlock>().PreviousTile();
+                }
+            }
+        }
     }
 
 

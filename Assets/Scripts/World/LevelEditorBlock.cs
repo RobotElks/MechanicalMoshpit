@@ -20,7 +20,7 @@ public class LevelEditorBlock : MonoBehaviour
         {
             GameObject tile = Instantiate(tilePrefabs[i], this.transform.position, Quaternion.identity, this.transform);
             tile.SetActive(false);
-
+            tile.GetComponent<BoxCollider>().enabled = false;
             //Rotate conveoyrbelts
             if (i > firstConveryorBelt && i < firstConveryorBelt + 4)
             {
@@ -43,12 +43,14 @@ public class LevelEditorBlock : MonoBehaviour
     public void NextTile()
     {
         visableTiles[currentTile].SetActive(false);
-
-
         currentTile = (currentTile + 1 + tilePrefabs.Count) % tilePrefabs.Count;
-
-
         visableTiles[currentTile].SetActive(true);
+    }
 
+    public void PreviousTile()
+    {
+        visableTiles[currentTile].SetActive(false);
+        currentTile = (currentTile - 1 + tilePrefabs.Count) % tilePrefabs.Count;
+        visableTiles[currentTile].SetActive(true);
     }
 }
