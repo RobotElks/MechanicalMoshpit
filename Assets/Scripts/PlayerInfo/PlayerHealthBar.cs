@@ -50,7 +50,7 @@ public class PlayerHealthBar : NetworkBehaviour
 
     public void GetHit(int damageAmount)
     {
-        if (IsOwner && roundsHandlerScript.InsideActiveGame())
+        if (IsOwner && roundsHandlerScript.InsideActiveGame() && localHealth > 0)
         {
             if ((localHealth - damageAmount) > 0)
             {
@@ -74,7 +74,7 @@ public class PlayerHealthBar : NetworkBehaviour
         healthPoints.Value = health;
     }
 
-    public void healPowerUp()
+    public void HealPowerUp()
     {
         if (IsOwner)
         {
@@ -86,7 +86,10 @@ public class PlayerHealthBar : NetworkBehaviour
             {
                 localHealth = 100;
             }
+
+            healthSlider.value = (float)localHealth;
             UpdateHealthInfoServerRpc(localHealth);
+            
         }
     }
 

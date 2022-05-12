@@ -82,7 +82,7 @@ public class RobotRoundsHandler : NetworkBehaviour
     {
         //Debug.Log("Old: " + oldState + " |  new: " + newState);
 
-        if (IsOwner && !deadScript.IsDead())
+        if (IsOwner)
         {
             switch (newState)
             {
@@ -96,6 +96,8 @@ public class RobotRoundsHandler : NetworkBehaviour
                     stopProgramButton.SetActive(false);
                     programmingInterface.SetActive(false);
                     instructionScript.StopExecute();
+
+
 
                     //Host starts countdown
                     if (IsHost)
@@ -125,9 +127,12 @@ public class RobotRoundsHandler : NetworkBehaviour
 
                     }
 
-                    programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
-                    programmingInterface.SetActive(true);
-                   
+                    if (!deadScript.IsDead())
+                    {
+                        programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
+                        programmingInterface.SetActive(true);
+                    }
+
                     //Stop excecuting
 
                     break;
@@ -139,9 +144,12 @@ public class RobotRoundsHandler : NetworkBehaviour
                         SetTimerServerRpc(excecutingTime);
                     }
 
-                    programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().sendProgramToRobot();
-                    programmingInterface.SetActive(false);
-                    
+                    if (!deadScript.IsDead())
+                    {
+                        programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().sendProgramToRobot();
+                        programmingInterface.SetActive(false);
+                    }
+
 
                     break;
             }

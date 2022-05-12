@@ -209,7 +209,7 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     {
         energyScript.restoreEnergy(restoredEnergyPerRound);
         if(collisionScript.onHealthStation){
-            healthScript.healPowerUp();
+            healthScript.HealPowerUp();
             collisionScript.healthStationScript.Inactivate();
         }
         else if(collisionScript.onEnergyStation){
