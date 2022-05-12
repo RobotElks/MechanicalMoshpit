@@ -72,9 +72,10 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             else if (IsMoving())
             {
                 //if the distance between the position target and the current position is larger than 0.000001, move towards it.
-                if ((transform.position - positionTarget).magnitude > 0.000001f)
+                Vector3 target = new Vector3(positionTarget.x, transform.position.y, positionTarget.z);
+                if ((transform.position - target).magnitude > 0.000001f)
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, positionTarget, movementSpeed * movementGear * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, target, movementSpeed * movementGear * Time.deltaTime);
                 }
                 else
                 {

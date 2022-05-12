@@ -10,6 +10,8 @@ public class MultiplayerLevelInfo : NetworkBehaviour
     RobotMultiplayerMovement movementScript;
     MultiplayerWorldParse worldScript;
     GameRoundsManager gameRound;
+    RobotCollision collisionScript;
+    RobotMultiplayerInstructionScript instructionScript;
 
     [ServerRpc]
     public void StartCountDownServerRPC()
@@ -130,6 +132,8 @@ public class MultiplayerLevelInfo : NetworkBehaviour
         movementScript = GetComponent<RobotMultiplayerMovement>();
         worldScript = GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>();
         gameRound = GameObject.Find("GameRoundsManager").GetComponent<GameRoundsManager>();
+        instructionScript = GetComponent<RobotMultiplayerInstructionScript>();
+        collisionScript = GetComponent<RobotCollision>();
         gameRound.notReady.Add(gameObject);
 
         if (IsOwner)
@@ -208,6 +212,7 @@ public class MultiplayerLevelInfo : NetworkBehaviour
         {
             Debug.Log("Start Count Down");
             //worldScript.SetWorldString(worldString);
+            instructionScript.ClearInstructions();
             gameRound.runButton.SetActive(false);
             gameRound.stopButton.SetActive(false);
             gameRound.readyButton.SetActive(false);
@@ -221,7 +226,9 @@ public class MultiplayerLevelInfo : NetworkBehaviour
 
             int id = (int)NetworkManager.Singleton.LocalClientId;
             movementScript.ResetTargetPosition(spawnPoints[id]);
+
             transform.position = spawnPoints[id];
+            collisionScript.onConveyorBelt = false;
         }
     }
 

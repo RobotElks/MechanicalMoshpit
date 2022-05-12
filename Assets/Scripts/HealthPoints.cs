@@ -14,6 +14,7 @@ public class HealthPoints : NetworkBehaviour
     ParticleSystem smoke;
     ChickenDinner chickenDinner;
     public int heal = 50;
+    public int damageTilePower = 20;
     Slider healthSlider;
 
     GameRoundsManager roundsManager;
@@ -65,6 +66,9 @@ public class HealthPoints : NetworkBehaviour
         }
     }
 
+    public void DamageTile(){
+        getHit(damageTilePower);
+    }
 
     public void healPowerUp()
     {

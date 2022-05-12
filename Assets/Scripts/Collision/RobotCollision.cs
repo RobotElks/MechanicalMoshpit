@@ -7,11 +7,13 @@ public class RobotCollision : NetworkBehaviour
 {
     HealthPoints healthScript;
     RobotMultiplayerMovement thisRobotMovementScript;
+    public HealthStationScript healthStationScript;
     public bool onHealthStation = false;
     public bool onEnergyStation = false;
     public bool onConveyorBelt = false;
     public bool onTurnLeft = false;
     public bool onTurnRight = false;
+    public bool onDamageTile = false;
 
 
 	void Start () {
@@ -32,9 +34,14 @@ public class RobotCollision : NetworkBehaviour
             onHealthStation = false;
         }
 
-        if (collision.collider.CompareTag("EnergyStation"))
+        else if (collision.collider.CompareTag("EnergyStation"))
         {
             onEnergyStation = false;
+        }
+
+        else if (collision.collider.CompareTag("DamageTile"))
+        {
+            onDamageTile = false;
         }
     }
 
@@ -55,7 +62,11 @@ public class RobotCollision : NetworkBehaviour
         }
         else if (collision.collider.CompareTag("HealthStation"))
         {
-            onHealthStation = true;
+            healthStationScript = collision.collider.GetComponent<HealthStationScript>();
+            if(healthStationScript.GetIfAvailable()){
+                onHealthStation = true;
+            }
+            
         }
         else if (collision.collider.CompareTag("EnergyStation"))
         {
@@ -63,7 +74,7 @@ public class RobotCollision : NetworkBehaviour
         }
         else if (collision.collider.CompareTag("DamageTile"))
         {
-            TakeDamage();
+            onDamageTile = true;
         }
         else if (collision.collider.CompareTag("ConveyorBelt"))
         {
@@ -132,7 +143,7 @@ public class RobotCollision : NetworkBehaviour
         }
     }
     private void TakeDamage(){
-        healthScript.getHit(20);
+        //healthScript.getHit(20);
     }
 
 }
