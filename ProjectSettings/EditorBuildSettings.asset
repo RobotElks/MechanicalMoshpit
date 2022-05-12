@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Development Scenes/playerinfo.unity
-    guid: 9390d54f18b374145918d91e3cbda0e1
+    path: Assets/Scenes/Development Scenes/PlayerInfoLEO.unity
+    guid: 689334d5727dc24459c349fe70869f04
   m_configObjects: {}

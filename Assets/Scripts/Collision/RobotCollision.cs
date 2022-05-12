@@ -5,7 +5,7 @@ using Unity.Netcode;
 
 public class RobotCollision : NetworkBehaviour
 {
-    HealthPoints healthScript;
+    PlayerHealthBar playerHealthBarScript;
     RobotMultiplayerMovement thisRobotMovementScript;
     public bool onHealthStation = false;
     public bool onEnergyStation = false;
@@ -15,7 +15,7 @@ public class RobotCollision : NetworkBehaviour
 
 
 	void Start () {
-		healthScript = this.GetComponent<HealthPoints>();
+		playerHealthBarScript = this.GetComponentInChildren<PlayerHealthBar>();
         thisRobotMovementScript = GetComponent<RobotMultiplayerMovement>();
 	}
 
@@ -69,17 +69,14 @@ public class RobotCollision : NetworkBehaviour
         {
             onConveyorBelt = true;
             thisRobotMovementScript.SetDirection(collision.collider.gameObject);
-            Debug.Log("hit conveyorBelt");
         }
         else if (collision.collider.CompareTag("TurnGearLeft"))
         {
             onTurnLeft = true;
-            Debug.Log("Turn Left");
         }
         else if (collision.collider.CompareTag("TurnGearRight"))
         {
             onTurnRight = true;
-            Debug.Log("Turn Right");
         }
         
 
@@ -118,21 +115,19 @@ public class RobotCollision : NetworkBehaviour
     }
 
     private void LaserCollision(Collision collider){
-        healthScript.getHit(50);
+        playerHealthBarScript.GetHit(20);
         GameObject laser = collider.gameObject;
         Destroy(laser, 0f);
-        
     }
 
     private void WallCollision(Collision hitWall){
         if (IsOwner)
         {
             thisRobotMovementScript.MoveTargetPositionBack(1);
-            Debug.Log("Träffa vägg");
         }
     }
     private void TakeDamage(){
-        healthScript.getHit(20);
+        playerHealthBarScript.GetHit(20);
     }
 
 }
