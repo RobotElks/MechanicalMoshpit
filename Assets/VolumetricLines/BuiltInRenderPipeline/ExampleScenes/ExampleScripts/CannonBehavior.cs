@@ -20,11 +20,24 @@ public class CannonBehavior : NetworkBehaviour {
 		//}
 	}
 
+	[ServerRpc]
+	void RequestShootServerRpc(Vector3 spawnPosition, Quaternion muzzleRotation)
+    {
 
-	public void shoot(){
+		ShootClientRpc(spawnPosition, muzzleRotation);
+    }
+
+	[ClientRpc]
+	void ShootClientRpc(Vector3 spawnPosition, Quaternion muzzle){
 		//m_shotPrefab.GetComponent<Light>().color = new Color.yellow;
-		GameObject laser = GameObject.Instantiate(shotPrefab, shot_spawn.transform.position, muzzle.rotation);
+		GameObject laser = GameObject.Instantiate(shotPrefab, spawnPosition, muzzle);
 		Physics.IgnoreCollision(laser.GetComponent<BoxCollider>(), GetComponent<CapsuleCollider>(), true);
 		GameObject.Destroy(laser, 3f);
+	}
+
+	public void Shoot()
+	{
+		//m_shotPrefab.GetComponent<Light>().color = new Color.yellow;
+		RequestShootServerRpc(shot_spawn.transform.position, muzzle.rotation);
 	}
 }
