@@ -11,8 +11,6 @@ public class ChickenDinner : NetworkBehaviour
     [SerializeField] GameObject ui;
     [SerializeField] GameObject hud;
     [SerializeField] GameObject readyScreen;
-    [SerializeField] GameObject gameRoundsManager;
-    GameRoundsManager timer;
     Transform winLose;
     GameObject[] robotArray;
 
@@ -45,6 +43,8 @@ public class ChickenDinner : NetworkBehaviour
     [ClientRpc]
     void WinnerStateClientRpc()
     {
+        Debug.Log("Reached Winner State Check");
+
         robotArray = robotList.GetRobots();
 
         foreach (GameObject robot in robotArray)
@@ -52,20 +52,13 @@ public class ChickenDinner : NetworkBehaviour
             deadScript = robot.GetComponent<Dead>();
             if (deadScript.IsDead())
             {
-                if (IsOwner)
-                {
-                    Loser();
-                    break;
-                }
+                Loser();
+                break;
             }
             else
             {
-                if (IsOwner)
-                {
-                    Winner();
-                    break;
-
-                }
+                Winner();
+                break;
             }
 
         }
@@ -73,7 +66,6 @@ public class ChickenDinner : NetworkBehaviour
 
     public void Winner()
     {
-        gameRoundsManager.SetActive(false);
         readyScreen.SetActive(false);
         ui.SetActive(false);
         hud.SetActive(false);
@@ -87,14 +79,13 @@ public class ChickenDinner : NetworkBehaviour
     {
         if (IsOwner)
         {
-            //gameRoundsManager.SetActive(false);
             readyScreen.SetActive(false);
             ui.SetActive(false);
             hud.SetActive(false);
             transform.Find("Canvas/Panel").gameObject.SetActive(true);
             transform.Find("Canvas/Panel/WinnerText").gameObject.SetActive(false);
             winLose = transform.Find("Canvas/Panel/LoserText");
-            winLose.GetComponent<TextMeshProUGUI>().text += "\n#" + (robotList.GetRobots().Length + 1);
+            winLose.GetComponent<TextMeshProUGUI>().text += "\n#" + (robotList.GetRobots().Length);
             winLose.gameObject.SetActive(true);
         }
     }
