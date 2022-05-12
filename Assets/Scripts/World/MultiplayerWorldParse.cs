@@ -50,6 +50,11 @@ public class MultiplayerWorldParse : MonoBehaviour
         worldString = newWorldString;
     }
 
+    public void AddToWorldString(string worldStringPart)
+    {
+        worldString += worldStringPart;
+    }
+
     public Vector3 GetLobbySpawnPoint()
     {
         return new Vector3(1005, 5, 5);

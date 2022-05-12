@@ -10,42 +10,73 @@ public class MultiplayerLevelInfo : NetworkBehaviour
     RobotMultiplayerMovement movementScript;
     MultiplayerWorldParse worldScript;
 
+    const int MAX_MAP_SEND_SIZE = 5000;
+
     public override void OnNetworkSpawn()
     {
         movementScript = GetComponent<RobotMultiplayerMovement>();
         worldScript = GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>();
-        //gameRound = GameObject.Find("GameRoundsManager").GetComponent<GameRoundsManager>();
-        //gameRound.notReady.Add(gameObject);
 
         if (IsOwner)
         {
-            //GameObject.Find("GameRoundsManager").GetComponent<GameRoundsManager>().SetOwnRobotLevelScript(this);
-
             worldScript.CreateWorldParent();
             worldScript.BuildLobby();
             transform.position = worldScript.GetLobbySpawnPoint();
-        }
 
-        if (NetworkManager.Singleton.IsHost)
-        {
-
-            //gameRound.startEarlyButton.SetActive(true);
-
-            if (IsOwner)
+            if (NetworkManager.Singleton.IsHost)
             {
                 worldScript.LoadWorldFromInformation();
                 worldScript.BuildWorld();
-            }
-
-            //Gets loaded world from host
-            else
-            {
-                //SetHasStartedClientRpc(gameRound.hasStarted);
             }
         }
     }
 
 
+    public void HostSendWorldStringToClients()
+    {
+        if (IsHost && IsOwner)
+        {
+            ClearWorldStringClientRpc();
+
+            string worldString = worldScript.GetWorldString();
+
+            int index = 0;
+            int length = worldString.Length;
+
+            while (length > (index + MAX_MAP_SEND_SIZE))
+            {
+                SendPartOfWorldStringClientRpc(worldString.Substring(index, MAX_MAP_SEND_SIZE));
+                index += MAX_MAP_SEND_SIZE;
+            }
+
+            SendPartOfWorldStringClientRpc(worldString.Substring(index));
+
+
+            BuildWorldClientRpc();
+        }
+
+    }
+
+    [ClientRpc]
+    private void SendPartOfWorldStringClientRpc(string worldStringPart)
+    {
+        if (!IsHost)
+            worldScript.AddToWorldString(worldStringPart);
+    }
+
+    [ClientRpc]
+    private void ClearWorldStringClientRpc()
+    {
+        if (!IsHost)
+            worldScript.SetWorldString("");
+    }
+
+    [ClientRpc]
+    private void BuildWorldClientRpc()
+    {
+        if (!IsHost)
+            worldScript.BuildWorld();
+    }
 
 
 }

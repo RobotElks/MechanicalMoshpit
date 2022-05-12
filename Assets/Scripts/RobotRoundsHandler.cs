@@ -23,6 +23,7 @@ public class RobotRoundsHandler : NetworkBehaviour
     RobotList robotList;
 
     RobotMultiplayerInstructionScript instructionScript;
+    MultiplayerLevelInfo levelInfoScript;
 
     public float countdownTime = 5;
     public float programmingTime = 8;
@@ -47,6 +48,7 @@ public class RobotRoundsHandler : NetworkBehaviour
         countdownTimer.OnValueChanged += TimerChanged;
 
         instructionScript = GetComponent<RobotMultiplayerInstructionScript>();
+        levelInfoScript = GetComponent<MultiplayerLevelInfo>();
 
         if (IsHost)
         {
@@ -84,7 +86,8 @@ public class RobotRoundsHandler : NetworkBehaviour
             {
                 //Countdown starts
                 case GameState.Countdown:
-                    //Turns of the ready screan
+
+
                     readyScreen.SetActive(false);
                     finishedButton.SetActive(true);
                     runProgramButton.SetActive(false);
@@ -95,8 +98,8 @@ public class RobotRoundsHandler : NetworkBehaviour
                     //Host starts countdown
                     if (IsHost)
                     {
+                        levelInfoScript.HostSendWorldStringToClients();
                         SetTimerServerRpc(countdownTime);
-
 
                         //Move all players to MAP
                     }
@@ -268,8 +271,17 @@ public class RobotRoundsHandler : NetworkBehaviour
     {
         if (IsHost)
             this.isReady.Value = ready;
+    }
 
 
+    public bool InsideActiveGame()
+    {
+        return (gameState.Value == GameState.Programming || gameState.Value == GameState.Excecuting);
+    }
+
+    public bool InLobby()
+    {
+        return gameState.Value == GameState.InLobby;
     }
 
 
