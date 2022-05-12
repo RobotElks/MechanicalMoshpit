@@ -35,7 +35,7 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     GameObject robot;
     RobotEnergy energyScript;
     RobotCollision collisionScript;
-    HealthPoints healthScript;
+    PlayerHealthBar healthScript;
     
     public int movingEnergy = 5;
     public float restoredEnergyPerRound = 30f;
@@ -73,7 +73,7 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     {
         robot = playerRobot;
         energyScript = robot.GetComponent<RobotEnergy>();
-        healthScript = robot.GetComponent<HealthPoints>();
+        healthScript = robot.GetComponentInChildren<PlayerHealthBar>();
         collisionScript = robot.GetComponent<RobotCollision>();
 
     }
