@@ -34,6 +34,11 @@ public class MultiplayerWorldParse : MonoBehaviour
         //ClearWorld();
     }
 
+    public void BuildWorldString(string part)
+    {
+        Debug.Log("part world : " + part);
+        worldString += part;
+    }
 
     public void LoadWorldFromInformation()
     {
@@ -80,10 +85,12 @@ public class MultiplayerWorldParse : MonoBehaviour
     {
         worldString = Resources.Load<TextAsset>("lobby").text;
         BuildWorld();
+        worldString = "";
     }
 
     public void BuildWorld()
     {
+        Debug.Log("saved world : " + worldString);
 
         worldMiddle = Vector3.zero;
 

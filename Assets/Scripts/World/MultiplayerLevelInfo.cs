@@ -92,7 +92,6 @@ public class MultiplayerLevelInfo : NetworkBehaviour
                 robot.GetComponent<MultiplayerLevelInfo>().SetSpawnPointClientRpc(spawnPoints);
             }
 
-
         }
     }
 

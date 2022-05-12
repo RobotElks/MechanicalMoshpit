@@ -17,6 +17,9 @@ public class HealthPoints : NetworkBehaviour
     public int heal = 50;
     public Slider healthSlider;
     public Slider abovePlayerHealth;
+    public int damageTilePower = 20;
+    Slider healthSlider;
+
     GameRoundsManager roundsManager;
 
     public override void OnNetworkSpawn()
@@ -51,12 +54,9 @@ public class HealthPoints : NetworkBehaviour
 
 
     public void getHit(int damage)
-    {
-
-        if (IsOwner)
-        {
-            Debug.Log(NetworkManager.Singleton.LocalClientId);
-            if ((localHealth - damage) > 0)
+    {   
+        
+            if (IsOwner)
             {
                 if ((localHealth - damage) > 0)
                 {
@@ -88,6 +88,9 @@ public class HealthPoints : NetworkBehaviour
 
     }
 
+    public void DamageTile(){
+        getHit(damageTilePower);
+    }
 
     public void healPowerUp()
     {

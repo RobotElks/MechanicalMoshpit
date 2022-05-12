@@ -10,6 +10,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     RobotList robotList;
     CannonBehavior cannonScript;
     Dead deadScript;
+
     RobotRoundsHandler roundsHandlerScript;
 
     RaycastHit hit;
@@ -25,7 +26,6 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     void Start()
     {
         cannonScript = this.GetComponent<CannonBehavior>();
-        roundsHandlerScript = GetComponent<RobotRoundsHandler>();
         //MovementScript = this.GetComponent<RobotMovement>();
 
         //CheckIfTargetInScope();
@@ -36,6 +36,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
         robotList = GameObject.Find("RobotList").GetComponent<RobotList>();
         robotList.AddRobot(this.gameObject);
 
+        roundsHandlerScript = GetComponent<RobotRoundsHandler>();
     }
 
     public override void OnNetworkDespawn()
@@ -58,7 +59,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
         //float distance = CalculateDistance();
 
         float angleBetween = CalculateAngle(target);
-        if ((angleBetween < 0.5f) && (angleBetween > -0.5f) && CheckForWalls(target)){
+        if ((angleBetween < 0.8f) && (angleBetween > -0.8f) && CheckForWalls(target)){
             return true;
         }
         return false;
@@ -76,34 +77,37 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     }
 
     private void ShootTarget(){
-        
-        cannonScript.shoot();
+
+        cannonScript.Shoot();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (roundsHandlerScript.GetCurrentGameState() != GameState.Programming)
+
+        //Debug.Log("Time: " + Time.time);
+        //Debug.Log("reloadTime: " + reloadTime);
+
+        if (IsOwner && roundsHandlerScript.GetCurrentGameState() != GameState.Programming)
         {
-
-            //Debug.Log("Time: " + Time.time);
-            //Debug.Log("reloadTime: " + reloadTime);
             GameObject[] robots = robotList.GetRobots();
-
             foreach (GameObject robot in robots)
             {
+                // robot != this.gameObject && 
                 if (robot != this.gameObject && (Time.time > nextShotTime) && CheckIfTargetInScope(robot.transform))
                 {
+                    //Debug.Log("check laser for robot : " + robot.GetInstanceID());
                     deadScript = robot.GetComponent<Dead>();
                     if (!deadScript.IsDead())
                     {
+                        // CALL SERVER TO SHOOT
                         nextShotTime = Time.time + reloadTime;
-
+                        Debug.Log("cooldown : " + nextShotTime);
                         ShootTarget();
                     }
                 }
             }
-        }        
+        }
         
     }
 }

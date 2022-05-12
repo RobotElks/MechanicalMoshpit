@@ -7,11 +7,13 @@ public class RobotCollision : NetworkBehaviour
 {
     PlayerHealthBar playerHealthBarScript;
     RobotMultiplayerMovement thisRobotMovementScript;
+    public HealthStationScript healthStationScript;
     public bool onHealthStation = false;
     public bool onEnergyStation = false;
     public bool onConveyorBelt = false;
     public bool onTurnLeft = false;
     public bool onTurnRight = false;
+    public bool onDamageTile = false;
 
 
 	void Start () {
@@ -27,14 +29,24 @@ public class RobotCollision : NetworkBehaviour
 
     void OnCollisionExit (Collision collision) 
     {
+        if (collision.collider.CompareTag("Laser"))
+        {
+            LaserCollision(collision);
+        }
+
         if (collision.collider.CompareTag("HealthStation"))
         {
             onHealthStation = false;
         }
 
-        if (collision.collider.CompareTag("EnergyStation"))
+        else if (collision.collider.CompareTag("EnergyStation"))
         {
             onEnergyStation = false;
+        }
+
+        else if (collision.collider.CompareTag("DamageTile"))
+        {
+            onDamageTile = false;
         }
     }
 
@@ -45,17 +57,17 @@ public class RobotCollision : NetworkBehaviour
             PlayerCollision(collision);
         }
 
-        else if (collision.collider.CompareTag("Laser"))
-        {
-            LaserCollision(collision);
-        }
         else if (collision.collider.CompareTag("Wall"))
         {
             WallCollision(collision);
         }
         else if (collision.collider.CompareTag("HealthStation"))
         {
-            onHealthStation = true;
+            healthStationScript = collision.collider.GetComponent<HealthStationScript>();
+            if(healthStationScript.GetIfAvailable()){
+                onHealthStation = true;
+            }
+            
         }
         else if (collision.collider.CompareTag("EnergyStation"))
         {
@@ -63,7 +75,7 @@ public class RobotCollision : NetworkBehaviour
         }
         else if (collision.collider.CompareTag("DamageTile"))
         {
-            TakeDamage();
+            onDamageTile = true;
         }
         else if (collision.collider.CompareTag("ConveyorBelt"))
         {
@@ -115,9 +127,9 @@ public class RobotCollision : NetworkBehaviour
     }
 
     private void LaserCollision(Collision collider){
-        playerHealthBarScript.GetHit(20);
-        GameObject laser = collider.gameObject;
-        Destroy(laser, 0f);
+        Destroy(collider.gameObject, 0f);
+        playerHealthBarScript.GetHit(10);
+        
     }
 
     private void WallCollision(Collision hitWall){
@@ -127,7 +139,7 @@ public class RobotCollision : NetworkBehaviour
         }
     }
     private void TakeDamage(){
-        playerHealthBarScript.GetHit(20);
+        playerHealthBarScript.GetHit(10);
     }
 
 }
