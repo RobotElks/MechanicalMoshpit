@@ -135,7 +135,8 @@ public class RobotCollision : NetworkBehaviour
     private void WallCollision(Collision hitWall){
         if (IsOwner)
         {
-            thisRobotMovementScript.MoveTargetPositionBack(1);
+            thisRobotMovementScript.WallCollision();
+            
         }
     }
     private void TakeDamage(){

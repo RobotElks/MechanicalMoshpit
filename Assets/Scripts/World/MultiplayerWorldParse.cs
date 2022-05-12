@@ -90,7 +90,6 @@ public class MultiplayerWorldParse : MonoBehaviour
 
     public void BuildWorld()
     {
-        Debug.Log("saved world : " + worldString);
 
         worldMiddle = Vector3.zero;
 

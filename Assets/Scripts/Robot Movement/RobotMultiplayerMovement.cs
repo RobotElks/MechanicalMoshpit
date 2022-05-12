@@ -224,6 +224,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         positionTarget = spawnPoint;
         GetComponent<RobotCollision>().Reset();
         leftToPush = Vector3.zero;
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
     //Call on function to set gear to either First, Second or Third.
@@ -274,9 +275,10 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         leftToPush += direction * tileSize * numOfTiles - direction * 0.3f;
     }
 
-    public void MoveTargetPositionBack(int numOfTiles)
+    public void WallCollision()
     {
-        positionTarget -= GetMovingDirection() * tileSize * numOfTiles;
+        positionTarget -= GetMovingDirection() * tileSize;
+        leftToPush = Vector3.zero;
     }
 
     public Vector3 GetForceToMe(Vector3 myPosition)
