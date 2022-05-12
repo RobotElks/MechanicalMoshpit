@@ -11,13 +11,13 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
     bool isExecuting = false;
     RobotMultiplayerMovement movementScript;
     RobotCollision collisionScript;
-    HealthPoints healthScript;
+    PlayerHealthBar healthScript;
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
     {
         movementScript = GetComponent<RobotMultiplayerMovement>();
         collisionScript = GetComponent<RobotCollision>();
-        healthScript = GetComponent<HealthPoints>();
+        healthScript = GetComponentInChildren<PlayerHealthBar>();
 
 
         if(IsOwner)

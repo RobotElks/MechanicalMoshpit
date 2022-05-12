@@ -46,8 +46,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.DrawRay(GetRobotMiddle(), transform.forward, Color.red);
-        Debug.DrawLine(this.transform.position, this.transform.position + transform.forward, Color.red);
 
         //Local player owns the object
         if (IsOwner)

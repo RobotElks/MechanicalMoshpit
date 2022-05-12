@@ -15,6 +15,8 @@ public class PlayerHealthBar : NetworkBehaviour
     public int localHealth = 100;
     public int heal = 50;
     public bool changeColorLocal = false;
+    public int damageTilePower = 10;
+
 
     //Local scripts
     RobotRoundsHandler roundsHandlerScript;
@@ -115,5 +117,10 @@ public class PlayerHealthBar : NetworkBehaviour
                 return;
             dead.SetDeadServerRpc(true);
         }
+    }
+
+    public void DamageTile()
+    {
+        GetHit(damageTilePower);
     }
 }
