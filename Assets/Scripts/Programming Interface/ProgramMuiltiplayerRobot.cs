@@ -216,6 +216,12 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
         }
         instructionScript.StopExecute();
         instructionsQueue.Clear();
+        textInstructions.text = "";
+    }
+
+    public void FinishedProgramming()
+    {
+        robot.GetComponent<RobotRoundsHandler>().FinishedProgramming();
     }
 
 

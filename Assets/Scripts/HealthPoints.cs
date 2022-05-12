@@ -23,7 +23,7 @@ public class HealthPoints : NetworkBehaviour
         if (IsOwner)
             healthSlider = GameObject.Find("Hud").transform.Find("HealthBar").GetComponent<Slider>();
 
-        roundsManager = GameObject.Find("GameRoundsManager").GetComponent<GameRoundsManager>();
+        //roundsManager = GameObject.Find("GameRoundsManager").GetComponent<GameRoundsManager>();
         chickenDinner = GameObject.Find("ChickenDinner").GetComponent<ChickenDinner>();
     }
 
@@ -35,34 +35,33 @@ public class HealthPoints : NetworkBehaviour
 
         if (IsOwner)
             healthSlider.value = (float)localHealth;
-        if(gameObject.transform.position.y < -50) getHit(100);
+        if (gameObject.transform.position.y < -50) getHit(100);
 
     }
 
 
     public void getHit(int damage)
-    {   
-        if (roundsManager.GameStarted())
+    {
+
+        if (IsOwner)
         {
-            if (IsOwner)
+            Debug.Log(NetworkManager.Singleton.LocalClientId);
+            if ((localHealth - damage) > 0)
             {
-                Debug.Log(NetworkManager.Singleton.LocalClientId);
-                if ((localHealth - damage) > 0)
-                {
-                    localHealth = localHealth - damage;
-                }
-                else
-                {
-                    localHealth = 0;
-                    killed();
-                }
-                UpdateHealthInfoServerRpc(localHealth);
+                localHealth = localHealth - damage;
             }
             else
             {
-                localHealth = healthPoints.Value;
+                localHealth = 0;
+                killed();
             }
+            UpdateHealthInfoServerRpc(localHealth);
         }
+        else
+        {
+            localHealth = healthPoints.Value;
+        }
+
     }
 
 

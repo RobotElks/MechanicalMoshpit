@@ -290,6 +290,22 @@ MonoBehaviour:
     m_InternalValue: {x: 0, y: 0, z: 0}
   direction: {fileID: 0}
   movementSpeed: 1
+--- !u!114 &-5411753018022561703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5462321247307863178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 885cb5439dcd86e409b22397644ddf34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  countdownTime: 5
+  programmingTime: 30
+  finishedTime: 10
+  excecutingTime: 10
 --- !u!114 &-3771028748239154682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -389,6 +405,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   changeColorLocal: 0
+  localHealth: 100
   heal: 100
 --- !u!114 &8015023296398355661
 MonoBehaviour:
