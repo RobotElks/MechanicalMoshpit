@@ -88,7 +88,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
         //Debug.Log("Time: " + Time.time);
         //Debug.Log("reloadTime: " + reloadTime);
 
-        if (IsOwner && roundsHandlerScript.GetCurrentGameState() != GameState.Programming)
+        if (IsOwner && roundsHandlerScript.GetCurrentGameState() != GameState.Programming && !deadScript.IsDead())
         {
             GameObject[] robots = robotList.GetRobots();
             foreach (GameObject robot in robots)
@@ -102,7 +102,6 @@ public class MultiplayerDetectTarget : NetworkBehaviour
                     {
                         // CALL SERVER TO SHOOT
                         nextShotTime = Time.time + reloadTime;
-                        Debug.Log("cooldown : " + nextShotTime);
                         ShootTarget();
                     }
                 }
