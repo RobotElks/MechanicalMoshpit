@@ -41,7 +41,7 @@ public class Dead : NetworkBehaviour
         em.enabled = true;
 
         ChickenDinner chickenDinner = GameObject.Find("ChickenDinner").GetComponent<ChickenDinner>();
-        chickenDinner.robotDeath();
+        chickenDinner.RobotDeath();
     }
 
 }

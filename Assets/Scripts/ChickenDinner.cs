@@ -16,23 +16,59 @@ public class ChickenDinner : NetworkBehaviour
     Transform winLose;
     GameObject[] robotArray;
 
-    public void robotDeath() {
-        robotArray = robotList.GetRobots();
-        for (int i = 0; i < robotArray.Length; i++) {
-            deadScript = robotArray[i].GetComponent<Dead>();
-            if(deadScript.IsDead()) {
-                robotList.RemoveRobot(robotArray[i]);
-                if (robotList.GetRobots().Length <= 1 && !IsOwner) {
-                    winner();
-                }
-                else {
-                    loser();
-                }
-            }
-        }   
+    public void RobotDeath()
+    {
+        if (IsHost)
+            RobotDeathServerRpc();
     }
 
-    public void winner() {
+    [ServerRpc]
+    void RobotDeathServerRpc() {
+        robotArray = robotList.GetRobots();
+        int length = robotArray.Length;
+        int dead = 0;
+
+        foreach(GameObject robot in robotArray){
+            deadScript = robot.GetComponent<Dead>();
+            if (deadScript.IsDead())
+                dead++;
+        }
+
+        if (dead + 1 == length)
+            WinnerStateClientRpc();
+
+    }
+
+    [ClientRpc]
+    void WinnerStateClientRpc()
+    {
+        robotArray = robotList.GetRobots();
+
+        foreach (GameObject robot in robotArray)
+        {
+            deadScript = robot.GetComponent<Dead>();
+            if (deadScript.IsDead())
+            {
+                if (IsOwner)
+                {
+                    Loser();
+                    break;
+                }
+            }
+            else
+            {
+                if (IsOwner)
+                {
+                    Winner();
+                    break;
+
+                }
+            }
+
+        }
+    }
+
+    public void Winner() {
         gameRoundsManager.SetActive(false);
         readyScreen.SetActive(false);
         ui.SetActive(false);
@@ -43,7 +79,7 @@ public class ChickenDinner : NetworkBehaviour
         winLose.gameObject.SetActive(true);
     }
 
-    public void loser() {
+    public void Loser() {
         if(IsOwner) {
             gameRoundsManager.SetActive(false);
             readyScreen.SetActive(false);
