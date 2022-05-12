@@ -284,5 +284,10 @@ public class RobotRoundsHandler : NetworkBehaviour
         return gameState.Value == GameState.InLobby;
     }
 
+    public GameState GetCurrentGameState()
+    {
+        return gameState.Value;
+    }
+
 
 }

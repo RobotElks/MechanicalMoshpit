@@ -4,23 +4,20 @@ using UnityEngine.UI;
 
 public class PlayerHealthBar : NetworkBehaviour
 {
-    // GameObjects
-    GameRoundsManager roundsManager;
-    RobotList robotList;
-    ParticleSystem smoke;
-    ChickenDinner chickenDinner;
     //[SerializeField] RectTransform healthAmount;
     public Slider healthSlider;
     public Slider abovePlayerHealth;
 
     // Network variables
     NetworkVariable<int> healthPoints = new NetworkVariable<int>(100);
-    NetworkVariable<bool> changeColor = new NetworkVariable<bool>();
 
     // Local variables
     public int localHealth = 100;
     public int heal = 50;
     public bool changeColorLocal = false;
+
+    //Local scripts
+    RobotRoundsHandler roundsHandlerScript;
 
 
     public override void OnNetworkSpawn()
@@ -31,9 +28,7 @@ public class PlayerHealthBar : NetworkBehaviour
         }
 
         abovePlayerHealth = this.GetComponentInChildren<Slider>();
-
-        roundsManager = GameObject.Find("GameRoundsManager").GetComponent<GameRoundsManager>();
-        chickenDinner = GameObject.Find("ChickenDinner").GetComponent<ChickenDinner>();
+        roundsHandlerScript = GetComponentInParent<RobotRoundsHandler>();
     }
 
     void Update()
@@ -41,10 +36,6 @@ public class PlayerHealthBar : NetworkBehaviour
         if (Input.GetKeyDown("space"))
             GetHit(25);
 
-        //if (IsOwner)
-        //{
-        //    healthSlider.value -= (healthSlider.value - (float)localHealth) * Time.deltaTime * 2;
-        //}
         if (!IsOwner)
         {
             localHealth = healthPoints.Value;
@@ -57,7 +48,7 @@ public class PlayerHealthBar : NetworkBehaviour
 
     public void GetHit(int damageAmount)
     {
-        if (IsOwner)
+        if (IsOwner && roundsHandlerScript.InsideActiveGame())
         {
             if ((localHealth - damageAmount) > 0)
             {
@@ -96,6 +87,7 @@ public class PlayerHealthBar : NetworkBehaviour
             UpdateHealthInfoServerRpc(localHealth);
         }
     }
+
     public void killed()
     {
         MonoBehaviour[] comps = GetComponents<MonoBehaviour>();

@@ -10,6 +10,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     RobotList robotList;
     CannonBehavior cannonScript;
     Dead deadScript;
+    RobotRoundsHandler roundsHandlerScript;
 
     RaycastHit hit;
     
@@ -24,6 +25,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     void Start()
     {
         cannonScript = this.GetComponent<CannonBehavior>();
+        roundsHandlerScript = GetComponent<RobotRoundsHandler>();
         //MovementScript = this.GetComponent<RobotMovement>();
 
         //CheckIfTargetInScope();
@@ -81,22 +83,27 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        //Debug.Log("Time: " + Time.time);
-        //Debug.Log("reloadTime: " + reloadTime);
-        GameObject[] robots = robotList.GetRobots();
+        if (roundsHandlerScript.GetCurrentGameState() != GameState.Programming)
+        {
 
-        foreach(GameObject robot in robots){
-            if (robot != this.gameObject && (Time.time > nextShotTime) && CheckIfTargetInScope(robot.transform)) {
-                deadScript = robot.GetComponent<Dead>();
-                if (!deadScript.IsDead()) {
-                    nextShotTime = Time.time + reloadTime; 
-                    
-                    ShootTarget();
+            //Debug.Log("Time: " + Time.time);
+            //Debug.Log("reloadTime: " + reloadTime);
+            GameObject[] robots = robotList.GetRobots();
+
+            foreach (GameObject robot in robots)
+            {
+                if (robot != this.gameObject && (Time.time > nextShotTime) && CheckIfTargetInScope(robot.transform))
+                {
+                    deadScript = robot.GetComponent<Dead>();
+                    if (!deadScript.IsDead())
+                    {
+                        nextShotTime = Time.time + reloadTime;
+
+                        ShootTarget();
+                    }
                 }
             }
-        }
-        
+        }        
         
     }
 }
