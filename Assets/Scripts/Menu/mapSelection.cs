@@ -1,39 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class mapSelection : MonoBehaviour
 {
-    public GameObject[] Maps;
-    public int selectedMap = 0;
+    public string[] maps;
+    public int selectedMap;
+    public MultiplayerWorldParse worldBuilderScript;
+    public SaveIP informationScript;
+
+    public void Start()
+    {
+        //TODO: Filter out all non text files
+        maps = Directory.GetFiles("Worlds");
+        selectedMap = 0;
+        GenerateMap();
+        
+    }
 
     public void NextMap()
     {
-        Maps[selectedMap].SetActive(false);
-        selectedMap = (selectedMap + 1) % Maps.Length;
-        Maps[selectedMap].SetActive(true);
+        selectedMap = (selectedMap + 1 + maps.Length) % maps.Length;
+        GenerateMap();
     }
 
     public void PreviousMap()
     {
-        Maps[selectedMap].SetActive(false);
-        selectedMap--;
-        if (selectedMap < 0) selectedMap += Maps.Length;
-        Maps[selectedMap].SetActive(true);
+        selectedMap = (selectedMap - 1 + maps.Length) % maps.Length;
+        GenerateMap();
+
     }
 
-    public string GetMap()
+    private void GenerateMap()
     {
-        switch (selectedMap)
-        {
-            case 0:
-                return "Assets/Worlds/level20x20.txt";
-            case 1:
-                return "Assets/Worlds/level10x10.txt";
-            case 2:
-                return "Assets/Worlds/leveltest.txt";
-        }
-        
-        return Maps[selectedMap].name;
+        worldBuilderScript.ClearWorld();
+        informationScript.SetWorldString(File.ReadAllText(maps[selectedMap]).Replace("\r", ""));
+        worldBuilderScript.LoadWorldFromInformation();
+        worldBuilderScript.BuildWorld();
+        worldBuilderScript.MoveWorldToOrigin();
     }
+
+
 }

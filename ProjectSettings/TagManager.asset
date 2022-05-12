@@ -11,6 +11,7 @@ TagManager:
   - DamageTile
   - EnergyStation
   - ConveyorBelt
+  - Information
   layers:
   - Default
   - TransparentFX

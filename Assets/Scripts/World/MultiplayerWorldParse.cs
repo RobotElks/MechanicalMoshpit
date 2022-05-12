@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using Unity.Netcode;
 
@@ -20,24 +19,25 @@ public class MultiplayerWorldParse : MonoBehaviour
     public GameObject leftTurningGear;
     public GameObject rightTurningGear;
     public GameObject conveyorBelt;
-    public List<GameObject> SpawnArea = new List<GameObject>();
-    public List<GameObject> avaliableSpawnPoints = new List<GameObject>();
-    public List<GameObject> usedSpawnPoints = new List<GameObject>();
 
-    public string fileName;
+    public List<Vector3> worldSpawnPoints = new List<Vector3>();
 
     public string worldString = "";
+
+    GameObject worldParent;
+
+    Vector3 worldMiddle = Vector3.zero;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        //ClearWorld();
     }
 
 
-    public void LoadWorldFromFile()
+    public void LoadWorldFromInformation()
     {
-        SetWorldString(File.ReadAllText(fileName).Replace("\r", ""));
+        SetWorldString(GameObject.Find("Information").GetComponent<SaveIP>().GetWorldString());
     }
 
     public string GetWorldString()
@@ -47,50 +47,39 @@ public class MultiplayerWorldParse : MonoBehaviour
 
     public void SetWorldString(string newWorldString)
     {
-        if (newWorldString != worldString)
-        {
-            worldString = newWorldString;
-            BuildWorld();
-        }
+        worldString = newWorldString;
     }
 
-    public Vector3 GetSpawnAreaPoint()
+    public Vector3 GetLobbySpawnPoint()
     {
-        int i = Random.Range(0, SpawnArea.Count - 1);
-
-        Vector3 point = SpawnArea[i].transform.position;
-
-        usedSpawnPoints.Add(SpawnArea[i]);
-        SpawnArea.RemoveAt(i);
-
-        return point;
+        return new Vector3(1005, 5, 5);
     }
 
-    public Vector3 GetSpawnPoint()
+    public Vector3[] GetSpawnPoints()
     {
-        int i = Random.Range(0, 1);
-        GameObject spawnPoint;
-        if(i == 1)
+        List<Vector3> sp = new List<Vector3>();
+
+        while(worldSpawnPoints.Count > 0)
         {
-            spawnPoint = avaliableSpawnPoints[0];
+            int i = Random.Range(0, worldSpawnPoints.Count);
+            sp.Add(worldSpawnPoints[i]);
+            worldSpawnPoints.RemoveAt(i);
         }
-        else
-        {
-            spawnPoint = avaliableSpawnPoints[avaliableSpawnPoints.Count-1];
-        }
+
         
-        avaliableSpawnPoints.Remove(spawnPoint);
-        usedSpawnPoints.Add(spawnPoint);
-        Vector3 point = spawnPoint.transform.position;
-        return point;
-        
+        return sp.ToArray();
+    }
+
+    public void BuildLobby()
+    {
+        worldString = Resources.Load<TextAsset>("lobby").text;
+        BuildWorld();
     }
 
     public void BuildWorld()
     {
 
-        if (transform.childCount > 0)
-            return;
+        worldMiddle = Vector3.zero;
 
         //Debug.Log("Parsing world");
         string[] rows = worldString.Split("\n");
@@ -119,6 +108,9 @@ public class MultiplayerWorldParse : MonoBehaviour
             // Go to next line
             n++;
         }
+
+        worldMiddle /= 2;
+
     }
 
     // Extract information form specific line
@@ -143,6 +135,11 @@ public class MultiplayerWorldParse : MonoBehaviour
             Debug.Log($"Unable to parse!");
         }
 
+        if (x > worldMiddle.x)
+            worldMiddle.x = x;
+        if (z > worldMiddle.z)
+            worldMiddle.z = z;
+
         // Decide which tile we will use and instantiate it
         switch (tileID)
         {
@@ -150,71 +147,94 @@ public class MultiplayerWorldParse : MonoBehaviour
             case 0:
                 GameObject sp = new GameObject();
                 sp.transform.position = new Vector3(x, y, z);
-                sp.name = "SpawnPoint" + (avaliableSpawnPoints.Count + SpawnArea.Count + 1);
-                sp.transform.parent = this.transform;
-                if (x >= 1000)
-                    SpawnArea.Add(sp);
-                else
-                    avaliableSpawnPoints.Add(sp);
+                sp.name = "SpawnPoint" + (worldSpawnPoints.Count + 1);
+                sp.transform.parent = this.worldParent.transform;
+                worldSpawnPoints.Add(sp.transform.position);
                 break;
 
             // Grass-block
             case 1:
-                Instantiate(tile1Grass, new Vector3(x, y, z), Quaternion.identity, transform);
+                Instantiate(tile1Grass, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
             // Water
             case 2:
-                Instantiate(tile2Water, new Vector3(x, y, z), Quaternion.identity, transform);
+                Instantiate(tile2Water, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
             // Bridge
             case 3:
-                Instantiate(tile3Bridge, new Vector3(x, y, z), Quaternion.identity, transform);
+                Instantiate(tile3Bridge, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
             // Spikes
             case 4:
-                Instantiate(tile4Spikes, new Vector3(x, y, z), Quaternion.identity, transform);
+                Instantiate(tile4Spikes, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
             // Health station
             case 5:
-                Instantiate(healthStation, new Vector3(x, y, z), Quaternion.identity, transform);
+                Instantiate(healthStation, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
             case 6:
-                Instantiate(energyStation, new Vector3(x, y, z), Quaternion.identity, transform);
+                Instantiate(energyStation, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
             // Spikes
             case 7:
-                Instantiate(damageTile, new Vector3(x, y-0.1f, z), Quaternion.identity, transform);
+                Instantiate(damageTile, new Vector3(x, y-0.1f, z), Quaternion.identity, worldParent.transform);
                 break;
             // Health station
             case 8:
-                Instantiate(leftTurningGear, new Vector3(x, y, z), Quaternion.identity, transform);
+                Instantiate(leftTurningGear, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
             case 9:
-                Instantiate(rightTurningGear, new Vector3(x, y, z), Quaternion.identity, transform);
+                Instantiate(rightTurningGear, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
             case 10:
-                Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, transform);
+                Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
             case 11:
-                GameObject backwardtile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, transform);
+                GameObject backwardtile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 backwardtile.transform.eulerAngles = 180f * Vector3.up;
                 break;
             case 12:
-                GameObject righttile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, transform);
+                GameObject righttile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 righttile.transform.eulerAngles = 90f * Vector3.up;
                 break;
             case 13:
-                GameObject lefttile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, transform);
+                GameObject lefttile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 lefttile.transform.eulerAngles = 270f * Vector3.up;
                 break;
             // wall_x
             case 14:
-                Instantiate(tile10wall_x, new Vector3(x, y + 0.4f, z - 0.5f), Quaternion.identity, transform);
+                Instantiate(tile10wall_x, new Vector3(x, y + 0.4f, z - 0.5f), Quaternion.identity, worldParent.transform);
                 break;
             // wall_y
             case 15:
-                Instantiate(tile11wall_z, new Vector3(x - 0.5f, y + 0.4f, z), Quaternion.identity, transform);
+                Instantiate(tile11wall_z, new Vector3(x - 0.5f, y + 0.4f, z), Quaternion.identity, worldParent.transform);
                 break;
         }
+
+
     }
+
+    public void ClearWorld()
+    {
+
+        GameObject.Destroy(worldParent);
+        CreateWorldParent();
+
+        worldString = "";
+        worldSpawnPoints.Clear();
+        worldMiddle = Vector3.zero;
+    }
+
+    public void CreateWorldParent()
+    {
+        worldParent = new GameObject("Generated World");
+        worldParent.transform.position = Vector3.zero;
+        worldParent.transform.parent = this.transform;
+    }
+
+    public void MoveWorldToOrigin()
+    {
+        worldParent.transform.position = -worldMiddle;
+    }
+
 }

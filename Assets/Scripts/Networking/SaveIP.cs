@@ -17,10 +17,20 @@ public class SaveIP : MonoBehaviour
     [SerializeField]
     private bool isHost;
     [SerializeField]
-    private string world;
+    private string worldString;
        // Start is called before the first frame update
     void Start()
     {
+        GameObject[] informations = GameObject.FindGameObjectsWithTag("Information");
+        foreach(GameObject info in informations)
+        {
+            if (this.gameObject != info)
+            {
+                saved = info.GetComponent<SaveIP>().GetSaved();
+                GameObject.Destroy(info);
+                addressInput.text = saved;
+            }
+        }
         DontDestroyOnLoad(this.gameObject);
     }
 
@@ -29,18 +39,25 @@ public class SaveIP : MonoBehaviour
         isHost = false;
     }
 
+    public void SaveIPAddress(string newIP)
+    {
+        saved = newIP;
+        isHost = false;
+    }
+
     public string GetSaved(){
         return saved;
     }
 
-    public string GetWorld()
+    public string GetWorldString()
     {
-        return world;
+        return worldString;
     }
 
-    public void SetWorld()
+    public void SetWorldString(string worldString)
     {
-        world = Maps.GetComponent<mapSelection>().GetMap();
+        this.worldString = worldString;
+
     }
 
     public bool IsHost(){

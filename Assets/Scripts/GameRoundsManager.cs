@@ -23,7 +23,7 @@ public class GameRoundsManager : MonoBehaviour
 
     public GameObject countdown;
     public TextMeshProUGUI countdownText;
-    public GameObject robot;
+    public MultiplayerLevelInfo ownRobotLevelScript;
     public GameObject readyButton;
     public GameObject readyButtonText;
     public GameObject startEarlyButton;
@@ -44,7 +44,13 @@ public class GameRoundsManager : MonoBehaviour
     {
         robotList = GameObject.Find("RobotList").GetComponent<RobotList>();
         worldScript = GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>();
+      
 
+    }
+
+    public void SetOwnRobotLevelScript(MultiplayerLevelInfo script)
+    {
+        ownRobotLevelScript = script;
     }
 
     public void ToggleReady()
@@ -86,8 +92,11 @@ public class GameRoundsManager : MonoBehaviour
     {
         if (notReady.Count == 0)
         {
-            StartCountDown();
             startEarlyButton.SetActive(false);
+            hasStarted = true;
+            programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
+
+           ownRobotLevelScript.StartCountDownServerRPC();
         }
     }
 
@@ -105,17 +114,18 @@ public class GameRoundsManager : MonoBehaviour
 
     }
 
-    public void StartCountDown()
-    {
-        hasStarted = true;
-        GameObject[] robots = robotList.GetRobots();
-        programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
-        foreach (GameObject robot in robots)
-        {
-            levelInfo = robot.GetComponent<MultiplayerLevelInfo>();
-            levelInfo.StartCountDown();
-        }
-    }
+    //public void StartCountDown()
+    //{
+    //    hasStarted = true;
+    //    GameObject[] robots = robotList.GetRobots();
+    //    programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
+
+    //    foreach (GameObject robot in robots)
+    //    {
+    //        levelInfo = robot.GetComponent<MultiplayerLevelInfo>();
+    //        levelInfo.StartCountDown();
+    //    }
+    //}
 
     public void TimerSet(float time)
     {
