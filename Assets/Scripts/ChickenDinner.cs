@@ -33,7 +33,7 @@ public class ChickenDinner : NetworkBehaviour
     }
 
     public void winner() {
-        gameRoundsManager.SetActive(false);
+        //gameRoundsManager.SetActive(false);
         readyScreen.SetActive(false);
         ui.SetActive(false);
         hud.SetActive(false);
@@ -45,7 +45,7 @@ public class ChickenDinner : NetworkBehaviour
 
     public void loser() {
         if(IsOwner) {
-            gameRoundsManager.SetActive(false);
+            //gameRoundsManager.SetActive(false);
             readyScreen.SetActive(false);
             ui.SetActive(false);
             hud.SetActive(false);

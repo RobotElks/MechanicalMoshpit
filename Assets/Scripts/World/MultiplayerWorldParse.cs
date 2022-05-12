@@ -50,6 +50,11 @@ public class MultiplayerWorldParse : MonoBehaviour
         worldString = newWorldString;
     }
 
+    public void AddToWorldString(string worldStringPart)
+    {
+        worldString += worldStringPart;
+    }
+
     public Vector3 GetLobbySpawnPoint()
     {
         return new Vector3(1005, 5, 5);
@@ -58,7 +63,8 @@ public class MultiplayerWorldParse : MonoBehaviour
     public Vector3[] GetSpawnPoints()
     {
         List<Vector3> sp = new List<Vector3>();
-
+        Vector3[] save = worldSpawnPoints.ToArray();
+         
         while(worldSpawnPoints.Count > 0)
         {
             int i = Random.Range(0, worldSpawnPoints.Count);
@@ -66,7 +72,7 @@ public class MultiplayerWorldParse : MonoBehaviour
             worldSpawnPoints.RemoveAt(i);
         }
 
-        
+        worldSpawnPoints.AddRange(save);
         return sp.ToArray();
     }
 
