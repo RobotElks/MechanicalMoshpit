@@ -43,8 +43,7 @@ public class HealthPoints : NetworkBehaviour
 
     public void getHit(int damage)
     {   
-        if (roundsManager.GameStarted())
-        {
+        
             if (IsOwner)
             {
                 Debug.Log(NetworkManager.Singleton.LocalClientId);
@@ -59,11 +58,11 @@ public class HealthPoints : NetworkBehaviour
                 }
                 UpdateHealthInfoServerRpc(localHealth);
             }
-            else
-            {
-                localHealth = healthPoints.Value;
-            }
-        }
+            //else
+            //{
+            //    localHealth = healthPoints.Value;
+            //}
+        
     }
 
     public void DamageTile(){

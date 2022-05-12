@@ -29,6 +29,11 @@ public class RobotCollision : NetworkBehaviour
 
     void OnCollisionExit (Collision collision) 
     {
+        if (collision.collider.CompareTag("Laser"))
+        {
+            LaserCollision(collision);
+        }
+
         if (collision.collider.CompareTag("HealthStation"))
         {
             onHealthStation = false;
@@ -52,10 +57,6 @@ public class RobotCollision : NetworkBehaviour
             PlayerCollision(collision);
         }
 
-        else if (collision.collider.CompareTag("Laser"))
-        {
-            LaserCollision(collision);
-        }
         else if (collision.collider.CompareTag("Wall"))
         {
             WallCollision(collision);
@@ -129,9 +130,10 @@ public class RobotCollision : NetworkBehaviour
     }
 
     private void LaserCollision(Collision collider){
-        healthScript.getHit(50);
-        GameObject laser = collider.gameObject;
-        Destroy(laser, 0f);
+        Destroy(collider.gameObject, 0f);
+        Debug.Log("laser hit");
+        healthScript.getHit(10);
+        //GameObject laser = collider.gameObject;
         
     }
 

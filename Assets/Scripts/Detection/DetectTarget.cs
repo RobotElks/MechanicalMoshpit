@@ -49,12 +49,13 @@ public class DetectTarget : MonoBehaviour
     private void ShootTarget(){
         deadScript = GetComponent<Dead>();
         if (!deadScript.IsDead())
-            CannonScript.shoot();
+            CannonScript.Shoot();
     }
 
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("IS THIS RUNNING??");
         
         //Debug.Log("Time: " + Time.time);
         //Debug.Log("reloadTime: " + reloadTime);
