@@ -92,13 +92,19 @@ public class PlayerHealthBar : NetworkBehaviour
 
     public void killed()
     {
-        MonoBehaviour[] comps = GetComponents<MonoBehaviour>();
-        foreach (MonoBehaviour c in comps)
+        //MonoBehaviour[] comps = GetComponents<MonoBehaviour>();
+        //foreach (MonoBehaviour c in comps)
+        //{
+        //    if (c.GetType() != typeof(PlayerHealthBar))
+        //    {
+        //        c.enabled = false;
+        //    }
+        //}
+
+        if (IsOwner)
         {
-            if (c.GetType() != typeof(PlayerHealthBar))
-            {
-                c.enabled = false;
-            }
+            GetComponentInParent<RobotMultiplayerInstructionScript>().StopExecute();
+            GameObject.Find("ProgrammingInterface Multiplayer Variant").SetActive(false);
         }
 
         ulong localClientId = NetworkManager.Singleton.LocalClientId;

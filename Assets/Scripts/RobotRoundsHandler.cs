@@ -24,6 +24,7 @@ public class RobotRoundsHandler : NetworkBehaviour
 
     RobotMultiplayerInstructionScript instructionScript;
     MultiplayerLevelInfo levelInfoScript;
+    Dead deadScript;
 
     public float countdownTime = 5;
     public float programmingTime = 8;
@@ -49,6 +50,7 @@ public class RobotRoundsHandler : NetworkBehaviour
 
         instructionScript = GetComponent<RobotMultiplayerInstructionScript>();
         levelInfoScript = GetComponent<MultiplayerLevelInfo>();
+        deadScript = GetComponent<Dead>();
 
         if (IsHost)
         {
@@ -80,7 +82,7 @@ public class RobotRoundsHandler : NetworkBehaviour
     {
         //Debug.Log("Old: " + oldState + " |  new: " + newState);
 
-        if (IsOwner)
+        if (IsOwner && !deadScript.IsDead())
         {
             switch (newState)
             {
