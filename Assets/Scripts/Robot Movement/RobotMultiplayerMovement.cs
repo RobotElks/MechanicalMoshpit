@@ -278,7 +278,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public void WallCollision()
     {
         positionTarget -= GetMovingDirection() * tileSize;
-        leftToPush = Vector3.zero;
+        //leftToPush = Vector3.zero;
     }
 
     public Vector3 GetForceToMe(Vector3 myPosition)
