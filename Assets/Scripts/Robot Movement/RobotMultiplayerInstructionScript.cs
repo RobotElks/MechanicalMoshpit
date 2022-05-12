@@ -47,11 +47,14 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
                     movementScript.RotateRight();
                     collisionScript.onTurnRight = false;
                 }
-                else if(collisionScript.onDamageTile){
-                    healthScript.DamageTile();
-                }
+                
                 if (instructionsQueue.Count > 0)
                 {
+                    if (collisionScript.onDamageTile)
+                    {
+                        healthScript.DamageTile();
+                    }
+
                     Instructions instruction = instructionsQueue.Dequeue();
                     switch (instruction)
                     {

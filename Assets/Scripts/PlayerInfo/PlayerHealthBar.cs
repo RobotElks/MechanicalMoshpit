@@ -7,6 +7,7 @@ public class PlayerHealthBar : NetworkBehaviour
     //[SerializeField] RectTransform healthAmount;
     public Slider healthSlider;
     public Slider abovePlayerHealth;
+    GameObject programmingInterface;
 
     // Network variables
     NetworkVariable<int> healthPoints = new NetworkVariable<int>(100);
@@ -31,6 +32,7 @@ public class PlayerHealthBar : NetworkBehaviour
 
         abovePlayerHealth = this.GetComponentInChildren<Slider>();
         roundsHandlerScript = GetComponentInParent<RobotRoundsHandler>();
+        programmingInterface = GameObject.Find("ProgrammingInterface Multiplayer Variant");
     }
 
     void Update()
@@ -88,6 +90,7 @@ public class PlayerHealthBar : NetworkBehaviour
             }
 
             healthSlider.value = (float)localHealth;
+            abovePlayerHealth.value = (float)localHealth;
             UpdateHealthInfoServerRpc(localHealth);
             
         }
@@ -107,7 +110,7 @@ public class PlayerHealthBar : NetworkBehaviour
         if (IsOwner)
         {
             GetComponentInParent<RobotMultiplayerInstructionScript>().StopExecute();
-            GameObject.Find("ProgrammingInterface Multiplayer Variant").SetActive(false);
+            programmingInterface.SetActive(false);
         }
 
         ulong localClientId = NetworkManager.Singleton.LocalClientId;
