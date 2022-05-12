@@ -100,7 +100,7 @@ public class RobotRoundsHandler : NetworkBehaviour
                     {
                         levelInfoScript.HostSendWorldStringToClients();
                         SetTimerServerRpc(countdownTime);
-
+                        levelInfoScript.HostSendsSpawnPointsToClients();
                         //Move all players to MAP
                     }
 

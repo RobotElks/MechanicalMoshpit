@@ -79,6 +79,32 @@ public class MultiplayerLevelInfo : NetworkBehaviour
     }
 
 
+    public void HostSendsSpawnPointsToClients()
+    {
+        if(IsHost && IsOwner)
+        {
+            Vector3[] spawnPoints = worldScript.GetSpawnPoints();
+
+            GameObject[] robots = GameObject.Find("RobotList").GetComponent<RobotList>().GetRobots();
+
+            foreach(GameObject robot in robots)
+            {
+                robot.GetComponent<MultiplayerLevelInfo>().SetSpawnPointClientRpc(spawnPoints);
+            }
+
+
+        }
+    }
+
+    [ClientRpc]
+    private void SetSpawnPointClientRpc(Vector3[] spawnPoints)
+    {
+        
+        int id = (int)NetworkManager.Singleton.LocalClientId;
+        movementScript.MoveToSpawnPoints(spawnPoints[id]);
+    }
+
+
 }
 
 

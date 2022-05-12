@@ -215,6 +215,13 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         return currentGear;
     }
 
+    public void MoveToSpawnPoints(Vector3 spawnPoint)
+    {
+        transform.position = spawnPoint;
+        positionTarget = spawnPoint;
+        leftToPush = Vector3.zero;
+    }
+
     //Call on function to set gear to either First, Second or Third.
     public void SetGear(Gear newGear)
     {
