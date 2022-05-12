@@ -24,12 +24,14 @@ public class ChickenDinner : NetworkBehaviour
 
 
     [ServerRpc]
-    void RobotDeathServerRpc() {
+    void RobotDeathServerRpc()
+    {
         robotArray = robotList.GetRobots();
         int length = robotArray.Length;
         int dead = 0;
 
-        foreach(GameObject robot in robotArray){
+        foreach (GameObject robot in robotArray)
+        {
             deadScript = robot.GetComponent<Dead>();
             if (deadScript.IsDead())
                 dead++;
@@ -69,7 +71,8 @@ public class ChickenDinner : NetworkBehaviour
         }
     }
 
-    public void Winner() {
+    public void Winner()
+    {
         gameRoundsManager.SetActive(false);
         readyScreen.SetActive(false);
         ui.SetActive(false);
@@ -80,8 +83,10 @@ public class ChickenDinner : NetworkBehaviour
         winLose.gameObject.SetActive(true);
     }
 
-    public void Loser() {
-        if(IsOwner) {
+    public void Loser()
+    {
+        if (IsOwner)
+        {
             //gameRoundsManager.SetActive(false);
             readyScreen.SetActive(false);
             ui.SetActive(false);

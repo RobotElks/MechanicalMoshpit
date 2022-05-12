@@ -142,4 +142,15 @@ public class RobotCollision : NetworkBehaviour
         playerHealthBarScript.GetHit(10);
     }
 
+    public void Reset()
+    {
+        onConveyorBelt = false;
+        onDamageTile = false;
+        onEnergyStation = false;
+        onHealthStation = false;
+        onTurnLeft = false;
+        onTurnRight = false;
+        
+    }
+
 }

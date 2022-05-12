@@ -168,22 +168,20 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public void SetDirection(GameObject Direction)
     {
         direction = Direction;
-        Debug.Log("direction set");
     }
 
     public void MoveDirection()
     {
         if (IsDoingInstruction()) return;
-        Debug.Log("direction move");
         positionTarget = transform.position + direction.transform.forward * tileSize;
-        currentInstruction = Instructions.MoveBackward;
-        
+        currentInstruction = Instructions.MapMovement;
+
 
     }
     //Call on function to return whether robot is moving or not
     public bool IsMoving()
     {
-        return currentInstruction == Instructions.MoveForward || currentInstruction == Instructions.MoveBackward;
+        return currentInstruction == Instructions.MoveForward || currentInstruction == Instructions.MoveBackward || currentInstruction == Instructions.MapMovement;
     }
 
     //Call on function to rotate the robot 90 degrees to the left
@@ -224,6 +222,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     {
         transform.position = spawnPoint;
         positionTarget = spawnPoint;
+        GetComponent<RobotCollision>().Reset();
         leftToPush = Vector3.zero;
     }
 
