@@ -18,7 +18,6 @@ public class HealthPoints : NetworkBehaviour
     public Slider healthSlider;
     public Slider abovePlayerHealth;
     public int damageTilePower = 20;
-    Slider healthSlider;
 
     GameRoundsManager roundsManager;
 
@@ -26,7 +25,7 @@ public class HealthPoints : NetworkBehaviour
     {
         if (IsOwner)
         {
-        healthSlider = GameObject.Find("Hud").transform.Find("HealthBar").GetComponent<Slider>();
+            healthSlider = GameObject.Find("Hud").transform.Find("HealthBar").GetComponent<Slider>();
         }
 
         abovePlayerHealth = this.GetComponentInChildren<Slider>();
@@ -40,55 +39,51 @@ public class HealthPoints : NetworkBehaviour
         if (Input.GetKeyDown("space"))
             getHit(25);
         //healthSlider.value -= (healthSlider.value - (float)localHealth) * Time.deltaTime * 2;
-/*
-        if (IsOwner)
-        {
-            healthSlider.value = (float)localHealth;
+        /*
+                if (IsOwner)
+                {
+                    healthSlider.value = (float)localHealth;
 
-            abovePlayerHealth.value = (float)localHealth;
-        }
-*/
+                    abovePlayerHealth.value = (float)localHealth;
+                }
+        */
         if (gameObject.transform.position.y < -50) getHit(100);
 
     }
 
 
     public void getHit(int damage)
-    {   
-        
-            if (IsOwner)
+    {
+
+        if (IsOwner)
+        {
+            if ((localHealth - damage) > 0)
             {
-                if ((localHealth - damage) > 0)
-                {
-                    localHealth = localHealth - damage;
-                    healthSlider.value = (float)localHealth;
-                    abovePlayerHealth.value = (float)localHealth;
-                }
-                else
-                {
-                    localHealth = 0;
-                    killed();
-                }
-                UpdateHealthInfoServerRpc(localHealth);
-                
+                localHealth = localHealth - damage;
+                healthSlider.value = (float)localHealth;
+                abovePlayerHealth.value = (float)localHealth;
             }
             else
             {
-                localHealth = healthPoints.Value;
-                Debug.Log("Healthpoints: " + healthPoints.Value);
-                healthSlider.value = (float)healthPoints.Value;
-                abovePlayerHealth.value = (float)healthPoints.Value;
+                localHealth = 0;
+                killed();
             }
             UpdateHealthInfoServerRpc(localHealth);
+
         }
         else
         {
             localHealth = healthPoints.Value;
+            Debug.Log("Healthpoints: " + healthPoints.Value);
+            healthSlider.value = (float)healthPoints.Value;
+            abovePlayerHealth.value = (float)healthPoints.Value;
         }
+
 
     }
 
-    public void DamageTile(){
+    public void DamageTile()
+    {
         getHit(damageTilePower);
     }
 

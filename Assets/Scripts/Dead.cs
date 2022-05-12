@@ -15,7 +15,6 @@ public class Dead : NetworkBehaviour
 
     [ServerRpc]
     public void SetDeadServerRpc(bool isDead) {
-        Debug.Log("UPDATE DEATH");
         dead.Value = isDead;
     }
 
