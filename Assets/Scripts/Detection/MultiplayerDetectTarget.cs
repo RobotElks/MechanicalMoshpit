@@ -36,6 +36,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
         robotList = GameObject.Find("RobotList").GetComponent<RobotList>();
         robotList.AddRobot(this.gameObject);
 
+        deadScript = GetComponent<Dead>();
         roundsHandlerScript = GetComponent<RobotRoundsHandler>();
     }
 

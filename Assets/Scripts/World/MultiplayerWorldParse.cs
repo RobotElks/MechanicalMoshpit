@@ -62,7 +62,7 @@ public class MultiplayerWorldParse : MonoBehaviour
 
     public Vector3 GetLobbySpawnPoint()
     {
-        return new Vector3(1005, 5, 5);
+        return new Vector3(1015, 15, 15);
     }
 
     public Vector3[] GetSpawnPoints()
