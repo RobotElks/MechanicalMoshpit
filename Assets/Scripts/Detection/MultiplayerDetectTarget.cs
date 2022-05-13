@@ -89,7 +89,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
         //Debug.Log("Time: " + Time.time);
         //Debug.Log("reloadTime: " + reloadTime);
 
-        if (IsOwner && roundsHandlerScript.GetCurrentGameState() != GameState.Programming && !deadScript.IsDead())
+        if (IsOwner && roundsHandlerScript.GetCurrentGameState() != GameState.Programming)
         {
             GameObject[] robots = robotList.GetRobots();
             foreach (GameObject robot in robots)
