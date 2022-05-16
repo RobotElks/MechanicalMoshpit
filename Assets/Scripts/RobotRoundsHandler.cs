@@ -5,15 +5,17 @@ using Unity.Netcode;
 using TMPro;
 
 
-public enum GameState { InLobby, Countdown, Programming, Excecuting, Winner };
+public enum GameState { InLobby, Countdown, Programming, Excecuting, GameOver };
 
 public class RobotRoundsHandler : NetworkBehaviour
 {
     NetworkVariable<bool> isReady = new NetworkVariable<bool>();
     public NetworkVariable<GameState> gameState = new NetworkVariable<GameState>();
     NetworkVariable<float> countdownTimer = new NetworkVariable<float>();
+    NetworkVariable<float> gameTimer = new NetworkVariable<float>();
 
     TextMeshProUGUI countdownText;
+    TextMeshProUGUI gameTimeText;
     GameObject readyScreen;
     GameObject finishedButton;
     GameObject programmingInterface;
@@ -36,13 +38,15 @@ public class RobotRoundsHandler : NetworkBehaviour
     public float programmingTime = 8;
     public float finishedTime = 10;
     public float excecutingTime = 3;
-
+    public float gameTime = 600;
 
 
     //Network functions
     public override void OnNetworkSpawn()
     {
         countdownText = GameObject.Find("Countdown").GetComponent<TextMeshProUGUI>();
+        gameTimeText = GameObject.Find("Game Time").GetComponent<TextMeshProUGUI>();
+
         robotList = GameObject.Find("RobotList").GetComponent<RobotList>();
         readyScreen = GameObject.Find("ReadyScreen");
         finishedButton = GameObject.Find("Finished");
@@ -54,7 +58,8 @@ public class RobotRoundsHandler : NetworkBehaviour
 
         //Tells the game to run a function everytime the variables is changed
         gameState.OnValueChanged += GameStateChanged;
-        countdownTimer.OnValueChanged += TimerChanged;
+        countdownTimer.OnValueChanged += CountdownTimerChanged;
+        gameTimer.OnValueChanged += GameTimerChanged;
 
         instructionScript = GetComponent<RobotMultiplayerInstructionScript>();
         levelInfoScript = GetComponent<MultiplayerLevelInfo>();
@@ -83,7 +88,7 @@ public class RobotRoundsHandler : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         gameState.OnValueChanged -= GameStateChanged;
-        countdownTimer.OnValueChanged -= TimerChanged;
+        countdownTimer.OnValueChanged -= CountdownTimerChanged;
 
     }
 
@@ -100,7 +105,16 @@ public class RobotRoundsHandler : NetworkBehaviour
                 case GameState.Excecuting:
                     flagScript.CaptureFlag();
                     break;
+
+                case GameState.Countdown:
+                    if (IsHost)
+                    {
+                        gameTimer.Value = gameTime;
+                    }
+                    break;
             }
+
+
 
             switch (newState)
             {
@@ -168,9 +182,10 @@ public class RobotRoundsHandler : NetworkBehaviour
                     programmingInterface.SetActive(false);
                     break;
 
-                case GameState.Winner:
+                case GameState.GameOver:
 
                     hud.SetActive(false);
+                    programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
                     programmingInterface.SetActive(false);
                     break;
             }
@@ -178,12 +193,29 @@ public class RobotRoundsHandler : NetworkBehaviour
     }
 
     //Update timer text
-    private void TimerChanged(float oldTimer, float newTimer)
+    private void CountdownTimerChanged(float oldTimer, float newTimer)
     {
         countdownText.text = "";
 
         if (newTimer > 0)
             countdownText.text += Mathf.CeilToInt(newTimer);
+
+    }
+
+    //Update timer text
+    private void GameTimerChanged(float oldTimer, float newTimer)
+    {
+
+        if (newTimer > 0)
+        {
+            int min = ((int)Mathf.CeilToInt(newTimer) / 60);
+            int sec = ((int)Mathf.CeilToInt(newTimer) % 60);
+            gameTimeText.text = min + ":" + sec;
+
+        }
+        else
+            gameTimeText.text = "";
+
 
     }
 
@@ -194,6 +226,7 @@ public class RobotRoundsHandler : NetworkBehaviour
         //Host updates timer
         if (IsHost && IsOwner)
         {
+
             //Countdown the timer (Not "> 0" to stop it from being false on first countdown update)
             if (countdownTimer.Value >= 0)
             {
@@ -237,9 +270,17 @@ public class RobotRoundsHandler : NetworkBehaviour
             }
         }
 
+        if (InsideActiveGame())
+        {
+            if (gameTimer.Value >= 0)
+                gameTimer.Value -= Time.deltaTime;
+            else
+                HostSetGameStateForAll(GameState.GameOver);
+        }
+
 
         //Bad but wont work in GameStateChanged
-        if (gameState.Value == GameState.Winner)
+        else if (gameState.Value == GameState.GameOver)
             programmingInterface.SetActive(false);
     }
 
