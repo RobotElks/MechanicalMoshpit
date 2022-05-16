@@ -1450,7 +1450,7 @@ MonoBehaviour:
   programmingTime: 30
   finishedTime: 10
   excecutingTime: 10
-  gameTime: 60
+  gameTime: 600
 --- !u!114 &-3771028748239154682
 MonoBehaviour:
   m_ObjectHideFlags: 0

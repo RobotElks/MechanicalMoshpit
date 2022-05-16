@@ -268,19 +268,21 @@ public class RobotRoundsHandler : NetworkBehaviour
                         break;
                 }
             }
-        }
 
-        if (InsideActiveGame())
-        {
-            if (gameTimer.Value >= 0)
-                gameTimer.Value -= Time.deltaTime;
-            else
-                HostSetGameStateForAll(GameState.GameOver);
-        }
+            if (InsideActiveGame())
+            {
+                if (gameTimer.Value >= 0)
+                    gameTimer.Value -= Time.deltaTime;
+                else
+                    HostSetGameStateForAll(GameState.GameOver);
+            }
 
+
+
+        }
 
         //Bad but wont work in GameStateChanged
-        else if (gameState.Value == GameState.GameOver)
+        if (gameState.Value == GameState.GameOver)
             programmingInterface.SetActive(false);
     }
 
