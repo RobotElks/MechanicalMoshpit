@@ -36,6 +36,8 @@ public class HealthPoints : NetworkBehaviour
 
     void Update()
     {
+
+        abovePlayerHealth.value = (float)localHealth;
         if (Input.GetKeyDown("space"))
             getHit(25);
         //healthSlider.value -= (healthSlider.value - (float)localHealth) * Time.deltaTime * 2;
@@ -66,6 +68,8 @@ public class HealthPoints : NetworkBehaviour
             else
             {
                 localHealth = 0;
+                healthSlider.value = 0f;
+                abovePlayerHealth.value = 0f;
                 killed();
             }
             UpdateHealthInfoServerRpc(localHealth);
@@ -138,14 +142,8 @@ public class HealthPoints : NetworkBehaviour
     public void UpdateHealthInfoServerRpc(int health)
     {
         healthPoints.Value = health;
-        healthSlider.value = health;
+        healthSlider.value = (float)health;
+        abovePlayerHealth.value = (float)health;
     }
-
-    [ClientRpc]
-    public void UpdateHealthSliderClientRpc(int health)
-    {
-        healthSlider.value = health;
-    }
-
 
 }

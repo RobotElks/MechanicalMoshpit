@@ -44,6 +44,7 @@ public class PlayerHealthBar : NetworkBehaviour
         {
             localHealth = healthPoints.Value;
             abovePlayerHealth.value = (float)localHealth;
+            healthSlider.value = (float)localHealth;
         }
 
         //Die on fall
@@ -64,6 +65,7 @@ public class PlayerHealthBar : NetworkBehaviour
             {
                 localHealth = 0;
                 abovePlayerHealth.value = (float)localHealth;
+                healthSlider.value = 0f;
                 killed();
             }
             UpdateHealthInfoServerRpc(localHealth);
@@ -74,6 +76,8 @@ public class PlayerHealthBar : NetworkBehaviour
     public void UpdateHealthInfoServerRpc(int health)
     {
         healthPoints.Value = health;
+        abovePlayerHealth.value = (float)health;
+        healthSlider.value = (float)health;
     }
 
     public void HealPowerUp()
