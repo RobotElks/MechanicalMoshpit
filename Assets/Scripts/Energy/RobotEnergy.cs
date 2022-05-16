@@ -11,6 +11,7 @@ public class RobotEnergy : NetworkBehaviour
 
     ProgramMuiltiplayerRobot programRobotScript;
     Slider energySlider;
+    RobotRoundsHandler gameRounds;
 
     public override void OnNetworkSpawn()
     {
@@ -21,6 +22,7 @@ public class RobotEnergy : NetworkBehaviour
             programRobotScript = programRobot.GetComponent<ProgramMuiltiplayerRobot>();
             programRobotScript.SetRobot(gameObject);
             energySlider = GameObject.Find("Hud").transform.Find("EnergyBar").GetComponent<Slider>();
+            gameRounds = GetComponent<RobotRoundsHandler>();
 
         }
     }
@@ -41,6 +43,7 @@ public class RobotEnergy : NetworkBehaviour
 
     public void useEnergy(float energy)
     {
+        if (gameRounds.GetCurrentGameState() == GameState.InLobby) return;
         useEnergyServerRpc(energy);
     }
 

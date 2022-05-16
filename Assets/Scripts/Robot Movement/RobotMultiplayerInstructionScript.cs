@@ -19,7 +19,6 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
         collisionScript = GetComponent<RobotCollision>();
         healthScript = GetComponentInChildren<PlayerHealthBar>();
 
-
         if(IsOwner)
         {
             GameObject.Find("ProgrammingInterface Multiplayer Variant").GetComponent<ProgramMuiltiplayerRobot>().instructionScript = this;
