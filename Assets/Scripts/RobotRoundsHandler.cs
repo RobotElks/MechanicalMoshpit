@@ -5,12 +5,12 @@ using Unity.Netcode;
 using TMPro;
 
 
-public enum GameState { InLobby, Countdown, Programming, Excecuting };
+public enum GameState { InLobby, Countdown, Programming, Excecuting, Winner };
 
 public class RobotRoundsHandler : NetworkBehaviour
 {
     NetworkVariable<bool> isReady = new NetworkVariable<bool>();
-    NetworkVariable<GameState> gameState = new NetworkVariable<GameState>();
+    public NetworkVariable<GameState> gameState = new NetworkVariable<GameState>();
     NetworkVariable<float> countdownTimer = new NetworkVariable<float>();
 
     TextMeshProUGUI countdownText;
@@ -19,6 +19,7 @@ public class RobotRoundsHandler : NetworkBehaviour
     GameObject programmingInterface;
     GameObject runProgramButton;
     GameObject stopProgramButton;
+    GameObject hud;
 
     RobotList robotList;
 
@@ -49,6 +50,7 @@ public class RobotRoundsHandler : NetworkBehaviour
         runProgramButton = GameObject.Find("StartButton");
         stopProgramButton = GameObject.Find("StopButton");
         worldScript = GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>();
+        hud = GameObject.Find("Hud");
 
         //Tells the game to run a function everytime the variables is changed
         gameState.OnValueChanged += GameStateChanged;
@@ -152,9 +154,6 @@ public class RobotRoundsHandler : NetworkBehaviour
 
                     programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
                     programmingInterface.SetActive(true);
-
-                    //Stop excecuting
-
                     break;
 
 
@@ -167,9 +166,12 @@ public class RobotRoundsHandler : NetworkBehaviour
 
                     programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().sendProgramToRobot();
                     programmingInterface.SetActive(false);
+                    break;
 
+                case GameState.Winner:
 
-
+                    hud.SetActive(false);
+                    programmingInterface.SetActive(false);
                     break;
             }
         }
@@ -235,6 +237,10 @@ public class RobotRoundsHandler : NetworkBehaviour
             }
         }
 
+
+        //Bad but wont work in GameStateChanged
+        if (gameState.Value == GameState.Winner)
+            programmingInterface.SetActive(false);
     }
 
 
@@ -265,14 +271,17 @@ public class RobotRoundsHandler : NetworkBehaviour
         isReady.Value = ready;
     }
 
+    [ServerRpc]
+    public void SetGameStateForAllServerRpc(GameState gameState)
+    {
+        HostSetGameStateForAll(gameState);
+    }
+
 
     public void FinishedProgramming()
     {
-
         SetIsReadyServerRpc(true);
         programmingInterface.SetActive(false);
-
-
     }
 
 

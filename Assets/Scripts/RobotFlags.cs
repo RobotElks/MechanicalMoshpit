@@ -8,6 +8,7 @@ public class RobotFlags : NetworkBehaviour
 {
     MultiplayerWorldParse worldScript;
     RobotCollision collisionScript;
+    RobotRoundsHandler roundsScript;
 
     public Slider flagSlider;
 
@@ -17,6 +18,7 @@ public class RobotFlags : NetworkBehaviour
     {
         worldScript = GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>();
         collisionScript = GetComponent<RobotCollision>();
+        roundsScript = GetComponent<RobotRoundsHandler>();
 
         flagCount.OnValueChanged += FlagCountChange;
     }
@@ -37,9 +39,13 @@ public class RobotFlags : NetworkBehaviour
         //Check victory
         if (collisionScript.onFlagTile)
         {
-            MoveFlagServerRPC();
             IncreaseFlagCountServerRpc();
+            MoveFlagServerRPC();
 
+            if (flagCount.Value == flagSlider.maxValue)
+            {
+                roundsScript.SetGameStateForAllServerRpc(GameState.Winner);
+            }
         }
     }
 
