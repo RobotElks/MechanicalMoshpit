@@ -57,6 +57,14 @@ public class RobotCollision : NetworkBehaviour
         {
             onDamageTile = false;
         }
+        else if (collision.collider.CompareTag("TurnGearLeft"))
+        {
+            onTurnLeft = false;
+        }
+        else if (collision.collider.CompareTag("TurnGearRight"))
+        {
+            onTurnRight = false;
+        }
     }
 
     private void CollisionCheck(Collision collision)
