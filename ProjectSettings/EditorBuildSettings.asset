@@ -11,7 +11,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Production Scenes/Game.unity
     guid: 874b2d0fec3b36d4fb62796c469f3b72
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/ChickenDinner.unity
     guid: 7fe1e6a589eaa334ea31d7f0235bef4a
+  - enabled: 1
+    path: Assets/Scenes/Spectator.unity
+    guid: 83b6fb333ec86d04d84121958c1aa3b8
   m_configObjects: {}

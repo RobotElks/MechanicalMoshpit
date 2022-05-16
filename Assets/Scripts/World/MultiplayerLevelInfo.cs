@@ -11,8 +11,47 @@ public class MultiplayerLevelInfo : NetworkBehaviour
     RobotMultiplayerMovement movementScript;
     MultiplayerWorldParse worldScript;
     GameRoundsManager gameRound;
+    Spectator spectator;
 
     NetworkVariable<Vector3> spawnPoint = new NetworkVariable<Vector3>();
+
+    public override void OnNetworkSpawn()
+    {
+        movementScript = GetComponent<RobotMultiplayerMovement>();
+        worldScript = GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>();
+        gameRound = GameObject.Find("GameRoundsManager").GetComponent<GameRoundsManager>();
+        spectator = GameObject.Find("Spectator").GetComponent<Spectator>();
+        gameRound.notReady.Add(gameObject);
+
+        if (NetworkManager.Singleton.IsHost)
+        {
+            gameRound.startEarlyButton.SetActive(true);
+            if (IsOwner)
+            {
+                worldScript.LoadWorldFromFile();
+
+                transform.position = worldScript.GetSpawnAreaPoint();
+            }
+
+            //Gets loaded world from host
+            else
+            {
+                string worldString = worldScript.GetWorldString();
+                LoadWorldClientRpc(worldString);
+                if (gameRound.hasStarted)
+                    spectator.joinLate();
+                else
+                    SetSpawnPointClientRpc(worldScript.GetSpawnAreaPoint());
+                
+            }
+        }
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        gameRound.Ready.Remove(gameObject);
+        gameRound.notReady.Remove(gameObject);
+    }
 
     public void StartCountDown()
     {
@@ -83,39 +122,6 @@ public class MultiplayerLevelInfo : NetworkBehaviour
         gameRound.programmingInterface.SetActive(false);
     }
 
-    public override void OnNetworkDespawn()
-    {
-        gameRound.Ready.Remove(gameObject);
-        gameRound.notReady.Remove(gameObject);
-    }
-    public override void OnNetworkSpawn()
-    {
-        movementScript = GetComponent<RobotMultiplayerMovement>();
-        worldScript = GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>();
-        gameRound = GameObject.Find("GameRoundsManager").GetComponent<GameRoundsManager>();
-        gameRound.notReady.Add(gameObject);
-
-        if (NetworkManager.Singleton.IsHost)
-        {
-            gameRound.startEarlyButton.SetActive(true);
-            if (IsOwner)
-            {
-                worldScript.LoadWorldFromFile();
-
-                transform.position = worldScript.GetSpawnAreaPoint();
-            }
-
-            //Gets loaded world from host
-            else
-            {
-                string worldString = worldScript.GetWorldString();
-                LoadWorldClientRpc(worldString);
-                SetSpawnPointClientRpc(worldScript.GetSpawnAreaPoint());
-                SetHasStartedClientRpc(gameRound.hasStarted);
-            }
-        }
-
-    }
 
     public void StartGame()
     {
@@ -152,16 +158,6 @@ public class MultiplayerLevelInfo : NetworkBehaviour
     void SetSpawnPointClientRpc(Vector3 point)
     {
         transform.position = point;
-    }
-
-    [ClientRpc]
-    void SetHasStartedClientRpc(bool hasStarted)
-    {
-        gameRound.hasStarted = hasStarted;
-        if (hasStarted)
-        {
-            SetAsSpectator();
-        }
     }
 
     public void SetTimer(float time)

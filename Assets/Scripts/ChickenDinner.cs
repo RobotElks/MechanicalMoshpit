@@ -22,6 +22,7 @@ public class ChickenDinner : NetworkBehaviour
             deadScript = robotArray[i].GetComponent<Dead>();
             if(deadScript.IsDead()) {
                 robotList.RemoveRobot(robotArray[i]);
+                robotList.AddDeadRobot(robotArray[i]);
                 if (robotList.GetRobots().Length <= 1 && !IsOwner) {
                     winner();
                 }
