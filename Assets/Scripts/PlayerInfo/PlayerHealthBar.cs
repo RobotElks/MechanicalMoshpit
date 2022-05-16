@@ -30,7 +30,7 @@ public class PlayerHealthBar : NetworkBehaviour
             healthSlider = GameObject.Find("Hud").transform.Find("HealthBar").GetComponent<Slider>();
         }
 
-        abovePlayerHealth = this.GetComponentInChildren<Slider>();
+        abovePlayerHealth = GetComponent<Slider>();
         roundsHandlerScript = GetComponentInParent<RobotRoundsHandler>();
         programmingInterface = GameObject.Find("ProgrammingInterface Multiplayer Variant");
     }
