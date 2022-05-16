@@ -33,14 +33,21 @@ public class Dead : NetworkBehaviour
     private void ChangeColor(bool oldBool, bool newBool) {
         if (!IsClient) return;
 
+        if (newBool)
+        {
+            colorBase.material.SetColor("_Color", Color.black);
+            colorTower.material.SetColor("_Color", Color.black);
+            var em = smoke.emission;
+            em.enabled = true;   
+        }
 
-        colorBase.material.SetColor("_Color", Color.black);
-        colorTower.material.SetColor("_Color", Color.black);
-        var em = smoke.emission;
-        em.enabled = true;
-
-        ChickenDinner chickenDinner = GameObject.Find("ChickenDinner").GetComponent<ChickenDinner>();
-        chickenDinner.RobotDeath();
+        else
+        {
+            colorBase.material.SetColor("_Color", Color.white);
+            colorTower.material.SetColor("_Color", Color.white);
+            var em = smoke.emission;
+            em.enabled = false;
+        }
     }
 
 }

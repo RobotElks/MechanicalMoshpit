@@ -43,6 +43,11 @@ public class RobotFlags : NetworkBehaviour
         }
     }
 
+    public void LoseFlag()
+    {
+        DecreaseFlagCountServerRpc();
+    }
+
     [ServerRpc]
     private void IncreaseFlagCountServerRpc()
     {

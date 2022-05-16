@@ -92,6 +92,11 @@ public class MultiplayerWorldParse : MonoBehaviour
         return sp.ToArray();
     }
 
+    public Vector3 GetSpawnPoint()
+    {
+        return robotSpawnPoints[Random.Range(0, robotSpawnPoints.Count)];
+    }
+
     public void BuildLobby()
     {
         worldString = Resources.Load<TextAsset>("lobby").text;

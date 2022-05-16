@@ -23,9 +23,13 @@ public class RobotRoundsHandler : NetworkBehaviour
     RobotList robotList;
 
     RobotMultiplayerInstructionScript instructionScript;
+    RobotMultiplayerMovement movementScript;
     MultiplayerLevelInfo levelInfoScript;
     Dead deadScript;
     RobotFlags flagScript;
+    PlayerHealthBar healthBarScript;
+
+    MultiplayerWorldParse worldScript;
 
     public float countdownTime = 5;
     public float programmingTime = 8;
@@ -44,6 +48,7 @@ public class RobotRoundsHandler : NetworkBehaviour
         programmingInterface = GameObject.Find("ProgrammingInterface Multiplayer Variant");
         runProgramButton = GameObject.Find("StartButton");
         stopProgramButton = GameObject.Find("StopButton");
+        worldScript = GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>();
 
         //Tells the game to run a function everytime the variables is changed
         gameState.OnValueChanged += GameStateChanged;
@@ -53,6 +58,8 @@ public class RobotRoundsHandler : NetworkBehaviour
         levelInfoScript = GetComponent<MultiplayerLevelInfo>();
         deadScript = GetComponent<Dead>();
         flagScript = GetComponent<RobotFlags>();
+        healthBarScript = GetComponentInChildren<PlayerHealthBar>();
+        movementScript = GetComponent<RobotMultiplayerMovement>();
 
         if (IsHost)
         {
@@ -92,6 +99,7 @@ public class RobotRoundsHandler : NetworkBehaviour
                     flagScript.CaptureFlag();
                     break;
             }
+
             switch (newState)
             {
                 //Countdown starts
@@ -131,15 +139,19 @@ public class RobotRoundsHandler : NetworkBehaviour
                         {
                             robot.GetComponent<RobotRoundsHandler>().HostSetReady(false);
                         }
-
-
                     }
 
-                    if (!deadScript.IsDead())
+
+
+                    if (deadScript.IsDead())
                     {
-                        programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
-                        programmingInterface.SetActive(true);
+                        healthBarScript.ReviveRobot();
+                        movementScript.MoveToSpawnPoints(worldScript.GetSpawnPoint());
+
                     }
+
+                    programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
+                    programmingInterface.SetActive(true);
 
                     //Stop excecuting
 
@@ -152,11 +164,10 @@ public class RobotRoundsHandler : NetworkBehaviour
                         SetTimerServerRpc(excecutingTime);
                     }
 
-                    if (!deadScript.IsDead())
-                    {
-                        programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().sendProgramToRobot();
-                        programmingInterface.SetActive(false);
-                    }
+
+                    programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().sendProgramToRobot();
+                    programmingInterface.SetActive(false);
+
 
 
                     break;
