@@ -42,7 +42,7 @@ public class MultiplayerWorldParse : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.F))
-            MoveFlag();
+            RandomFlagPosition();
     }
 
     public void BuildWorldString(string part)
@@ -267,7 +267,7 @@ public class MultiplayerWorldParse : MonoBehaviour
         worldParent.transform.position = -worldMiddle;
     }
 
-    public void MoveFlag()
+    public void RandomFlagPosition()
     {
         Vector3 oldPos = flag.transform.position;
 
@@ -275,6 +275,16 @@ public class MultiplayerWorldParse : MonoBehaviour
         {
             flag.transform.position = flagSpawnPoints[Random.Range(0, flagSpawnPoints.Count)];
         }
+    }
+
+    public Vector3 GetFlagPosition()
+    {
+        return flag.transform.position;
+    }
+
+    public void SetFlagPosition(Vector3 newPos)
+    {
+        flag.transform.position = newPos;
     }
 
 }
