@@ -107,7 +107,7 @@ public class RobotRoundsHandler : NetworkBehaviour
                     break;
 
                 case GameState.Countdown:
-                    if (IsHost)
+                    if (IsHost && IsOwner)
                     {
                         gameTimer.Value = gameTime;
                     }

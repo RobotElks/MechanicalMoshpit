@@ -1444,10 +1444,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 885cb5439dcd86e409b22397644ddf34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameState:
+    m_InternalValue: 0
   countdownTime: 5
   programmingTime: 30
   finishedTime: 10
   excecutingTime: 10
+  gameTime: 60
 --- !u!114 &-3771028748239154682
 MonoBehaviour:
   m_ObjectHideFlags: 0
