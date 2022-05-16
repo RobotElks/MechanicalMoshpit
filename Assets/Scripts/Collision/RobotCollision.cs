@@ -135,15 +135,11 @@ public class RobotCollision : NetworkBehaviour
         }
     }
 
-    private void LaserCollision(Collision collider){
-        Destroy(collider.gameObject, 0f);
-        playerHealthBarScript.GetHit(10);
-        
-    }
     private void LaserCollision(Collider collider)
     {
         Destroy(collider.gameObject, 0f);
         playerHealthBarScript.GetHit(10);
+        this.gameObject.GetComponent<Rigidbody>().AddForce(Vector3.up*20000);
 
     }
 
