@@ -220,10 +220,10 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
     public void MoveToSpawnPoints(Vector3 spawnPoint)
     {
-        transform.position = spawnPoint;
-        positionTarget = spawnPoint;
         GetComponent<RobotCollision>().Reset();
         leftToPush = Vector3.zero;
+        positionTarget = spawnPoint;
+        transform.position = spawnPoint;
         GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 

@@ -479,6 +479,7 @@ MonoBehaviour:
   localHealth: 100
   heal: 50
   changeColorLocal: 0
+  damageTilePower: 10
 --- !u!1 &4654505438783509613
 GameObject:
   m_ObjectHideFlags: 0
@@ -869,6 +870,10 @@ PrefabInstance:
     - target: {fileID: 3000118029487621005, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3430948954217506177, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
+      propertyPath: m_Mass
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 3430948954217506177, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
       propertyPath: m_UseGravity

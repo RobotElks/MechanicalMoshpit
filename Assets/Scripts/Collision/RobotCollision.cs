@@ -27,12 +27,21 @@ public class RobotCollision : NetworkBehaviour
         CollisionCheck(collision);
     }
 
+    private void OnTriggerStay(Collider collider)
+    {
+        if (collider.CompareTag("Laser"))
+        {
+            LaserCollision(collider);
+        }
+    }
+
+
     void OnCollisionExit (Collision collision) 
     {
-        if (collision.collider.CompareTag("Laser"))
-        {
-            LaserCollision(collision);
-        }
+        //if (collision.collider.CompareTag("Laser"))
+        //{
+        //    LaserCollision(collision);
+        //}
 
         if (collision.collider.CompareTag("HealthStation"))
         {
@@ -130,6 +139,12 @@ public class RobotCollision : NetworkBehaviour
         Destroy(collider.gameObject, 0f);
         playerHealthBarScript.GetHit(10);
         
+    }
+    private void LaserCollision(Collider collider)
+    {
+        Destroy(collider.gameObject, 0f);
+        playerHealthBarScript.GetHit(10);
+
     }
 
     private void WallCollision(Collision hitWall){
