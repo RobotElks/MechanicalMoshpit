@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
+public enum StateOfAnimation {Idle, Forward, Backward, Right, Left, Death, Push};
+
 public class RobotMultiplayerMovement : NetworkBehaviour
 {
     public NetworkVariable<Vector3> networkPosition = new NetworkVariable<Vector3>();
@@ -11,6 +13,8 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public NetworkVariable<Gear> networkGear = new NetworkVariable<Gear>();
     public NetworkVariable<Vector3> networkLeftToPush = new NetworkVariable<Vector3>();
     public NetworkVariable<bool> networkAnimation = new NetworkVariable<bool>();
+    public NetworkVariable<StateOfAnimation> animationState = new NetworkVariable<StateOfAnimation>(); 
+
     Rigidbody rb;
     public GameObject direction;
     Animator animator;
@@ -26,9 +30,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     float movementGear;
     float rotateGear;
     float turnRate = 1.0f;
-    bool localAnimation;
-
-
+    StateOfAnimation localAnimationState = StateOfAnimation.Idle;
     Gear currentGear = Gear.None;
     Instructions currentInstruction = Instructions.None;
 
@@ -48,7 +50,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        animator.SetBool("isMoving", localAnimation);
+        animator.SetInteger("transitionDecider", (int)localAnimationState);
 
         //Local player owns the object
         if (IsOwner)
@@ -67,6 +69,8 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 {
                     transform.eulerAngles = new Vector3(transform.eulerAngles.x, Mathf.RoundToInt(transform.eulerAngles.y), transform.eulerAngles.z); ;
                     currentInstruction = Instructions.None;
+                    localAnimationState = StateOfAnimation.Idle;
+
                 }
             }
 
@@ -83,7 +87,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 {
                     //transform.position = positionTarget;
                     currentInstruction = Instructions.None;
-                    localAnimation = false;
+                    localAnimationState = StateOfAnimation.Idle;
                 }
 
             }
@@ -106,7 +110,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             rb = GetComponent<Rigidbody>();
             rb.freezeRotation = false;
             UpdateNetworkInfoServerRpc(transform.position, transform.rotation, currentInstruction, 
-                currentGear, leftToPush, localAnimation);
+                currentGear, leftToPush, localAnimationState);
             rb.freezeRotation = true;
         }
 
@@ -118,20 +122,20 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             currentInstruction = networkInstruction.Value;
             currentGear = networkGear.Value;
             leftToPush = networkLeftToPush.Value;
-            localAnimation = networkAnimation.Value;
+            localAnimationState = animationState.Value;
         }
     }
 
     [ServerRpc]
     public void UpdateNetworkInfoServerRpc(Vector3 localPosition, Quaternion localRotation, 
-        Instructions localInstruction, Gear localGear, Vector3 localLeftToPush, bool isMoving)
+        Instructions localInstruction, Gear localGear, Vector3 localLeftToPush, StateOfAnimation AnimationState)
     {
         networkPosition.Value = localPosition;
         networkRotation.Value = localRotation;
         networkInstruction.Value = localInstruction;
         networkGear.Value = localGear;
         networkLeftToPush.Value = localLeftToPush;
-        networkAnimation.Value = isMoving;
+        animationState.Value = AnimationState;
     }
 
     public Vector3 GetTargetPosition()
@@ -164,7 +168,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     {
         if (IsDoingInstruction()) return;
         if(IsOwner)
-            localAnimation = true;
+            localAnimationState = StateOfAnimation.Forward;
         positionTarget = transform.position + transform.forward * tileSize;
         currentInstruction = Instructions.MoveForward;
     }
@@ -172,6 +176,8 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public void MoveBackwards()
     {
         if (IsDoingInstruction()) return;
+        if (IsOwner)
+            localAnimationState = StateOfAnimation.Backward;
         positionTarget = transform.position - transform.forward * tileSize;
         currentInstruction = Instructions.MoveBackward;
     }
@@ -199,7 +205,8 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public void RotateLeft()
     {
         if (IsDoingInstruction()) return;
-
+        if (IsOwner)
+            localAnimationState = StateOfAnimation.Left;
         rotationTarget = -transform.right;
         currentInstruction = Instructions.RotateLeft;
 
@@ -209,7 +216,8 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public void RotateRight()
     {
         if (IsDoingInstruction()) return;
-
+        if (IsOwner)
+            localAnimationState = StateOfAnimation.Right;
         rotationTarget = transform.right;
         currentInstruction = Instructions.RotateRight;
     }
