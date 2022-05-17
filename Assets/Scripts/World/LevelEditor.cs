@@ -13,7 +13,7 @@ public class LevelEditor : MonoBehaviour
     public LevelEditorMenu editorMenu;
 
     public List<GameObject> tilePrefabs = new List<GameObject>();
-    int firstConveryorBelt = 6;
+    public int firstConveryorBelt = 7;
 
     
     public List<GameObject> worldBlocks = new List<GameObject>();
@@ -55,7 +55,7 @@ public class LevelEditor : MonoBehaviour
             {
                 if (hit.collider.gameObject.CompareTag("LevelEditorBlock"))
                 {
-                    hit.collider.GetComponent<LevelEditorBlock>().SetCurrentTile(tileSelector.value);
+                    hit.collider.GetComponent<LevelEditorBlock>().CurrentTileID = tileSelector.value;
                 }
             }
         }
@@ -87,6 +87,7 @@ public class LevelEditor : MonoBehaviour
             {
                 GameObject tile = GameObject.Instantiate(levelTileBlock, new Vector3(x, 0, z), Quaternion.identity, worldParent.transform);
                 tile.GetComponent<LevelEditorBlock>().SetTileList(tilePrefabs, firstConveryorBelt);
+                tile.GetComponent<LevelEditorBlock>().CurrentTileID = 1;
                 worldBlocks.Add(tile);
             }
         }

@@ -941,8 +941,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 153.044, y: 42.353}
-  m_SizeDelta: {x: 303.709, y: 85.78}
+  m_AnchoredPosition: {x: 232.831, y: 42.353}
+  m_SizeDelta: {x: 463.284, y: 85.78}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &474565530
 MonoBehaviour:
@@ -994,6 +994,8 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
+    - m_Text: Spawnpoint
+      m_Image: {fileID: 0}
     - m_Text: Ground
       m_Image: {fileID: 0}
     - m_Text: Health
@@ -1002,17 +1004,19 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Damage
       m_Image: {fileID: 0}
-    - m_Text: L-Gear
+    - m_Text: L Gear
       m_Image: {fileID: 0}
-    - m_Text: R-Gear
+    - m_Text: R Gear
       m_Image: {fileID: 0}
-    - m_Text: "\u2191-Belt"
+    - m_Text: "\u2191 Belt"
       m_Image: {fileID: 0}
-    - m_Text: "\u2193-Belt"
+    - m_Text: "\u2193 Belt"
       m_Image: {fileID: 0}
-    - m_Text: "\u2192-Belt"
+    - m_Text: "\u2192 Belt"
       m_Image: {fileID: 0}
-    - m_Text: "\u2190-Belt"
+    - m_Text: "\u2190 Belt"
+      m_Image: {fileID: 0}
+    - m_Text: 1st Flag
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3103,7 +3107,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ground
+  m_text: Spawnpoint
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3130,8 +3134,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
-  m_fontSizeBase: 100
+  m_fontSize: 64
+  m_fontSizeBase: 64
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5253,8 +5257,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
-  m_fontSizeBase: 100
+  m_fontSize: 64
+  m_fontSizeBase: 64
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6337,6 +6341,10 @@ PrefabInstance:
       propertyPath: worldOrigin
       value: 
       objectReference: {fileID: 1996852559}
+    - target: {fileID: 5297624807803195241, guid: f6f66d22a41daa64a8b15cadf2d14afe, type: 3}
+      propertyPath: tileSelector
+      value: 
+      objectReference: {fileID: 474565530}
     - target: {fileID: 5297624807803195241, guid: f6f66d22a41daa64a8b15cadf2d14afe, type: 3}
       propertyPath: selectorCameraDistance
       value: 2

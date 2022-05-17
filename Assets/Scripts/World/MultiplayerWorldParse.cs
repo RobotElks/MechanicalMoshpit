@@ -218,16 +218,17 @@ public class MultiplayerWorldParse : MonoBehaviour
                 break;
             // wall_x
             case 11:
+                defaultFlagSpawn = new Vector3(x, y, z);
+                break;
+            case 12:
                 Instantiate(tile10wall_x, new Vector3(x, y + 0.4f, z - 0.5f), Quaternion.identity, worldParent.transform);
                 break;
             // wall_y
-            case 12:
+            case 13:
                 Instantiate(tile11wall_z, new Vector3(x - 0.5f, y + 0.4f, z), Quaternion.identity, worldParent.transform);
                 break;
 
-            case 13:
-                defaultFlagSpawn = new Vector3(x, y, z);
-                break;
+            
         }
 
 

@@ -53,21 +53,15 @@ public class LevelEditorBlock : MonoBehaviour
         visableTiles[currentTile].SetActive(true);
     }
 
-    public void SetCurrentTile(int newTile)
-    {
-        visableTiles[currentTile].SetActive(false);
-        currentTile = newTile;
-        visableTiles[currentTile].SetActive(true);
-    }
 
 
     public int CurrentTileID
     {
-        get { return currentTile + 1; }
+        get { return currentTile; }
         set
         {
             visableTiles[currentTile].SetActive(false);
-            currentTile = value - 1;
+            currentTile = value;
             visableTiles[currentTile].SetActive(true);
 
         }
