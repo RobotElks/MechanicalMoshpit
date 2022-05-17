@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class PlayerHealthBar : NetworkBehaviour
 {
@@ -11,6 +12,7 @@ public class PlayerHealthBar : NetworkBehaviour
 
     // Network variables
     NetworkVariable<int> healthPoints = new NetworkVariable<int>(100);
+    
 
     // Local variables
     public int localHealth = 100;

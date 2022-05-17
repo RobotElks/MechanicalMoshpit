@@ -36,13 +36,12 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         SetGear(Gear.Third);
         pushedSpeed = movementSpeed * movementGear * 2f;
         SetGear(Gear.First);
-        animator = GetComponent<Animator>();
-
 
         if (IsOwner)
+        {
+            animator = GetComponent<Animator>();
             GameObject.Find("Main Camera").GetComponent<CameraMultiplayer>().SetLocalPlayer(transform);
-
-
+        }
     }
 
     // Update is called once per frame
