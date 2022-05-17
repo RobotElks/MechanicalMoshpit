@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+using UnityEngine.EventSystems;
 
 public class LevelEditor : MonoBehaviour
 {
 
     public GameObject levelTileBlock;
     public GameObject worldOrigin;
+    public LevelEditorMenu editorMenu;
 
     public List<GameObject> tilePrefabs = new List<GameObject>();
     int firstConveryorBelt = 6;
@@ -23,9 +26,57 @@ public class LevelEditor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        worldParent = new GameObject("Editor World");
+        //NewWorld();
 
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        //if (Input.GetKeyDown(KeyCode.S))
+        //    SaveWorldToFile("TestMap");
+
+        //if (Input.GetKeyDown(KeyCode.L))
+        //    LoadWorldFromFile("TestMap");
+
+        //if (Input.GetKeyDown(KeyCode.M))
+        //    Debug.Log(GetMapNames().Length);
+
+        //Click to edit map and not on UI
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && !editorMenu.HasMenuopen())
+        {
+            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.collider.gameObject.CompareTag("LevelEditorBlock"))
+                {
+                    hit.collider.GetComponent<LevelEditorBlock>().NextTile();
+                }
+            }
+        }
+    }
+
+    public string[] GetMapNames()
+    {
+        string[] names = Directory.GetFiles(@"Worlds");
+
+        for (int i = 0; i < names.Length; i++)
+        {
+            names[i] = names[i].Split("\\")[1].Split(".")[0];
+        }
+
+        return names;
+    }
+
+    public void NewWorld()
+    {
+        GameObject.Destroy(worldParent);
         worldParent = new GameObject("Editor World");
         worldParent.transform.parent = this.transform;
+        editorBlocks.Clear();
+
 
         for (int z = 0; z < worldSize.y; z++)
         {
@@ -40,44 +91,19 @@ public class LevelEditor : MonoBehaviour
         worldOrigin.transform.position = new Vector3(worldSize.x / 2, 0, worldSize.y / 2);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.S))
-            SaveWorldToFile("TestMap");
-
-        if (Input.GetKeyDown(KeyCode.L))
-            LoadWorldFromFile("TestMap");
-
-        if (Input.GetMouseButtonDown(0))
-        { // if left button pressed...
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.collider.gameObject.CompareTag("LevelEditorBlock"))
-                {
-                    hit.collider.GetComponent<LevelEditorBlock>().NextTile();
-                }
-            }
-        }
-    }
-
     public void SaveWorldToFile(string name)
     {
-        using (System.IO.StreamWriter writer = new System.IO.StreamWriter(@"Worlds\" + name + ".txt", false))
+        StreamWriter writer = new System.IO.StreamWriter(@"Worlds\" + name + ".txt", false);
+        foreach (GameObject tile in editorBlocks)
         {
-            foreach (GameObject tile in editorBlocks)
-            {
-                string line = "{" + tile.transform.position.x + "," + tile.transform.position.y + "," + tile.transform.position.z + "," + tile.GetComponent<LevelEditorBlock>().CurrentTileID + "}";
+            string line = "{" + tile.transform.position.x + "," + tile.transform.position.y + "," + tile.transform.position.z + "," + tile.GetComponent<LevelEditorBlock>().CurrentTileID + "}";
 
-                writer.WriteLine(line);
+            writer.WriteLine(line);
 
-            }
-
-            writer.Close();
-            Debug.Log("Saved to file");
         }
+
+        writer.Close();
+
     }
 
     public void LoadWorldFromFile(string name)
@@ -87,8 +113,10 @@ public class LevelEditor : MonoBehaviour
         worldParent.transform.parent = this.transform;
         editorBlocks.Clear();
 
-        string[] lines = System.IO.File.ReadAllLines(@"Worlds\" + name + ".txt");
-        Debug.Log(lines.Length);
+        string path = @"Worlds\" + name + ".txt";
+
+
+        string[] lines = File.ReadAllLines(path);
         foreach (string line in lines)
         {
 
@@ -129,9 +157,9 @@ public class LevelEditor : MonoBehaviour
             }
 
 
+
+
         }
-
     }
-
 
 }

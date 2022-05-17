@@ -38,12 +38,6 @@ public class LevelEditorBlock : MonoBehaviour
         visableTiles[0].SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-            NextTile();
-    }
 
     public void NextTile()
     {

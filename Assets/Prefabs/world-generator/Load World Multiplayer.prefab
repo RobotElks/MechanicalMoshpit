@@ -45,10 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e17ef551c95470468cc8076a218c841, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tile1Grass: {fileID: 1363037412436797206, guid: ea4e323efd1513f4181b5be459e8e127, type: 3}
-  tile2Water: {fileID: 1640771308685042, guid: ff78edb367a079b4a8f8ae2d128c581f, type: 3}
-  tile3Bridge: {fileID: 1487688346712832, guid: 41b018f12ce178147b4607881dbcdcea, type: 3}
-  tile4Spikes: {fileID: 1779254397466754, guid: eb3f51c9e4e6faa45b78a8c2a6e0c16d, type: 3}
+  tile1Ground: {fileID: 1363037412436797206, guid: ea4e323efd1513f4181b5be459e8e127, type: 3}
   healthStation: {fileID: 1363037412436797206, guid: af79172900dac4d4ea653205b964ce93, type: 3}
   energyStation: {fileID: 1363037412436797206, guid: a14facc5b11cba64bbb69e093ffc8346, type: 3}
   damageTile: {fileID: 1363037412436797206, guid: 9d0f46e6464cc4f4f9122f7f11212c46, type: 3}
@@ -58,7 +55,8 @@ MonoBehaviour:
   leftTurningGear: {fileID: 1363037412436797206, guid: 9c3084e78142fa74ea24be12bd9c8439, type: 3}
   rightTurningGear: {fileID: 1363037412436797206, guid: 1c9c1f295bb782c4d813d2540acf16e9, type: 3}
   conveyorBelt: {fileID: 1363037412436797206, guid: e757863ff9015574a9861284bef6cc74, type: 3}
-  worldSpawnPoints: []
+  robotSpawnPoints: []
+  flagSpawnPoints: []
   worldString: 
 --- !u!114 &840987804
 MonoBehaviour:
