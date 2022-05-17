@@ -19,7 +19,7 @@ public class MultiplayerManager : MonoBehaviour
         SaveIPObject = GameObject.Find("Information");
         SaveIPScript = SaveIPObject.GetComponent<SaveIP>();
         Network = NetworkManagerObject.GetComponent<UNetTransport>();
-        if (SaveIPScript.IsHost())
+        if (SaveIPScript.IsThisHost())
         {
             StartHost();
         }

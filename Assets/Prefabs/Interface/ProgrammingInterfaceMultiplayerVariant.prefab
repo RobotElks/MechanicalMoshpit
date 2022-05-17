@@ -269,7 +269,6 @@ GameObject:
   - component: {fileID: 4909130933384946871}
   - component: {fileID: 4909130933384946864}
   - component: {fileID: 4909130933384946865}
-  - component: {fileID: 4909130933384946866}
   m_Layer: 5
   m_Name: showHideProgram
   m_TagString: Untagged
@@ -380,20 +379,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4909130933384946866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4909130933384946860}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2dbb131e6fd5fd243980b1fdc3122f92, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Panel: {fileID: 4909130934426670564}
-  hideShowButton: {fileID: 4909130933384946865}
 --- !u!1 &4909130933472861418
 GameObject:
   m_ObjectHideFlags: 0

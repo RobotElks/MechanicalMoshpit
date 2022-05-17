@@ -9,22 +9,25 @@ public class PlayerNamePlate : NetworkBehaviour
     private NetworkVariable<FixedString32Bytes> playerNetworkName = new NetworkVariable<FixedString32Bytes>();
 
     private bool overlaySet = false;
-    public SaveIP informationScript;
+    //public SaveIP informationScript;
+    private string localPlayerName;
+    private SaveIP infoScript;
 
     public override void OnNetworkSpawn()
     {
-        if(IsHost)
-        {
-            //SaveIP information = GameObject.Find("Information").GetComponent<SaveIP>();
+        infoScript = GameObject.Find("Information").GetComponent<SaveIP>();
 
-        }
-
-        if (IsServer)
+        if (IsOwner)
         {
             //playerNetworkName.Value = $"Player {OwnerClientId+1}";
-            playerNetworkName.Value = informationScript.PlayerName();
-            Debug.Log("Sista" + playerNetworkName.Value);
+            localPlayerName = infoScript.PlayerName();
+            SetServerNameServerRpc(localPlayerName);
         }
+    }
+
+    [ServerRpc]
+    private void SetServerNameServerRpc(string name) {
+        playerNetworkName.Value = name;
     }
 
     public void SetOverlay()

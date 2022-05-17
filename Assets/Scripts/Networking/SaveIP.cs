@@ -7,7 +7,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using Unity.Netcode;
 
-public class SaveIP : MonoBehaviour
+public class SaveIP : NetworkBehaviour
 {
     //public GameObject SaveIp;
     public GameObject Maps;
@@ -18,7 +18,9 @@ public class SaveIP : MonoBehaviour
     private bool isHost;
     [SerializeField]
     private string worldString;
-    //public TMP_InputField inputPlayerName;
+
+    public TMP_InputField inputPlayerName;
+    public TMP_InputField inputHostName;
     private string savedPlayerName;
 
        // Start is called before the first frame update
@@ -37,11 +39,15 @@ public class SaveIP : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
 
-
-    public void savePlayerName(string playerNameInput)
+    public void SavePlayerName()
     {
-        savedPlayerName = playerNameInput;
+        savedPlayerName = inputPlayerName.text;
     }
+    public void SaveHostName()
+    {
+        savedPlayerName = inputHostName.text;
+    }
+
 
     public string PlayerName()
     {
@@ -74,7 +80,7 @@ public class SaveIP : MonoBehaviour
 
     }
 
-    public bool IsHost(){
+    public bool IsThisHost(){
         return isHost;
     }
 
