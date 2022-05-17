@@ -22,6 +22,10 @@ public class PlayerNamePlate : NetworkBehaviour
         localPlayerOverlay.text = playerNetworkName.Value.ToString();
     }
 
+    public string GetPlayerName(){
+        return playerNetworkName.Value.ToString();
+    }
+
     private void Update()
     {
         if (!overlaySet && !string.IsNullOrEmpty(playerNetworkName.Value.ToString()))

@@ -10,15 +10,15 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     RobotList robotList;
     CannonBehavior cannonScript;
     Dead deadScript;
-
+    NetworkVariable<int> shotsFired = new NetworkVariable<int>(0);
     RobotRoundsHandler roundsHandlerScript;
-
     RaycastHit hit;
     
     //RobotMovement MovementScript;
     //private bool reload = true;
     //public float fireRate = 0.5f;
     //private float nextFire = 0.0f;
+    public int localShotsFired;
     private float nextShotTime = 0.0f;
     private float reloadTime = 5f;
 
@@ -77,9 +77,20 @@ public class MultiplayerDetectTarget : NetworkBehaviour
         return false;
     }
 
-    private void ShootTarget(){
+    [ServerRpc]
+    public void UpdateShotsFiredInfoServerRpc(int deaths)
+    {
+        shotsFired.Value = localShotsFired;
+    }
 
+    private void ShootTarget(){
+        localShotsFired += 1;
+        UpdateShotsFiredInfoServerRpc(localShotsFired);
         cannonScript.Shoot();
+    }
+
+    public int GetShotsFired(){
+        return shotsFired.Value;
     }
 
     // Update is called once per frame

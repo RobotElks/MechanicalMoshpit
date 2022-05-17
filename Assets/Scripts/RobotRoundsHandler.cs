@@ -22,6 +22,10 @@ public class RobotRoundsHandler : NetworkBehaviour
     GameObject runProgramButton;
     GameObject stopProgramButton;
     GameObject hud;
+    public GameObject playerInfo;
+
+    public GameObject scoreBoard;
+    GameObject scoreBoardObject;
 
     RobotList robotList;
 
@@ -31,6 +35,8 @@ public class RobotRoundsHandler : NetworkBehaviour
     Dead deadScript;
     RobotFlags flagScript;
     PlayerHealthBar healthBarScript;
+    MultiplayerDetectTarget detectionScript;
+    PlayerNamePlate playerNameScript;
 
     MultiplayerWorldParse worldScript;
 
@@ -67,6 +73,8 @@ public class RobotRoundsHandler : NetworkBehaviour
         flagScript = GetComponent<RobotFlags>();
         healthBarScript = GetComponentInChildren<PlayerHealthBar>();
         movementScript = GetComponent<RobotMultiplayerMovement>();
+        detectionScript = GetComponent<MultiplayerDetectTarget>();
+        playerNameScript = GetComponent<PlayerNamePlate>();
 
         if (IsHost)
         {
@@ -187,6 +195,7 @@ public class RobotRoundsHandler : NetworkBehaviour
                     hud.SetActive(false);
                     programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
                     programmingInterface.SetActive(false);
+                    ShowScoreBoardServerRpc();
                     break;
             }
         }
@@ -282,8 +291,10 @@ public class RobotRoundsHandler : NetworkBehaviour
         }
 
         //Bad but wont work in GameStateChanged
-        if (gameState.Value == GameState.GameOver)
+        if (gameState.Value == GameState.GameOver){
             programmingInterface.SetActive(false);
+
+        }
     }
 
 
@@ -319,7 +330,6 @@ public class RobotRoundsHandler : NetworkBehaviour
     {
         HostSetGameStateForAll(gameState);
     }
-
 
     public void FinishedProgramming()
     {
@@ -369,6 +379,53 @@ public class RobotRoundsHandler : NetworkBehaviour
     {
         return gameState.Value;
     }
+
+    [ServerRpc]
+    public void ShowScoreBoardServerRpc()
+    {
+        EndOfGameClientRpc();
+        GameObject[] robots = robotList.GetRobots();
+        List<(string, int, int, int)> stats = new List<(string, int, int, int)>();
+        foreach(GameObject robot in robots)
+        {
+            RobotRoundsHandler roundsHandler = robot.GetComponent<RobotRoundsHandler>();
+            string name = roundsHandler.playerInfo.GetComponent<PlayerNamePlate>().GetPlayerName();
+            int stars = roundsHandler.flagScript.GetFlags();
+            int deaths = roundsHandler.healthBarScript.GetDeaths();
+            int shotsFired = roundsHandler.detectionScript.GetShotsFired();
+            stats.Add((name,stars,deaths,shotsFired));
+
+        }
+        stats.Sort((a, b) => b.Item2.CompareTo(a.Item2));
+        foreach((string, int, int, int) stat in stats){
+            ShowScoreBoardClientRpc(stat.Item1, stat.Item2, stat.Item3, stat.Item4);
+        }
+        ChickenDinnerClientRpc();
+    }
+
+    [ClientRpc]
+    public void ShowScoreBoardClientRpc(string bruh1, int stars, int deaths, int shotsFired)
+    {
+        if(IsOwner)
+            scoreBoardObject.GetComponent<ScoreBoardScript>().AddToScoreBoard(bruh1, stars, deaths, shotsFired);
+
+    }
+
+
+    [ClientRpc]
+    public void EndOfGameClientRpc()
+    {
+        if(IsOwner)
+        scoreBoardObject = Instantiate(scoreBoard);
+    }
+
+    [ClientRpc]
+    public void ChickenDinnerClientRpc()
+    {
+        if(IsOwner)
+        scoreBoardObject.GetComponent<ScoreBoardScript>().ChickenDinner(playerInfo.GetComponent<PlayerNamePlate>().GetPlayerName().ToString());
+    }
+
 
 
 }
