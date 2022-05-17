@@ -12,6 +12,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public NetworkVariable<Vector3> networkLeftToPush = new NetworkVariable<Vector3>();
     Rigidbody rb;
     public GameObject direction;
+    Animator animator;
 
     Vector3 positionTarget;
     Vector3 rotationTarget;
@@ -35,6 +36,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         SetGear(Gear.Third);
         pushedSpeed = movementSpeed * movementGear * 2f;
         SetGear(Gear.First);
+        animator = GetComponent<Animator>();
 
 
         if (IsOwner)
@@ -63,6 +65,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 {
                     transform.eulerAngles = new Vector3(transform.eulerAngles.x, Mathf.RoundToInt(transform.eulerAngles.y), transform.eulerAngles.z); ;
                     currentInstruction = Instructions.None;
+                    animator.SetBool("isMoving", false);
                 }
             }
 
@@ -79,6 +82,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 {
                     //transform.position = positionTarget;
                     currentInstruction = Instructions.None;
+                    animator.SetBool("isMoving", false);
                 }
 
             }
@@ -154,6 +158,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public void MoveForward()
     {
         if (IsDoingInstruction()) return;
+        animator.SetBool("isMoving", true);
         positionTarget = transform.position + transform.forward * tileSize;
         currentInstruction = Instructions.MoveForward;
     }
@@ -161,6 +166,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public void MoveBackwards()
     {
         if (IsDoingInstruction()) return;
+        animator.SetBool("isMoving", true);
         positionTarget = transform.position - transform.forward * tileSize;
         currentInstruction = Instructions.MoveBackward;
     }
@@ -189,6 +195,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     {
         if (IsDoingInstruction()) return;
 
+        animator.SetBool("isMoving", true);
         rotationTarget = -transform.right;
         currentInstruction = Instructions.RotateLeft;
 
@@ -198,6 +205,8 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public void RotateRight()
     {
         if (IsDoingInstruction()) return;
+
+        animator.SetBool("isMoving", true);
         rotationTarget = transform.right;
         currentInstruction = Instructions.RotateRight;
     }

@@ -12,15 +12,13 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
     RobotMultiplayerMovement movementScript;
     RobotCollision collisionScript;
     PlayerHealthBar healthScript;
-    Animator animator;
+    
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
     {
         movementScript = GetComponent<RobotMultiplayerMovement>();
         collisionScript = GetComponent<RobotCollision>();
         healthScript = GetComponentInChildren<PlayerHealthBar>();
-        animator = GetComponent<Animator>();
-
 
         if(IsOwner)
         {
@@ -61,19 +59,15 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
                     switch (instruction)
                     {
                         case Instructions.MoveForward:
-                            animator.Play("run_forwards");
                             movementScript.MoveForward();
                             break;
                         case Instructions.MoveBackward:
-                            animator.Play("run_backwards");
                             movementScript.MoveBackwards();
                             break;
                         case Instructions.RotateLeft:
-                            animator.Play("run_backwards");
                             movementScript.RotateLeft();
                             break;
                         case Instructions.RotateRight:
-                            animator.Play("run_forwards");
                             movementScript.RotateRight();
                             break;
                         case Instructions.FirstGear:
