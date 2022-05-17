@@ -60,9 +60,10 @@ MonoBehaviour:
   - {fileID: 1363037412436797206, guid: e757863ff9015574a9861284bef6cc74, type: 3}
   - {fileID: 9001449884510678627, guid: 99f1bbcb2a3cd6b4f8de39e486eb516e, type: 3}
   - {fileID: 9001449884510678627, guid: f85a436685c8e224f978b4f6b2968da3, type: 3}
+  wallXPrefab: {fileID: 1863924120945026921, guid: 3b2879b984569e54ea29538652f2a960, type: 3}
+  wallZPrefab: {fileID: 1863924120945026921, guid: eda93d00f49e87a41b9b424f11bf61ff, type: 3}
   beltInedx: 6
   flagIndex: 10
-  worldBlocks: []
   worldSize: {x: 30, y: 30}
   camera: {fileID: 0}
   tileSelector: {fileID: 0}

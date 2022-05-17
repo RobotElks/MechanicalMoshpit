@@ -13,16 +13,20 @@ public class LevelEditor : MonoBehaviour
     public GameObject worldOrigin;
     public LevelEditorMenu editorMenu;
 
+
     public List<GameObject> tilePrefabs = new List<GameObject>();
+    public GameObject wallXPrefab;
+    public GameObject wallZPrefab;
+
     public int beltInedx = 6;
     public int flagIndex = 10;
 
 
     List<GameObject> worldBlocks = new List<GameObject>();
-
+    List<GameObject> worldWalls = new List<GameObject>();
 
     public Vector2 worldSize = new Vector2(30, 30);
-    GameObject worldParent;
+    GameObject worldParent, wallParent;
 
     public Camera camera;
 
@@ -32,6 +36,9 @@ public class LevelEditor : MonoBehaviour
     void Start()
     {
         worldParent = new GameObject("Editor World");
+        wallParent = new GameObject("Editor Walls");
+
+        SpawnWalls();
         //NewWorld();
 
     }
@@ -61,6 +68,34 @@ public class LevelEditor : MonoBehaviour
                 {
                     hit.collider.GetComponent<LevelEditorBlock>().CurrentTileID = tileSelector.value;
                 }
+            }
+        }
+    }
+
+    private void SpawnWalls()
+    {
+        GameObject.Destroy(wallParent);
+        wallParent = new GameObject("Editor Walls");
+        worldWalls.Clear();
+
+        for (int z = 0; z <= worldSize.y; z++)
+        {
+            for (int x = 0; x <= worldSize.x; x++)
+            {
+                if (x != worldSize.x)
+                {
+                    GameObject wall = Instantiate(wallXPrefab, new Vector3(x, 0, z), Quaternion.identity, wallParent.transform);
+                    wall.GetComponent<LevelEditorWall>().ShowWall();
+                    worldWalls.Add(wall);
+                }
+
+                if (z != worldSize.y)
+                {
+                    GameObject wall = Instantiate(wallZPrefab, new Vector3(x, 0, z), Quaternion.identity, wallParent.transform);
+                    wall.GetComponent<LevelEditorWall>().ShowWall();
+                    worldWalls.Add(wall);
+                }
+
             }
         }
     }
@@ -137,7 +172,7 @@ public class LevelEditor : MonoBehaviour
         int x = 0;
         int z = 0;
         int tileID = 0;
-        //"Regular tiles" (not spawns, flags or walls)
+        //Tiles at ground level (not spawns or flags)
         tileInfo.AddRange(fileLines.Where(l => int.Parse(l.Replace("{", "").Replace("}", "").Split(',').Last()) < flagIndex).ToArray());
         foreach (string line in tileInfo)
         {
@@ -161,7 +196,7 @@ public class LevelEditor : MonoBehaviour
             }
 
 
-            
+
         }
 
 
@@ -169,7 +204,7 @@ public class LevelEditor : MonoBehaviour
         //Flags, spawns
         tileInfo.Clear();
         tileInfo.AddRange(fileLines.Where(l => int.Parse(l.Replace("{", "").Replace("}", "").Split(',').Last()) >= flagIndex).ToArray());
-        
+
         foreach (string line in tileInfo)
         {
             string[] extracted = line.Split(',', '{', '}');
