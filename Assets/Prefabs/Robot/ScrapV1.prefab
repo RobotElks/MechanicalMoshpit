@@ -1996,7 +1996,6 @@ GameObject:
   - component: {fileID: 6222840116744481913}
   - component: {fileID: 7831919321826258242}
   - component: {fileID: 3030283893197960411}
-  - component: {fileID: 4759769881702582647}
   m_Layer: 6
   m_Name: ScrapV1
   m_TagString: Player
@@ -2090,6 +2089,8 @@ MonoBehaviour:
     m_InternalValue: 0
   networkLeftToPush:
     m_InternalValue: {x: 0, y: 0, z: 0}
+  networkAnimation:
+    m_InternalValue: 0
   direction: {fileID: 0}
   movementSpeed: 1
 --- !u!114 &4211874690712599558
@@ -2235,19 +2236,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 122
   m_CollisionDetection: 0
---- !u!114 &4759769881702582647
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1652683576438646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Animator: {fileID: 95746059256132094}
 --- !u!1 &1663719857077792
 GameObject:
   m_ObjectHideFlags: 0
