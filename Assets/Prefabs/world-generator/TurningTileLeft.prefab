@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1363037412436797203}
   - component: {fileID: 1363037412436797204}
   - component: {fileID: 1363037412436797205}
+  - component: {fileID: -3373933952392772630}
   m_Layer: 0
   m_Name: TurningTileLeft
   m_TagString: TurnGearLeft
@@ -97,3 +98,15 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-3373933952392772630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1363037412436797206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed4440ed400e84a8cd052aad35b1cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

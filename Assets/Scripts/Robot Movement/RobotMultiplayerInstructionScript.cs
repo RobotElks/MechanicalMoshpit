@@ -41,11 +41,13 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
                 }
                 else if(collisionScript.onTurnLeft){
                     movementScript.RotateLeft();
-                    collisionScript.onTurnLeft = false;
+                    if (instructionsQueue.Count > 0) 
+                        collisionScript.onTurnLeft = false;
                 }
                 else if(collisionScript.onTurnRight){
                     movementScript.RotateRight();
-                    collisionScript.onTurnRight = false;
+                    if (instructionsQueue.Count > 0)
+                        collisionScript.onTurnRight = false;
                 }
                 
                 if (instructionsQueue.Count > 0)
