@@ -9,21 +9,28 @@ public class HealthPoints : NetworkBehaviour
     public bool changeColorLocal = false;
     NetworkVariable<int> healthPoints = new NetworkVariable<int>();
     NetworkVariable<bool> changeColor = new NetworkVariable<bool>();
+    //NetworkVariable<float> abovePlayerHealth = new NetworkVariable<float>();
     public int localHealth = 100;
     RobotList robotList;
     ParticleSystem smoke;
     ChickenDinner chickenDinner;
     public int heal = 50;
-    Slider healthSlider;
+    public Slider healthSlider;
+    public Slider abovePlayerHealth;
+    public int damageTilePower = 20;
 
     GameRoundsManager roundsManager;
 
     public override void OnNetworkSpawn()
     {
         if (IsOwner)
+        {
             healthSlider = GameObject.Find("Hud").transform.Find("HealthBar").GetComponent<Slider>();
+        }
 
-        roundsManager = GameObject.Find("GameRoundsManager").GetComponent<GameRoundsManager>();
+        abovePlayerHealth = this.GetComponentInChildren<Slider>();
+
+        //roundsManager = GameObject.Find("GameRoundsManager").GetComponent<GameRoundsManager>();
         chickenDinner = GameObject.Find("ChickenDinner").GetComponent<ChickenDinner>();
     }
 
@@ -32,39 +39,53 @@ public class HealthPoints : NetworkBehaviour
         if (Input.GetKeyDown("space"))
             getHit(25);
         //healthSlider.value -= (healthSlider.value - (float)localHealth) * Time.deltaTime * 2;
+        /*
+                if (IsOwner)
+                {
+                    healthSlider.value = (float)localHealth;
 
-        if (IsOwner)
-            healthSlider.value = (float)localHealth;
-        if(gameObject.transform.position.y < -50) getHit(100);
+                    abovePlayerHealth.value = (float)localHealth;
+                }
+        */
+        if (gameObject.transform.position.y < -50) getHit(100);
 
     }
 
 
     public void getHit(int damage)
-    {   
-        if (roundsManager.GameStarted())
+    {
+
+        if (IsOwner)
         {
-            if (IsOwner)
+            if ((localHealth - damage) > 0)
             {
-                Debug.Log(NetworkManager.Singleton.LocalClientId);
-                if ((localHealth - damage) > 0)
-                {
-                    localHealth = localHealth - damage;
-                }
-                else
-                {
-                    localHealth = 0;
-                    killed();
-                }
-                UpdateHealthInfoServerRpc(localHealth);
+                localHealth = localHealth - damage;
+                healthSlider.value = (float)localHealth;
+                abovePlayerHealth.value = (float)localHealth;
             }
             else
             {
-                localHealth = healthPoints.Value;
+                localHealth = 0;
+                killed();
             }
+            UpdateHealthInfoServerRpc(localHealth);
+
         }
+        else
+        {
+            localHealth = healthPoints.Value;
+            Debug.Log("Healthpoints: " + healthPoints.Value);
+            healthSlider.value = (float)healthPoints.Value;
+            abovePlayerHealth.value = (float)healthPoints.Value;
+        }
+
+
     }
 
+    public void DamageTile()
+    {
+        getHit(damageTilePower);
+    }
 
     public void healPowerUp()
     {
@@ -117,6 +138,13 @@ public class HealthPoints : NetworkBehaviour
     public void UpdateHealthInfoServerRpc(int health)
     {
         healthPoints.Value = health;
+        healthSlider.value = health;
+    }
+
+    [ClientRpc]
+    public void UpdateHealthSliderClientRpc(int health)
+    {
+        healthSlider.value = health;
     }
 
 

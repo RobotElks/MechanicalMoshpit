@@ -35,7 +35,7 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     GameObject robot;
     RobotEnergy energyScript;
     RobotCollision collisionScript;
-    HealthPoints healthScript;
+    PlayerHealthBar healthScript;
     
     public int movingEnergy = 5;
     public float restoredEnergyPerRound = 30f;
@@ -73,7 +73,7 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     {
         robot = playerRobot;
         energyScript = robot.GetComponent<RobotEnergy>();
-        healthScript = robot.GetComponent<HealthPoints>();
+        healthScript = robot.GetComponentInChildren<PlayerHealthBar>();
         collisionScript = robot.GetComponent<RobotCollision>();
 
     }
@@ -209,13 +209,20 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     {
         energyScript.restoreEnergy(restoredEnergyPerRound);
         if(collisionScript.onHealthStation){
-            healthScript.healPowerUp();
+            healthScript.HealPowerUp();
+            collisionScript.healthStationScript.Inactivate();
         }
         else if(collisionScript.onEnergyStation){
             energyScript.restoreEnergy(100);
         }
         instructionScript.StopExecute();
         instructionsQueue.Clear();
+        textInstructions.text = "";
+    }
+
+    public void FinishedProgramming()
+    {
+        robot.GetComponent<RobotRoundsHandler>().FinishedProgramming();
     }
 
 

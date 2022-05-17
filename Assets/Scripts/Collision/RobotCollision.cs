@@ -5,17 +5,20 @@ using Unity.Netcode;
 
 public class RobotCollision : NetworkBehaviour
 {
-    HealthPoints healthScript;
+    PlayerHealthBar playerHealthBarScript;
     RobotMultiplayerMovement thisRobotMovementScript;
+    public HealthStationScript healthStationScript;
     public bool onHealthStation = false;
     public bool onEnergyStation = false;
     public bool onConveyorBelt = false;
     public bool onTurnLeft = false;
     public bool onTurnRight = false;
+    public bool onDamageTile = false;
+    public bool onFlagTile = false;
 
 
 	void Start () {
-		healthScript = this.GetComponent<HealthPoints>();
+		playerHealthBarScript = this.GetComponentInChildren<PlayerHealthBar>();
         thisRobotMovementScript = GetComponent<RobotMultiplayerMovement>();
 	}
 
@@ -27,14 +30,28 @@ public class RobotCollision : NetworkBehaviour
 
     void OnCollisionExit (Collision collision) 
     {
+        if (collision.collider.CompareTag("Laser"))
+        {
+            LaserCollision(collision);
+        }
+
         if (collision.collider.CompareTag("HealthStation"))
         {
             onHealthStation = false;
         }
 
-        if (collision.collider.CompareTag("EnergyStation"))
+        else if (collision.collider.CompareTag("EnergyStation"))
         {
             onEnergyStation = false;
+        }
+
+        else if (collision.collider.CompareTag("DamageTile"))
+        {
+            onDamageTile = false;
+        }
+        else if (collision.collider.CompareTag("Flag"))
+        {
+            onFlagTile = false;
         }
     }
 
@@ -45,17 +62,17 @@ public class RobotCollision : NetworkBehaviour
             PlayerCollision(collision);
         }
 
-        else if (collision.collider.CompareTag("Laser"))
-        {
-            LaserCollision(collision);
-        }
         else if (collision.collider.CompareTag("Wall"))
         {
             WallCollision(collision);
         }
         else if (collision.collider.CompareTag("HealthStation"))
         {
-            onHealthStation = true;
+            healthStationScript = collision.collider.GetComponent<HealthStationScript>();
+            if(healthStationScript.GetIfAvailable()){
+                onHealthStation = true;
+            }
+            
         }
         else if (collision.collider.CompareTag("EnergyStation"))
         {
@@ -63,25 +80,26 @@ public class RobotCollision : NetworkBehaviour
         }
         else if (collision.collider.CompareTag("DamageTile"))
         {
-            TakeDamage();
+            onDamageTile = true;
         }
         else if (collision.collider.CompareTag("ConveyorBelt"))
         {
             onConveyorBelt = true;
             thisRobotMovementScript.SetDirection(collision.collider.gameObject);
-            Debug.Log("hit conveyorBelt");
         }
         else if (collision.collider.CompareTag("TurnGearLeft"))
         {
             onTurnLeft = true;
-            Debug.Log("Turn Left");
         }
         else if (collision.collider.CompareTag("TurnGearRight"))
         {
             onTurnRight = true;
-            Debug.Log("Turn Right");
         }
-        
+        else if (collision.collider.CompareTag("Flag"))
+        {
+            onFlagTile = true;
+        }
+
 
     }
     
@@ -118,21 +136,31 @@ public class RobotCollision : NetworkBehaviour
     }
 
     private void LaserCollision(Collision collider){
-        healthScript.getHit(50);
-        GameObject laser = collider.gameObject;
-        Destroy(laser, 0f);
+        Destroy(collider.gameObject, 0f);
+        playerHealthBarScript.GetHit(10);
         
     }
 
     private void WallCollision(Collision hitWall){
         if (IsOwner)
         {
-            thisRobotMovementScript.MoveTargetPositionBack(1);
-            Debug.Log("Träffa vägg");
+            thisRobotMovementScript.WallCollision();
+            
         }
     }
     private void TakeDamage(){
-        healthScript.getHit(20);
+        playerHealthBarScript.GetHit(10);
+    }
+
+    public void Reset()
+    {
+        onConveyorBelt = false;
+        onDamageTile = false;
+        onEnergyStation = false;
+        onHealthStation = false;
+        onTurnLeft = false;
+        onTurnRight = false;
+        
     }
 
 }

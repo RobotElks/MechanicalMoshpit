@@ -15,6 +15,7 @@ TagManager:
   - TurnGearLeft
   - TurnGearRight
   - LevelEditorBlock
+  - Flag
   layers:
   - Default
   - TransparentFX

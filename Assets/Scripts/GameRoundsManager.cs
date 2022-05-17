@@ -75,7 +75,7 @@ public class GameRoundsManager : MonoBehaviour
         foreach (GameObject robot in notReady)
         {
             levelInfo = robot.GetComponent<MultiplayerLevelInfo>();
-            if (levelInfo.SetReady()) break;
+            //if (levelInfo.SetReady()) break;
         }
     }
 
@@ -84,7 +84,7 @@ public class GameRoundsManager : MonoBehaviour
         foreach (GameObject robot in Ready)
         {
             levelInfo = robot.GetComponent<MultiplayerLevelInfo>();
-            if (levelInfo.SetNotReady()) break;
+            //if (levelInfo.SetNotReady()) break;
         }
     }
 
@@ -96,7 +96,7 @@ public class GameRoundsManager : MonoBehaviour
             hasStarted = true;
             programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
 
-           ownRobotLevelScript.StartCountDownServerRPC();
+           //ownRobotLevelScript.StartCountDownServerRPC();
         }
     }
 
@@ -106,7 +106,7 @@ public class GameRoundsManager : MonoBehaviour
         foreach (GameObject robot in robots)
         {
             levelInfo = robot.GetComponent<MultiplayerLevelInfo>();
-            levelInfo.StartGame();
+            //levelInfo.StartGame();
         }
         StartProgrammingPhase();
         programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().GameStarted();
@@ -161,7 +161,7 @@ public class GameRoundsManager : MonoBehaviour
         foreach (GameObject robot in robots)
         {
             levelInfo = robot.GetComponent<MultiplayerLevelInfo>();
-            levelInfo.SetTimer(finishedProgrammingTime);
+            //levelInfo.SetTimer(finishedProgrammingTime);
         }
     }
 

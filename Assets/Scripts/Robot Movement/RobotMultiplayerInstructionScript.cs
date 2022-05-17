@@ -11,12 +11,13 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
     bool isExecuting = false;
     RobotMultiplayerMovement movementScript;
     RobotCollision collisionScript;
-
+    PlayerHealthBar healthScript;
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
     {
         movementScript = GetComponent<RobotMultiplayerMovement>();
         collisionScript = GetComponent<RobotCollision>();
+        healthScript = GetComponentInChildren<PlayerHealthBar>();
 
 
         if(IsOwner)
@@ -46,8 +47,14 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
                     movementScript.RotateRight();
                     collisionScript.onTurnRight = false;
                 }
+                
                 if (instructionsQueue.Count > 0)
                 {
+                    if (collisionScript.onDamageTile)
+                    {
+                        healthScript.DamageTile();
+                    }
+
                     Instructions instruction = instructionsQueue.Dequeue();
                     switch (instruction)
                     {
@@ -115,6 +122,11 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
     public void StopExecute()
     {
         isExecuting = false;
+    }
+
+    public void ClearInstructions()
+    {
+        instructionsQueue.Clear();
     }
 
 }

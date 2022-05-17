@@ -9,185 +9,100 @@ public class MultiplayerLevelInfo : NetworkBehaviour
 {
     RobotMultiplayerMovement movementScript;
     MultiplayerWorldParse worldScript;
-    GameRoundsManager gameRound;
-
-    [ServerRpc]
-    public void StartCountDownServerRPC()
-    {
-        Vector3[] sp = worldScript.GetSpawnPoints();
-
-        GameObject[] robots = GameObject.Find("RobotList").GetComponent<RobotList>().GetRobots();
-        foreach (GameObject robot in robots)
-            robot.GetComponent<MultiplayerLevelInfo>().StartCountdownClientRpc(worldScript.GetWorldString(), sp);
-
-        
-
-    }
-
-    public bool SetReady()
-    {
-        if (!IsOwner) return false;
-        SetReadyServerRpc();
-        return true;
-    }
 
 
-    public bool SetNotReady()
-    {
-        if (!IsOwner) return false;
-        SetNotReadyServerRpc();
-        return true;
-    }
-
-    [ServerRpc]
-    void SetReadyServerRpc()
-    {
-        gameRound.Ready.Add(gameObject);
-        gameRound.notReady.Remove(gameObject);
-        SetReadyClientRpc();
-        //if (gameRound.Ready.Count > 3 && gameRound.notReady.Count == 0)
-        //{
-        //    gameRound.StartCountDown();
-        //}
-    }
-
-    [ServerRpc]
-    void SetNotReadyServerRpc()
-    {
-        gameRound.notReady.Add(gameObject);
-        gameRound.Ready.Remove(gameObject);
-        SetNotReadyClientRpc();
-    }
-
-    [ClientRpc]
-    void SetReadyClientRpc()
-    {
-        if (!gameRound.Ready.Contains(gameObject))
-        {
-            gameRound.Ready.Add(gameObject);
-            gameRound.notReady.Remove(gameObject);
-        }
-    }
-
-    [ClientRpc]
-    void SetNotReadyClientRpc()
-    {
-        if (!gameRound.notReady.Contains(gameObject))
-        {
-            gameRound.notReady.Add(gameObject);
-            gameRound.Ready.Remove(gameObject);
-        }
-
-    }
-
-    public void SetAsSpectator()
-    {
-        transform.position = new Vector3(10f, 5f, 0f);
-        gameObject.SetActive(false);
-        gameRound.readyButton.SetActive(false);
-        gameRound.programmingInterface.SetActive(false);
-    }
-
-    public override void OnNetworkDespawn()
-    {
-        gameRound.Ready.Remove(gameObject);
-        gameRound.notReady.Remove(gameObject);
-    }
+    const int MAX_MAP_SEND_SIZE = 5000;
 
     public override void OnNetworkSpawn()
     {
         movementScript = GetComponent<RobotMultiplayerMovement>();
         worldScript = GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>();
-        gameRound = GameObject.Find("GameRoundsManager").GetComponent<GameRoundsManager>();
-        gameRound.notReady.Add(gameObject);
 
         if (IsOwner)
         {
-            GameObject.Find("GameRoundsManager").GetComponent<GameRoundsManager>().SetOwnRobotLevelScript(this);
-
             worldScript.CreateWorldParent();
             worldScript.BuildLobby();
             transform.position = worldScript.GetLobbySpawnPoint();
-        }
 
-        if (NetworkManager.Singleton.IsHost)
-        {
-
-            gameRound.startEarlyButton.SetActive(true);
-
-            if (IsOwner)
+            if (NetworkManager.Singleton.IsHost)
             {
                 worldScript.LoadWorldFromInformation();
                 worldScript.BuildWorld();
             }
+        }
+    }
 
-            //Gets loaded world from host
-            else
+
+    public void HostSendWorldStringToClients()
+    {
+        if (IsHost && IsOwner)
+        {
+            ClearWorldStringClientRpc();
+
+            string worldString = worldScript.GetWorldString();
+
+            int index = 0;
+            int length = worldString.Length;
+
+            while (length > (index + MAX_MAP_SEND_SIZE))
             {
-                SetHasStartedClientRpc(gameRound.hasStarted);
+                SendPartOfWorldStringClientRpc(worldString.Substring(index, MAX_MAP_SEND_SIZE));
+                index += MAX_MAP_SEND_SIZE;
             }
-        }
-    }
 
-    public void StartGame()
-    {
+            SendPartOfWorldStringClientRpc(worldString.Substring(index));
+
+
+            BuildWorldClientRpc();
+        }
 
     }
 
     [ClientRpc]
-    void StartCountdownClientRpc(string worldString, Vector3[] spawnPoints)
+    private void SendPartOfWorldStringClientRpc(string worldStringPart)
     {
-        if (IsOwner)
+        if (!IsHost)
+            worldScript.AddToWorldString(worldStringPart);
+    }
+
+    [ClientRpc]
+    private void ClearWorldStringClientRpc()
+    {
+        if (!IsHost)
+            worldScript.SetWorldString("");
+    }
+
+    [ClientRpc]
+    private void BuildWorldClientRpc()
+    {
+        if (!IsHost)
+            worldScript.BuildWorld();
+    }
+
+
+    public void HostSendsSpawnPointsToClients()
+    {
+        if (IsHost && IsOwner)
         {
-            worldScript.SetWorldString(worldString);
-            gameRound.runButton.SetActive(false);
-            gameRound.stopButton.SetActive(false);
-            gameRound.readyButton.SetActive(false);
-            gameRound.countdownText = gameRound.countdown.GetComponent<TextMeshProUGUI>();
-            gameRound.timer = gameRound.counterTime;
-            gameRound.countdownText.enabled = true;
-            gameRound.isCountdowning = true;
+            Vector3[] spawnPoints = worldScript.GetSpawnPoints();
 
-            if (!IsHost)
-                worldScript.BuildWorld();
+            GameObject[] robots = GameObject.Find("RobotList").GetComponent<RobotList>().GetRobots();
 
-            int id = (int)NetworkManager.Singleton.LocalClientId;
+            foreach (GameObject robot in robots)
+            {
+                robot.GetComponent<MultiplayerLevelInfo>().SetSpawnPointClientRpc(spawnPoints);
+            }
 
-            transform.position = spawnPoints[id];
         }
     }
 
     [ClientRpc]
-    void SetHasStartedClientRpc(bool hasStarted)
+    private void SetSpawnPointClientRpc(Vector3[] spawnPoints)
     {
-        gameRound.hasStarted = hasStarted;
-        if (hasStarted)
-        {
-            SetAsSpectator();
-        }
+
+        int id = (int)NetworkManager.Singleton.LocalClientId;
+        movementScript.MoveToSpawnPoints(spawnPoints[id]);
     }
-
-    public void SetTimer(float time)
-    {
-        if (IsOwner)
-            SetTimerServerRpc(time);
-    }
-
-    [ServerRpc]
-    void SetTimerServerRpc(float time)
-    {
-        gameRound.TimerSet(time);
-        SetTimerClientRpc(time);
-    }
-
-    [ClientRpc]
-    void SetTimerClientRpc(float time)
-    {
-        gameRound.TimerSet(time);
-    }
-
-
-
 
 
 }

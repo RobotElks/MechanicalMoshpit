@@ -46,8 +46,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.DrawRay(GetRobotMiddle(), transform.forward, Color.red);
-        Debug.DrawLine(this.transform.position, this.transform.position + transform.forward, Color.red);
 
         //Local player owns the object
         if (IsOwner)
@@ -72,9 +70,10 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             else if (IsMoving())
             {
                 //if the distance between the position target and the current position is larger than 0.000001, move towards it.
-                if ((transform.position - positionTarget).magnitude > 0.000001f)
+                Vector3 target = new Vector3(positionTarget.x, transform.position.y, positionTarget.z);
+                if ((transform.position - target).magnitude > 0.000001f)
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, positionTarget, movementSpeed * movementGear * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, target, movementSpeed * movementGear * Time.deltaTime);
                 }
                 else
                 {
@@ -131,6 +130,12 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         return positionTarget;
     }
 
+    public void ResetTargetPosition(Vector3 positionTarget)
+    {
+        this.leftToPush = Vector3.zero;
+        this.positionTarget = positionTarget;
+    }
+
     public Vector3 GetTargetRotation()
     {
         return rotationTarget;
@@ -163,22 +168,20 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public void SetDirection(GameObject Direction)
     {
         direction = Direction;
-        Debug.Log("direction set");
     }
 
     public void MoveDirection()
     {
         if (IsDoingInstruction()) return;
-        Debug.Log("direction move");
         positionTarget = transform.position + direction.transform.forward * tileSize;
-        currentInstruction = Instructions.MoveBackward;
-        
+        currentInstruction = Instructions.MapMovement;
+
 
     }
     //Call on function to return whether robot is moving or not
     public bool IsMoving()
     {
-        return currentInstruction == Instructions.MoveForward || currentInstruction == Instructions.MoveBackward;
+        return currentInstruction == Instructions.MoveForward || currentInstruction == Instructions.MoveBackward || currentInstruction == Instructions.MapMovement;
     }
 
     //Call on function to rotate the robot 90 degrees to the left
@@ -213,6 +216,15 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     public Gear GetGear()
     {
         return currentGear;
+    }
+
+    public void MoveToSpawnPoints(Vector3 spawnPoint)
+    {
+        transform.position = spawnPoint;
+        positionTarget = spawnPoint;
+        GetComponent<RobotCollision>().Reset();
+        leftToPush = Vector3.zero;
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
     //Call on function to set gear to either First, Second or Third.
@@ -263,9 +275,10 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         leftToPush += direction * tileSize * numOfTiles - direction * 0.3f;
     }
 
-    public void MoveTargetPositionBack(int numOfTiles)
+    public void WallCollision()
     {
-        positionTarget -= GetMovingDirection() * tileSize * numOfTiles;
+        positionTarget -= GetMovingDirection() * tileSize;
+        //leftToPush = Vector3.zero;
     }
 
     public Vector3 GetForceToMe(Vector3 myPosition)
