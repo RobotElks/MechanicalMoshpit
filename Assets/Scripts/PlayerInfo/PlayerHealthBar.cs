@@ -44,7 +44,6 @@ public class PlayerHealthBar : NetworkBehaviour
         {
             localHealth = healthPoints.Value;
             abovePlayerHealth.value = (float)localHealth;
-            healthSlider.value = (float)localHealth;
         }
 
         //Die on fall
@@ -102,14 +101,14 @@ public class PlayerHealthBar : NetworkBehaviour
 
     public void killed()
     {
-        //MonoBehaviour[] comps = GetComponents<MonoBehaviour>();
-        //foreach (MonoBehaviour c in comps)
-        //{
-        //    if (c.GetType() != typeof(PlayerHealthBar))
-        //    {
-        //        c.enabled = false;
-        //    }
-        //}
+        MonoBehaviour[] comps = GetComponents<MonoBehaviour>();
+        foreach (MonoBehaviour c in comps)
+        {
+            if (c.GetType() == typeof(MultiplayerDetectTarget))
+            {
+                c.enabled = false;
+            }
+        }
 
         if (IsOwner)
         {

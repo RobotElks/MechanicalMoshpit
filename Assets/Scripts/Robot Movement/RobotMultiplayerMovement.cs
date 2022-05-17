@@ -178,8 +178,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         if (IsDoingInstruction()) return;
         positionTarget = transform.position + direction.transform.forward * tileSize;
         currentInstruction = Instructions.MapMovement;
-
-
     }
     //Call on function to return whether robot is moving or not
     public bool IsMoving()
@@ -229,7 +227,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         leftToPush = Vector3.zero;
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         SetGear(Gear.First);
-        Debug.Log(GetGear());
     }
 
     //Call on function to set gear to either First, Second or Third.
