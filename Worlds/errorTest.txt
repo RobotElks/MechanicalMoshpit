@@ -9,7 +9,7 @@
 {30,1,30,0}
 
 #Flag start
-{15,1,15,16}
+{15,1,15,13}
 
 # Inside walls
 # outer rim/ starting area

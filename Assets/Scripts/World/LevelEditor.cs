@@ -11,11 +11,7 @@ public class LevelEditor : MonoBehaviour
     public List<GameObject> tilePrefabs = new List<GameObject>();
     int firstConveryorBelt = 6;
 
-
-    GameObject selector;
-    LevelEditorBlock selectorScript;
-    public float selectorCameraDistance = 5f;
-    public Vector3 selectorCameraOffset = new Vector3(0, 0, 0);
+    public List<GameObject> editorBlocks = new List<GameObject>();
 
 
     public Vector2 worldSize = new Vector2(30, 30);
@@ -27,19 +23,17 @@ public class LevelEditor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        selector = GameObject.Instantiate(levelTileBlock, transform);
-        selectorScript = selector.GetComponent<LevelEditorBlock>();
-        selectorScript.SetTileList(tilePrefabs, firstConveryorBelt);
-        selector.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
 
-        worldParent = new GameObject("Generated World");
+        worldParent = new GameObject("Editor World");
         worldParent.transform.parent = this.transform;
 
         for (int z = 0; z < worldSize.y; z++)
         {
             for (int x = 0; x < worldSize.x; x++)
             {
-                GameObject.Instantiate(levelTileBlock, new Vector3(x, 0, z), Quaternion.identity, worldParent.transform).GetComponent<LevelEditorBlock>().SetTileList(tilePrefabs, firstConveryorBelt);
+                GameObject tile = GameObject.Instantiate(levelTileBlock, new Vector3(x, 0, z), Quaternion.identity, worldParent.transform);
+                tile.GetComponent<LevelEditorBlock>().SetTileList(tilePrefabs, firstConveryorBelt);
+                editorBlocks.Add(tile);
             }
         }
 
@@ -49,9 +43,11 @@ public class LevelEditor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 offset = new Vector3(selectorCameraOffset.x * camera.transform.right.x, selectorCameraOffset.y * camera.transform.right.y, selectorCameraOffset.z * camera.transform.right.z);
-        selector.transform.position = camera.transform.position + camera.transform.forward * selectorCameraDistance ;
+        if (Input.GetKeyDown(KeyCode.S))
+            SaveWorldToFile("TestMap");
 
+        if (Input.GetKeyDown(KeyCode.L))
+            LoadWorldFromFile("TestMap");
 
         if (Input.GetMouseButtonDown(0))
         { // if left button pressed...
@@ -65,7 +61,75 @@ public class LevelEditor : MonoBehaviour
                 }
             }
         }
+    }
 
+    public void SaveWorldToFile(string name)
+    {
+        using (System.IO.StreamWriter writer = new System.IO.StreamWriter(@"Worlds\" + name + ".txt", false))
+        {
+            foreach (GameObject tile in editorBlocks)
+            {
+                string line = "{" + tile.transform.position.x + "," + tile.transform.position.y + "," + tile.transform.position.z + "," + tile.GetComponent<LevelEditorBlock>().CurrentTileID + "}";
+
+                writer.WriteLine(line);
+
+            }
+
+            writer.Close();
+            Debug.Log("Saved to file");
+        }
+    }
+
+    public void LoadWorldFromFile(string name)
+    {
+        GameObject.Destroy(worldParent);
+        worldParent = new GameObject("Editor World");
+        worldParent.transform.parent = this.transform;
+        editorBlocks.Clear();
+
+        string[] lines = System.IO.File.ReadAllLines(@"Worlds\" + name + ".txt");
+        Debug.Log(lines.Length);
+        foreach (string line in lines)
+        {
+
+            switch (line[0])
+            {
+                // Comment
+                case '#':
+                    break;
+                // Level-data
+                case '{':
+
+                    int x = 0;
+                    int y = 0;
+                    int z = 0;
+                    int tileID = 0;
+                    string[] extracted = line.Split(',', '{', '}');
+                    try
+                    {
+                        x = int.Parse(extracted[1]);
+                        y = int.Parse(extracted[2]);
+                        z = int.Parse(extracted[3]);
+                        tileID = int.Parse(extracted[4]);
+                    }
+                    catch
+                    {
+                        Debug.Log($"Unable to parse!");
+                    }
+
+                    GameObject tile = GameObject.Instantiate(levelTileBlock, new Vector3(x, 0, z), Quaternion.identity, worldParent.transform);
+                    tile.GetComponent<LevelEditorBlock>().SetTileList(tilePrefabs, firstConveryorBelt);
+                    tile.GetComponent<LevelEditorBlock>().CurrentTileID = tileID;
+                    editorBlocks.Add(tile);
+
+                    break;
+                // Something is wrong with file
+                default:
+                    break;
+            }
+
+
+        }
 
     }
 

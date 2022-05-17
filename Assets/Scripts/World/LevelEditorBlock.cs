@@ -6,9 +6,9 @@ public class LevelEditorBlock : MonoBehaviour
 {
     List<GameObject> visableTiles = new List<GameObject>();
 
-    public int currentTile = 0;
+    int currentTile = 0;
 
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -59,10 +59,18 @@ public class LevelEditorBlock : MonoBehaviour
         visableTiles[currentTile].SetActive(true);
     }
 
-    public void SetTile(int tileNumber)
+
+    public int CurrentTileID
     {
-        currentTile = tileNumber - 1;
+        get { return currentTile + 1; }
+        set
+        {
+            visableTiles[currentTile].SetActive(false);
+            currentTile = value - 1;
+            visableTiles[currentTile].SetActive(true);
+
+        }
     }
 
-    public int CurrentTile { get { return currentTile; }}
+
 }
