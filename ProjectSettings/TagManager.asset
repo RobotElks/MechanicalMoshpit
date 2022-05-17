@@ -12,6 +12,10 @@ TagManager:
   - EnergyStation
   - ConveyorBelt
   - Information
+  - TurnGearLeft
+  - TurnGearRight
+  - wallX
+  - wallZ
   layers:
   - Default
   - TransparentFX
