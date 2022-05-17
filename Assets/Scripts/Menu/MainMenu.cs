@@ -7,6 +7,7 @@ using TMPro;
 public class MainMenu : MonoBehaviour
 {
     public TMP_InputField addressInput;
+    public TMP_InputField playerNameInput;
     public SaveIP informationScript;
 
     public void PlayGameAsHost()
@@ -32,5 +33,10 @@ public class MainMenu : MonoBehaviour
             addressInput.text = addressInput.text.Replace("\r", "").Replace("\n", "");
             PlayGameAsClient();
         }
+    }
+
+    private void getPlayerName()
+    {
+        informationScript.savePlayerName(playerNameInput.text);
     }
 }

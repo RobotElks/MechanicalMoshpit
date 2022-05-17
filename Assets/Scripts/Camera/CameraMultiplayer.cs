@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CameraMultiplayer : MonoBehaviour
 {
@@ -41,13 +42,14 @@ public class CameraMultiplayer : MonoBehaviour
                 // Substract forward vector of the GameObject to point its forward vector to the target
                 //transform.position = player.position - transform.forward * offset;
             }
+        EventSystem.current.IsPointerOverGameObject();
 
             // ZOOM 
-            if (Input.mouseScrollDelta.y < 0f)
+            if (Input.mouseScrollDelta.y < 0f && !EventSystem.current.IsPointerOverGameObject())
             { //forward
                 offset++;
             }
-            else if (Input.mouseScrollDelta.y > 0f)
+            else if (Input.mouseScrollDelta.y > 0f && !EventSystem.current.IsPointerOverGameObject())
             { //Backwards
                 offset--;
             }

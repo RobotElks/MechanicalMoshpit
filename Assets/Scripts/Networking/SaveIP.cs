@@ -18,6 +18,9 @@ public class SaveIP : MonoBehaviour
     private bool isHost;
     [SerializeField]
     private string worldString;
+    //public TMP_InputField inputPlayerName;
+    private string savedPlayerName;
+
        // Start is called before the first frame update
     void Start()
     {
@@ -32,6 +35,17 @@ public class SaveIP : MonoBehaviour
             }
         }
         DontDestroyOnLoad(this.gameObject);
+    }
+
+
+    public void savePlayerName(string playerNameInput)
+    {
+        savedPlayerName = playerNameInput;
+    }
+
+    public string PlayerName()
+    {
+        return savedPlayerName;
     }
 
     public void SaveIPAddress(){

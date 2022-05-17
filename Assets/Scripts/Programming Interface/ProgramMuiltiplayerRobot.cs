@@ -7,12 +7,15 @@ using System.Collections;
 using System.Collections.Generic;
 
 
+
 public class ProgramMuiltiplayerRobot : MonoBehaviour
 {
     Queue<Instructions> instructionsQueue = new Queue<Instructions>();
 
     public Slider gear;
     private float gearValue;
+    public Button gearUpButton;
+    public Button gearDownButton;
     public TextMeshProUGUI textInstructions;
 
     public Button removeButton;
@@ -67,6 +70,13 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
         turnLeftButton = turnLeftButton.GetComponent<Button>();
         turnLeftButton.onClick.AddListener(addTurnLeftToProgram);
 
+        gearUpButton = gearUpButton.GetComponent<Button>();
+        gearUpButton.onClick.AddListener(increaseGear);
+
+        gearDownButton = gearDownButton.GetComponent<Button>();
+        gearDownButton.onClick.AddListener(decreaseGear);
+
+        gearValue = gear.GetComponent<Slider>().value;
     }
 
     public void SetRobot(GameObject playerRobot)
@@ -82,12 +92,29 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
         //Debug.Log(gearValue);
         //Debug.Log(gear);
         //Debug.Log(gear.GetComponent<Slider>().value);
-        gearValue = gear.GetComponent<Slider>().value;
+        
+        // //gearValue = gear.GetComponent<Slider>().value;
     }
     // void addInstructionToProgram(string instruction, float gearValue)
     // {
     //     textInstructions.text = textInstructions.text + instruction + gearValue + "\n";
     // }
+
+    void increaseGear()
+    {
+        if(gearValue < 3)
+            gearValue += 1;
+        gear.GetComponent<Slider>().value = gearValue;
+        Debug.Log("Gear: " + gearValue);
+    }
+
+    void decreaseGear()
+    {
+        if(gearValue > 1)
+            gearValue -= 1;
+        gear.GetComponent<Slider>().value = gearValue;
+        Debug.Log("Gear: " + gearValue);
+    }
 
 
     void addMoveForwardToProgram()
