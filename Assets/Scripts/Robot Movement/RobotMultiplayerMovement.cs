@@ -277,7 +277,23 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
     public void WallCollision()
     {
-        positionTarget -= GetMovingDirection() * tileSize;
+            if(IsPushed()){
+                Debug.Log(leftToPush);
+                if(Mathf.Abs(leftToPush.x) > Mathf.Abs(leftToPush.z)){
+                    if(leftToPush.x > 0)
+                    leftToPush.x = -(2*tileSize - leftToPush.x);
+                    else
+                    leftToPush.x = -(leftToPush.x - 2*tileSize);                    
+                }
+                else{
+                    if(leftToPush.z > 0)
+                    leftToPush.z = -(2*tileSize - leftToPush.z);
+                    else
+                    leftToPush.z = -(leftToPush.z - 2*tileSize);     
+                }
+            }
+            if(IsMoving())
+                positionTarget -= GetMovingDirection() * tileSize;
         //leftToPush = Vector3.zero;
     }
 
