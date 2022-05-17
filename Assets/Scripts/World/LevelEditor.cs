@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class LevelEditor : MonoBehaviour
 {
@@ -14,21 +15,23 @@ public class LevelEditor : MonoBehaviour
     public List<GameObject> tilePrefabs = new List<GameObject>();
     int firstConveryorBelt = 6;
 
-    public List<GameObject> editorBlocks = new List<GameObject>();
+    
+    public List<GameObject> worldBlocks = new List<GameObject>();
 
 
     public Vector2 worldSize = new Vector2(30, 30);
-
     GameObject worldParent;
 
     public Camera camera;
+
+    public TMP_Dropdown tileSelector;
 
     // Start is called before the first frame update
     void Start()
     {
         worldParent = new GameObject("Editor World");
         //NewWorld();
-
+        
     }
 
     // Update is called once per frame
@@ -52,7 +55,7 @@ public class LevelEditor : MonoBehaviour
             {
                 if (hit.collider.gameObject.CompareTag("LevelEditorBlock"))
                 {
-                    hit.collider.GetComponent<LevelEditorBlock>().NextTile();
+                    hit.collider.GetComponent<LevelEditorBlock>().SetCurrentTile(tileSelector.value);
                 }
             }
         }
@@ -75,7 +78,7 @@ public class LevelEditor : MonoBehaviour
         GameObject.Destroy(worldParent);
         worldParent = new GameObject("Editor World");
         worldParent.transform.parent = this.transform;
-        editorBlocks.Clear();
+        worldBlocks.Clear();
 
 
         for (int z = 0; z < worldSize.y; z++)
@@ -84,7 +87,7 @@ public class LevelEditor : MonoBehaviour
             {
                 GameObject tile = GameObject.Instantiate(levelTileBlock, new Vector3(x, 0, z), Quaternion.identity, worldParent.transform);
                 tile.GetComponent<LevelEditorBlock>().SetTileList(tilePrefabs, firstConveryorBelt);
-                editorBlocks.Add(tile);
+                worldBlocks.Add(tile);
             }
         }
 
@@ -94,7 +97,7 @@ public class LevelEditor : MonoBehaviour
     public void SaveWorldToFile(string name)
     {
         StreamWriter writer = new System.IO.StreamWriter(@"Worlds\" + name + ".txt", false);
-        foreach (GameObject tile in editorBlocks)
+        foreach (GameObject tile in worldBlocks)
         {
             string line = "{" + tile.transform.position.x + "," + tile.transform.position.y + "," + tile.transform.position.z + "," + tile.GetComponent<LevelEditorBlock>().CurrentTileID + "}";
 
@@ -111,7 +114,7 @@ public class LevelEditor : MonoBehaviour
         GameObject.Destroy(worldParent);
         worldParent = new GameObject("Editor World");
         worldParent.transform.parent = this.transform;
-        editorBlocks.Clear();
+        worldBlocks.Clear();
 
         string path = @"Worlds\" + name + ".txt";
 
@@ -148,18 +151,17 @@ public class LevelEditor : MonoBehaviour
                     GameObject tile = GameObject.Instantiate(levelTileBlock, new Vector3(x, 0, z), Quaternion.identity, worldParent.transform);
                     tile.GetComponent<LevelEditorBlock>().SetTileList(tilePrefabs, firstConveryorBelt);
                     tile.GetComponent<LevelEditorBlock>().CurrentTileID = tileID;
-                    editorBlocks.Add(tile);
+                    worldBlocks.Add(tile);
 
                     break;
                 // Something is wrong with file
                 default:
                     break;
             }
-
-
-
-
         }
+
+        worldOrigin.transform.position = new Vector3(worldSize.x / 2, 0, worldSize.y / 2);
+
     }
 
 }
