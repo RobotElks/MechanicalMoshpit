@@ -51,6 +51,7 @@ public class PlayerHealthBar : NetworkBehaviour
         {
             localHealth = healthPoints.Value;
             abovePlayerHealth.value = (float)localHealth;
+            healthSlider.value = (float)localHealth;
         }
 
         //Die on fall
@@ -65,6 +66,8 @@ public class PlayerHealthBar : NetworkBehaviour
         deadScript.SetDeadServerRpc(false);
         localHealth = healthPoints.Value;
         abovePlayerHealth.value = (float)localHealth;
+        healthSlider.value = (float)localHealth;
+
     }
 
     public void GetHit(int damageAmount)
