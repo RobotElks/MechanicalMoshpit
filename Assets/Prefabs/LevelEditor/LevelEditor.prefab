@@ -48,7 +48,6 @@ MonoBehaviour:
   worldOrigin: {fileID: 0}
   editorMenu: {fileID: 0}
   tilePrefabs:
-  - {fileID: 9001449884510678627, guid: f85a436685c8e224f978b4f6b2968da3, type: 3}
   - {fileID: 1363037412436797206, guid: ea4e323efd1513f4181b5be459e8e127, type: 3}
   - {fileID: 1363037412436797206, guid: af79172900dac4d4ea653205b964ce93, type: 3}
   - {fileID: 1363037412436797206, guid: a14facc5b11cba64bbb69e093ffc8346, type: 3}
@@ -60,6 +59,9 @@ MonoBehaviour:
   - {fileID: 1363037412436797206, guid: e757863ff9015574a9861284bef6cc74, type: 3}
   - {fileID: 1363037412436797206, guid: e757863ff9015574a9861284bef6cc74, type: 3}
   - {fileID: 9001449884510678627, guid: 99f1bbcb2a3cd6b4f8de39e486eb516e, type: 3}
+  - {fileID: 9001449884510678627, guid: f85a436685c8e224f978b4f6b2968da3, type: 3}
+  beltInedx: 6
+  flagIndex: 10
   worldBlocks: []
   worldSize: {x: 30, y: 30}
   camera: {fileID: 0}

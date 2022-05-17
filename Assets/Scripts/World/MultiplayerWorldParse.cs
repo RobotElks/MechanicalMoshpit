@@ -169,8 +169,53 @@ public class MultiplayerWorldParse : MonoBehaviour
         // Decide which tile we will use and instantiate it
         switch (tileID)
         {
-            //Spawnpoint
+            // Ground-block
             case 0:
+                Instantiate(tile1Ground, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
+                break;
+            // Health station
+            case 1:
+                Instantiate(healthStation, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
+                break;
+            case 2:
+                Instantiate(energyStation, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
+                break;
+            // Spikes
+            case 3:
+                Instantiate(damageTile, new Vector3(x, y - 0.1f, z), Quaternion.identity, worldParent.transform);
+                break;
+                //Gears
+            case 4:
+                Instantiate(leftTurningGear, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
+                break;
+            case 5:
+                Instantiate(rightTurningGear, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
+                break;
+            case 6:
+                Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
+                break;
+            case 7:
+                GameObject righttile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
+                righttile.transform.eulerAngles = 90f * Vector3.up;
+
+                break;
+            case 8:
+                GameObject backwardtile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
+                backwardtile.transform.eulerAngles = 180f * Vector3.up;
+                break;
+            case 9:
+                GameObject lefttile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
+                lefttile.transform.eulerAngles = 270f * Vector3.up;
+                break;
+
+                //Flag
+            case 10:
+                defaultFlagSpawn = new Vector3(x, y, z);
+                break;
+            // wall_x
+
+            //Spawnpoint
+            case 11:
                 GameObject sp = new GameObject();
                 sp.transform.position = new Vector3(x, y, z);
                 sp.name = "SpawnPoint" + (robotSpawnPoints.Count + 1);
@@ -178,48 +223,6 @@ public class MultiplayerWorldParse : MonoBehaviour
                 robotSpawnPoints.Add(sp.transform.position);
                 break;
 
-            // Ground-block
-            case 1:
-                Instantiate(tile1Ground, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
-                break;
-            // Health station
-            case 2:
-                Instantiate(healthStation, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
-                break;
-            case 3:
-                Instantiate(energyStation, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
-                break;
-            // Spikes
-            case 4:
-                Instantiate(damageTile, new Vector3(x, y - 0.1f, z), Quaternion.identity, worldParent.transform);
-                break;
-            // Health station
-            case 5:
-                Instantiate(leftTurningGear, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
-                break;
-            case 6:
-                Instantiate(rightTurningGear, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
-                break;
-            case 7:
-                Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
-                break;
-            case 8:
-                GameObject righttile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
-                righttile.transform.eulerAngles = 90f * Vector3.up;
-
-                break;
-            case 9:
-                GameObject backwardtile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
-                backwardtile.transform.eulerAngles = 180f * Vector3.up;
-                break;
-            case 10:
-                GameObject lefttile = Instantiate(conveyorBelt, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
-                lefttile.transform.eulerAngles = 270f * Vector3.up;
-                break;
-            // wall_x
-            case 11:
-                defaultFlagSpawn = new Vector3(x, y, z);
-                break;
             case 12:
                 Instantiate(tile10wall_x, new Vector3(x, y + 0.4f, z - 0.5f), Quaternion.identity, worldParent.transform);
                 break;
@@ -229,6 +232,7 @@ public class MultiplayerWorldParse : MonoBehaviour
                 break;
 
             
+
         }
 
 

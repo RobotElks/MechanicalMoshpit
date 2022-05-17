@@ -4,6 +4,7 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.EventSystems;
 using TMPro;
+using System.Linq;
 
 public class LevelEditor : MonoBehaviour
 {
@@ -13,10 +14,11 @@ public class LevelEditor : MonoBehaviour
     public LevelEditorMenu editorMenu;
 
     public List<GameObject> tilePrefabs = new List<GameObject>();
-    public int firstConveryorBelt = 7;
+    public int beltInedx = 6;
+    public int flagIndex = 10;
 
-    
-    public List<GameObject> worldBlocks = new List<GameObject>();
+
+    List<GameObject> worldBlocks = new List<GameObject>();
 
 
     public Vector2 worldSize = new Vector2(30, 30);
@@ -31,7 +33,7 @@ public class LevelEditor : MonoBehaviour
     {
         worldParent = new GameObject("Editor World");
         //NewWorld();
-        
+
     }
 
     // Update is called once per frame
@@ -45,6 +47,8 @@ public class LevelEditor : MonoBehaviour
 
         //if (Input.GetKeyDown(KeyCode.M))
         //    Debug.Log(GetMapNames().Length);
+
+
 
         //Click to edit map and not on UI
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && !editorMenu.HasMenuopen())
@@ -86,8 +90,8 @@ public class LevelEditor : MonoBehaviour
             for (int x = 0; x < worldSize.x; x++)
             {
                 GameObject tile = GameObject.Instantiate(levelTileBlock, new Vector3(x, 0, z), Quaternion.identity, worldParent.transform);
-                tile.GetComponent<LevelEditorBlock>().SetTileList(tilePrefabs, firstConveryorBelt);
-                tile.GetComponent<LevelEditorBlock>().CurrentTileID = 1;
+                tile.GetComponent<LevelEditorBlock>().SetTileList(tilePrefabs, beltInedx);
+                tile.GetComponent<LevelEditorBlock>().CurrentTileID = 0;
                 worldBlocks.Add(tile);
             }
         }
@@ -100,9 +104,16 @@ public class LevelEditor : MonoBehaviour
         StreamWriter writer = new System.IO.StreamWriter(@"Worlds\" + name + ".txt", false);
         foreach (GameObject tile in worldBlocks)
         {
-            string line = "{" + tile.transform.position.x + "," + tile.transform.position.y + "," + tile.transform.position.z + "," + tile.GetComponent<LevelEditorBlock>().CurrentTileID + "}";
+            if (tile.GetComponent<LevelEditorBlock>().CurrentTileID >= flagIndex)
+            {
+                writer.WriteLine("{" + tile.transform.position.x + "," + (tile.transform.position.y + 1) + "," + tile.transform.position.z + "," + tile.GetComponent<LevelEditorBlock>().CurrentTileID + "}");
+                writer.WriteLine("{" + tile.transform.position.x + "," + (tile.transform.position.y) + "," + tile.transform.position.z + "," + 0 + "}");
+            }
 
-            writer.WriteLine(line);
+            else
+                writer.WriteLine("{" + tile.transform.position.x + "," + tile.transform.position.y + "," + tile.transform.position.z + "," + tile.GetComponent<LevelEditorBlock>().CurrentTileID + "}");
+
+
 
         }
 
@@ -119,50 +130,70 @@ public class LevelEditor : MonoBehaviour
 
         string path = @"Worlds\" + name + ".txt";
 
+        string[] fileLines = File.ReadAllLines(path).Where(l => l[0] == '{').ToArray();
 
-        string[] lines = File.ReadAllLines(path);
-        foreach (string line in lines)
+        List<string> tileInfo = new List<string>();
+
+        int x = 0;
+        int z = 0;
+        int tileID = 0;
+        //"Regular tiles" (not spawns, flags or walls)
+        tileInfo.AddRange(fileLines.Where(l => int.Parse(l.Replace("{", "").Replace("}", "").Split(',').Last()) < flagIndex).ToArray());
+        foreach (string line in tileInfo)
         {
 
-            switch (line[0])
+            string[] extracted = line.Split(',', '{', '}');
+            try
             {
-                // Comment
-                case '#':
-                    break;
-                // Level-data
-                case '{':
+                x = int.Parse(extracted[1]);
+                z = int.Parse(extracted[3]);
+                tileID = int.Parse(extracted[4]);
 
-                    int x = 0;
-                    int y = 0;
-                    int z = 0;
-                    int tileID = 0;
-                    string[] extracted = line.Split(',', '{', '}');
-                    try
-                    {
-                        x = int.Parse(extracted[1]);
-                        y = int.Parse(extracted[2]);
-                        z = int.Parse(extracted[3]);
-                        tileID = int.Parse(extracted[4]);
-                    }
-                    catch
-                    {
-                        Debug.Log($"Unable to parse!");
-                    }
-
-                    GameObject tile = GameObject.Instantiate(levelTileBlock, new Vector3(x, 0, z), Quaternion.identity, worldParent.transform);
-                    tile.GetComponent<LevelEditorBlock>().SetTileList(tilePrefabs, firstConveryorBelt);
-                    tile.GetComponent<LevelEditorBlock>().CurrentTileID = tileID;
-                    worldBlocks.Add(tile);
-
-                    break;
-                // Something is wrong with file
-                default:
-                    break;
+                //Always spawn at 0 so that spawnpoints dont place to high
+                GameObject tile = GameObject.Instantiate(levelTileBlock, new Vector3(x, 0, z), Quaternion.identity, worldParent.transform);
+                tile.GetComponent<LevelEditorBlock>().SetTileList(tilePrefabs, beltInedx);
+                tile.GetComponent<LevelEditorBlock>().CurrentTileID = tileID;
+                worldBlocks.Add(tile);
             }
+            catch
+            {
+                Debug.Log($"Unable to parse!");
+            }
+
+
+            
         }
 
-        worldOrigin.transform.position = new Vector3(worldSize.x / 2, 0, worldSize.y / 2);
 
+
+        //Flags, spawns
+        tileInfo.Clear();
+        tileInfo.AddRange(fileLines.Where(l => int.Parse(l.Replace("{", "").Replace("}", "").Split(',').Last()) >= flagIndex).ToArray());
+        
+        foreach (string line in tileInfo)
+        {
+            string[] extracted = line.Split(',', '{', '}');
+            try
+            {
+                x = int.Parse(extracted[1]);
+                z = int.Parse(extracted[3]);
+                tileID = int.Parse(extracted[4]);
+
+                Vector3 pos = new Vector3(x, 0, z);
+
+                worldBlocks.Where(t => t.transform.position == pos).First().GetComponent<LevelEditorBlock>().CurrentTileID = tileID;
+            }
+            catch
+            {
+                Debug.Log($"Unable to parse!");
+            }
+
+        }
+
+
+
+        worldOrigin.transform.position = new Vector3(worldSize.x / 2, 0, worldSize.y / 2);
     }
+
 
 }
