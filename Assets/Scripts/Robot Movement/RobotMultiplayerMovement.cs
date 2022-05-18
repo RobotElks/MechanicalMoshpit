@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.UI;
 
 public enum StateOfAnimation {Idle, Forward, Backward, Right, Left, Death, Hit};
 
@@ -21,7 +22,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
     Vector3 positionTarget;
     Vector3 rotationTarget;
-
+    Vector3 lastValidPosition;
     Vector3 leftToPush = Vector3.zero;
 
     int tileSize = 1;
@@ -32,10 +33,13 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     float turnRate = 1.0f;
     public StateOfAnimation localAnimationState = StateOfAnimation.Idle;
     Gear currentGear = Gear.None;
+    Slider gearSlider;
     Instructions currentInstruction = Instructions.None;
 
     public override void OnNetworkSpawn()
     {
+        gearSlider = GameObject.Find("ProgrammingInterface Multiplayer Variant").GetComponentInChildren<Slider>();
+
         //Set gear to third to calculate pushedSpeed
         SetGear(Gear.Third);
         pushedSpeed = movementSpeed * movementGear * 2f;
@@ -116,6 +120,12 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             UpdateNetworkInfoServerRpc(transform.position, transform.rotation, currentInstruction, 
                 currentGear, leftToPush, localAnimationState);
             rb.freezeRotation = true;
+
+            if (positionTarget == transform.position)
+            {
+                lastValidPosition = positionTarget;
+                //Debug.Log("New valid position : " + lastValidPosition);
+            }
         }
 
         //Update model postition and rotation to match network position
@@ -196,8 +206,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         if (IsDoingInstruction()) return;
         positionTarget = transform.position + direction.transform.forward * tileSize;
         currentInstruction = Instructions.MapMovement;
-
-
     }
     //Call on function to return whether robot is moving or not
     public bool IsMoving()
@@ -244,11 +252,12 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
     public void MoveToSpawnPoints(Vector3 spawnPoint)
     {
-        transform.position = spawnPoint;
-        positionTarget = spawnPoint;
         GetComponent<RobotCollision>().Reset();
         leftToPush = Vector3.zero;
+        positionTarget = spawnPoint;
+        transform.position = spawnPoint;
         GetComponent<Rigidbody>().velocity = Vector3.zero;
+        SetGear(Gear.First);
     }
 
     //Call on function to set gear to either First, Second or Third.
@@ -263,14 +272,17 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             case Gear.First:
                 movementGear = 1;
                 rotateGear = 1;
+                gearSlider.value = 1f;
                 break;
             case Gear.Second:
                 movementGear = 1.5f;
                 rotateGear = 1.5f;
+                gearSlider.value = 2f;
                 break;
             case Gear.Third:
                 movementGear = 2f;
                 rotateGear = 2;
+                gearSlider.value = 3f;
                 break;
         }
     }
@@ -292,6 +304,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     {
         direction.y = 0;
         direction = direction.normalized;
+        //Debug.Log("New push force. Direction: " + direction + ", Magnitude: " + numOfTiles);
 
         transform.position += direction * 0.3f;
         positionTarget += direction * 0.3f;
@@ -299,10 +312,156 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         leftToPush += direction * tileSize * numOfTiles - direction * 0.3f;
     }
 
-    public void WallCollision()
+    // Gives less instant pushback than Push()
+    public void Wall(Vector3 direction, int numOfTiles)
+    {
+        direction.y = 0;
+        direction = direction.normalized;
+
+        transform.position += direction * 0.1f;
+        positionTarget += direction * 0.1f;
+
+        leftToPush += direction * tileSize * numOfTiles - direction * 0.1f;
+    }
+
+    public void WallCollisionX()
+    {
+        // Inverse push-force if pushed, else move back
+        if (IsPushed())
+        {
+            int force = Mathf.CeilToInt(Mathf.Abs(leftToPush.x));
+            //Debug.Log("X Force from push : " + force);
+            if (leftToPush.x > 0.05)
+                Wall(new Vector3(-1, 0, 0), force);
+            else if (leftToPush.x < -0.05)
+                Wall(new Vector3(1, 0, 0), force);
+        }
+        else
+        {
+            int movingDir = (int)GetMovingDirection().x;
+            //Debug.Log("X movingDir : " + movingDir);
+            int force = Mathf.Abs(movingDir);
+            if (force > 0.05)
+                MoveBackPosition();
+        }
+    }
+
+    public void WallCollisionZ()
+    {
+        // Inverse push-force if pushed, else move back
+        if (IsPushed())
+        {
+            int force = Mathf.CeilToInt(Mathf.Abs(leftToPush.z));
+            //Debug.Log("Z Force from push : " + force);
+            if (leftToPush.z > 0.05)
+                Wall(new Vector3(0, 0, -1), force);
+            else if (leftToPush.z < -0.05)
+                Wall(new Vector3(0, 0, 1), force);
+        }
+        else
+        {
+            int movingDir = (int)GetMovingDirection().z;
+            //Debug.Log("Z movingDir : " + movingDir);
+            int force = Mathf.Abs(movingDir);
+            if (force > 0.05)
+                MoveBackPosition();
+        }
+    }
+/*
+        public void WallCollisionX()
+        {
+            //Debug.Log("Hit wall in X - direction");
+            if (IsMoving())
+            {
+                if (IsPushed())
+                {
+
+                    //ROBOT IS MOVING AND PUSHED INTO THE WALL
+                    // Get the force magnitude against the wall
+                    int force = Mathf.CeilToInt(Mathf.Abs(leftToPush.x));
+
+                    if (leftToPush.x > 0.05)
+                        Wall(new Vector3(-1, 0, 0), force);
+                    else if (leftToPush.x < -0.05)
+                        Wall(new Vector3(1, 0, 0), force);
+
+                    //Vector3 movingDir = GetMovingDirection();
+                    //if (movingDir.x > 0.05 || movingDir.x < 0.05)
+                    //    MoveBackPosition();
+
+                }
+                else
+                {
+                    // ROBOT MIGHT BE DRIVING AGAINST THE WALL
+                    Vector3 movingDir = GetMovingDirection();
+                    if (movingDir.x > 0.05 || movingDir.x < 0.05)
+                        MoveBackPosition();
+                }
+
+            }
+            else
+            {
+                // ROBOT IS STANDING STILL AND BEEING PUSHED INTO THE WALL
+
+                // Get the force magnitude
+                int force = Mathf.CeilToInt(Mathf.Abs(leftToPush.x));
+
+                // Inverse the push power with its magnitude
+                if (leftToPush.x > 0)
+                    Wall(new Vector3(-1, 0, 0), force);
+                else
+                    Wall(new Vector3(1, 0, 0), force);
+
+            }
+        }
+
+        public void WallCollisionZ()
+        {
+
+            if (IsMoving())
+            {
+                if (IsPushed())
+                {
+                    //ROBOT IS MOVING AND PUSHED INTO THE WALL
+                    // Get the force magnitude
+                    int force = Mathf.CeilToInt(Mathf.Abs(leftToPush.z));
+
+                    if (leftToPush.z > 0.05)
+                        Wall(new Vector3(0, 0, -1), force);
+                    else if(leftToPush.z < -0.05)
+                        Wall(new Vector3(0, 0, 1), force);
+
+                    //Vector3 movingDir = GetMovingDirection();
+                    //if (movingDir.z > 0.05 || movingDir.z < 0.05)
+                    //    MoveBackPosition();
+                }
+                else
+                {
+                    // ROBOT MIGHT BE DRIVING AGAINST THE WALL
+                    Vector3 movingDir = GetMovingDirection();
+                    if (movingDir.z > 0.05 || movingDir.z < 0.05)
+                        MoveBackPosition();
+                }
+
+            }
+            else
+            {
+                // ROBOT IS BEEING PUSHED INTO THE WALL
+
+                // Get the force magnitude
+                int force = Mathf.CeilToInt(Mathf.Abs(leftToPush.z));
+
+                // Inverse the push power and its magnitude
+                if (leftToPush.z > 0)
+                    Wall(new Vector3(0,0,-1), force);
+                else
+                    Wall(new Vector3(0, 0,1), force);
+            }
+        }
+        */
+    public void MoveBackPosition()
     {
         positionTarget -= GetMovingDirection() * tileSize;
-        //leftToPush = Vector3.zero;
     }
 
     public Vector3 GetForceToMe(Vector3 myPosition)

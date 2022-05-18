@@ -23,6 +23,10 @@ public class PlayerHealthBar : NetworkBehaviour
 
     //Local scripts
     RobotRoundsHandler roundsHandlerScript;
+    RobotFlags flagScript;
+    Dead deadScript;
+
+  
 
 
     public override void OnNetworkSpawn()
@@ -35,6 +39,9 @@ public class PlayerHealthBar : NetworkBehaviour
         abovePlayerHealth = GetComponentInChildren<Slider>();
         roundsHandlerScript = GetComponentInParent<RobotRoundsHandler>();
         programmingInterface = GameObject.Find("ProgrammingInterface Multiplayer Variant");
+        flagScript = GetComponentInParent<RobotFlags>();
+        deadScript = GetComponentInParent<Dead>();
+
     }
 
     void Update()
@@ -47,9 +54,25 @@ public class PlayerHealthBar : NetworkBehaviour
             localHealth = healthPoints.Value;
             abovePlayerHealth.value = (float)localHealth;
         }
+        //if (IsOwner)
+        //{
+        //    healthSlider.value = (float)localHealth;
+        //}
 
         //Die on fall
         if (gameObject.transform.position.y < -20) GetHit(100);
+    }
+
+    
+    public void ReviveRobot()
+    {
+        localHealth = 100;
+        UpdateHealthInfoServerRpc(localHealth);
+        deadScript.SetDeadServerRpc(false);
+        localHealth = healthPoints.Value;
+        abovePlayerHealth.value = (float)localHealth;
+        healthSlider.value = (float)localHealth;
+
     }
 
     public void GetHit(int damageAmount)
@@ -66,6 +89,7 @@ public class PlayerHealthBar : NetworkBehaviour
             {
                 localHealth = 0;
                 abovePlayerHealth.value = (float)localHealth;
+                healthSlider.value = 0f;
                 killed();
             }
             UpdateHealthInfoServerRpc(localHealth);
@@ -76,6 +100,8 @@ public class PlayerHealthBar : NetworkBehaviour
     public void UpdateHealthInfoServerRpc(int health)
     {
         healthPoints.Value = health;
+        abovePlayerHealth.value = (float)health;
+        healthSlider.value = (float)health;
     }
 
     public void HealPowerUp()
@@ -100,20 +126,25 @@ public class PlayerHealthBar : NetworkBehaviour
 
     public void killed()
     {
-        //MonoBehaviour[] comps = GetComponents<MonoBehaviour>();
-        //foreach (MonoBehaviour c in comps)
-        //{
-        //    if (c.GetType() != typeof(PlayerHealthBar))
-        //    {
-        //        c.enabled = false;
-        //    }
-        //}
+        MonoBehaviour[] comps = GetComponents<MonoBehaviour>();
+        foreach (MonoBehaviour c in comps)
+        {
+            if (c.GetType() == typeof(MultiplayerDetectTarget))
+            {
+                c.enabled = false;
+            }
+        }
+
+        healthSlider.value = (float)localHealth;
+        abovePlayerHealth.value = (float)localHealth;
 
         if (IsOwner)
         {
             GetComponentInParent<RobotMultiplayerMovement>().SetAnimation(StateOfAnimation.Death);
             GetComponentInParent<RobotMultiplayerInstructionScript>().StopExecute();
             programmingInterface.SetActive(false);
+            flagScript.LoseFlag();
+            //robotMovementScript.MoveToSpawnPoints(worldScript.GetSpawnPoint());
         }
 
         ulong localClientId = NetworkManager.Singleton.LocalClientId;

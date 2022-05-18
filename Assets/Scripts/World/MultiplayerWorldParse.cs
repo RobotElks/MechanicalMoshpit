@@ -15,12 +15,14 @@ public class MultiplayerWorldParse : MonoBehaviour
     public GameObject damageTile;
     public GameObject tile10wall_x;
     public GameObject tile11wall_z;
+    public GameObject tileFlag;
 
     public GameObject leftTurningGear;
     public GameObject rightTurningGear;
     public GameObject conveyorBelt;
 
-    public List<Vector3> worldSpawnPoints = new List<Vector3>();
+    public List<Vector3> robotSpawnPoints = new List<Vector3>();
+    public List<Vector3> flagSpawnPoints = new List<Vector3>();
 
     public string worldString = "";
 
@@ -28,10 +30,19 @@ public class MultiplayerWorldParse : MonoBehaviour
 
     Vector3 worldMiddle = Vector3.zero;
 
+    Vector3 defaultFlagSpawn = Vector3.zero;
+    GameObject flag;
+
     // Start is called before the first frame update
     void Start()
     {
         //ClearWorld();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+            RandomFlagPosition();
     }
 
     public void BuildWorldString(string part)
@@ -68,17 +79,22 @@ public class MultiplayerWorldParse : MonoBehaviour
     public Vector3[] GetSpawnPoints()
     {
         List<Vector3> sp = new List<Vector3>();
-        Vector3[] save = worldSpawnPoints.ToArray();
-         
-        while(worldSpawnPoints.Count > 0)
+        Vector3[] save = robotSpawnPoints.ToArray();
+
+        while (robotSpawnPoints.Count > 0)
         {
-            int i = Random.Range(0, worldSpawnPoints.Count);
-            sp.Add(worldSpawnPoints[i]);
-            worldSpawnPoints.RemoveAt(i);
+            int i = Random.Range(0, robotSpawnPoints.Count);
+            sp.Add(robotSpawnPoints[i]);
+            robotSpawnPoints.RemoveAt(i);
         }
 
-        worldSpawnPoints.AddRange(save);
+        robotSpawnPoints.AddRange(save);
         return sp.ToArray();
+    }
+
+    public Vector3 GetSpawnPoint()
+    {
+        return robotSpawnPoints[Random.Range(0, robotSpawnPoints.Count)];
     }
 
     public void BuildLobby()
@@ -123,6 +139,7 @@ public class MultiplayerWorldParse : MonoBehaviour
 
         worldMiddle /= 2;
 
+        flag = Instantiate(tileFlag, defaultFlagSpawn, Quaternion.identity, worldParent.transform);
     }
 
     // Extract information form specific line
@@ -159,14 +176,16 @@ public class MultiplayerWorldParse : MonoBehaviour
             case 0:
                 GameObject sp = new GameObject();
                 sp.transform.position = new Vector3(x, y, z);
-                sp.name = "SpawnPoint" + (worldSpawnPoints.Count + 1);
+                sp.name = "SpawnPoint" + (robotSpawnPoints.Count + 1);
                 sp.transform.parent = this.worldParent.transform;
-                worldSpawnPoints.Add(sp.transform.position);
+                robotSpawnPoints.Add(sp.transform.position);
                 break;
 
-            // Grass-block
+            // Ground-block
             case 1:
                 Instantiate(tile1Grass, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
+                if (x < 999)
+                    flagSpawnPoints.Add(new Vector3(x, y + 1, z));
                 break;
             // Water
             case 2:
@@ -189,7 +208,7 @@ public class MultiplayerWorldParse : MonoBehaviour
                 break;
             // Spikes
             case 7:
-                Instantiate(damageTile, new Vector3(x, y-0.1f, z), Quaternion.identity, worldParent.transform);
+                Instantiate(damageTile, new Vector3(x, y - 0.1f, z), Quaternion.identity, worldParent.transform);
                 break;
             // Health station
             case 8:
@@ -221,6 +240,10 @@ public class MultiplayerWorldParse : MonoBehaviour
             case 15:
                 Instantiate(tile11wall_z, new Vector3(x - 0.5f, y + 0.4f, z), Quaternion.identity, worldParent.transform);
                 break;
+
+            case 16:
+                defaultFlagSpawn = new Vector3(x, y, z);
+                break;
         }
 
 
@@ -233,7 +256,7 @@ public class MultiplayerWorldParse : MonoBehaviour
         CreateWorldParent();
 
         worldString = "";
-        worldSpawnPoints.Clear();
+        robotSpawnPoints.Clear();
         worldMiddle = Vector3.zero;
     }
 
@@ -247,6 +270,26 @@ public class MultiplayerWorldParse : MonoBehaviour
     public void MoveWorldToOrigin()
     {
         worldParent.transform.position = -worldMiddle;
+    }
+
+    public void RandomFlagPosition()
+    {
+        Vector3 oldPos = flag.transform.position;
+
+        while ((oldPos - flag.transform.position).magnitude < 10)
+        {
+            flag.transform.position = flagSpawnPoints[Random.Range(0, flagSpawnPoints.Count)];
+        }
+    }
+
+    public Vector3 GetFlagPosition()
+    {
+        return flag.transform.position;
+    }
+
+    public void SetFlagPosition(Vector3 newPos)
+    {
+        flag.transform.position = newPos;
     }
 
 }

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4883484550195873210}
   - component: {fileID: -357009771318321959}
+  - component: {fileID: 840987804}
   m_Layer: 0
   m_Name: Load World Multiplayer
   m_TagString: Untagged
@@ -44,9 +45,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e17ef551c95470468cc8076a218c841, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tile1Grass: {fileID: 1219471545100730, guid: 1b8fbee291cdc1046a281cb2b3b51bf7, type: 3}
+  tile1Grass: {fileID: 1363037412436797206, guid: ea4e323efd1513f4181b5be459e8e127, type: 3}
   tile2Water: {fileID: 1640771308685042, guid: ff78edb367a079b4a8f8ae2d128c581f, type: 3}
   tile3Bridge: {fileID: 1487688346712832, guid: 41b018f12ce178147b4607881dbcdcea, type: 3}
   tile4Spikes: {fileID: 1779254397466754, guid: eb3f51c9e4e6faa45b78a8c2a6e0c16d, type: 3}
-  fileName: Assets/Worlds/level20x20.txt
-  worldString: []
+  healthStation: {fileID: 1363037412436797206, guid: af79172900dac4d4ea653205b964ce93, type: 3}
+  energyStation: {fileID: 1363037412436797206, guid: a14facc5b11cba64bbb69e093ffc8346, type: 3}
+  damageTile: {fileID: 1363037412436797206, guid: 9d0f46e6464cc4f4f9122f7f11212c46, type: 3}
+  tile10wall_x: {fileID: 2965143252909224037, guid: 397aa956dc44d40f2bb761c9a96675c1, type: 3}
+  tile11wall_z: {fileID: 2965143252909224037, guid: 196dd619c54eb480e86e47fbaeb4b9e2, type: 3}
+  tileFlag: {fileID: 3055908429513138643, guid: 7c5b7b97713f95c4ba1bcc9b7776f89c, type: 3}
+  leftTurningGear: {fileID: 1363037412436797206, guid: 9c3084e78142fa74ea24be12bd9c8439, type: 3}
+  rightTurningGear: {fileID: 1363037412436797206, guid: 1c9c1f295bb782c4d813d2540acf16e9, type: 3}
+  conveyorBelt: {fileID: 1363037412436797206, guid: e757863ff9015574a9861284bef6cc74, type: 3}
+  worldSpawnPoints: []
+  worldString: 
+--- !u!114 &840987804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4883484550195873208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
