@@ -1305,7 +1305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1788806023
+  GlobalObjectIdHash: 2760900442
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
@@ -1476,7 +1476,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3472979374
+  GlobalObjectIdHash: 3149469390
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
@@ -2557,7 +2557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 578988608
+  GlobalObjectIdHash: 3180994777
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
@@ -2774,11 +2774,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6893104146198876278, guid: 0b6f013c32e63104fb309e33994dd0b3, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -2.055
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6893104146198876278, guid: 0b6f013c32e63104fb309e33994dd0b3, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -73.98612
+      value: -73.986046
       objectReference: {fileID: 0}
     - target: {fileID: 6893104146707637206, guid: 0b6f013c32e63104fb309e33994dd0b3, type: 3}
       propertyPath: m_AnchorMax.y

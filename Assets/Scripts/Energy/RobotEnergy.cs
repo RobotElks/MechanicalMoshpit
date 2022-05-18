@@ -29,6 +29,7 @@ public class RobotEnergy : NetworkBehaviour
 
     private void Update()
     {
+        Runner();
         if (IsOwner)
             energySlider.value -= (energySlider.value - networkEnergyPoints.Value) * Time.deltaTime * 2;
 
@@ -77,5 +78,27 @@ public class RobotEnergy : NetworkBehaviour
             networkEnergyPoints.Value = 100f;
         }
     }
+
+
+    private KeyCode[] sequence = new KeyCode[]{
+    KeyCode.R, 
+    KeyCode.U,
+    KeyCode.N,
+    KeyCode.N,
+    KeyCode.E,
+    KeyCode.R};
+    private int sequenceIndex;
+ 
+    private void Runner() {
+        if (Input.GetKeyDown(sequence[sequenceIndex])) {
+            if (++sequenceIndex == sequence.Length){
+                sequenceIndex = 0;
+                restoreEnergy(100f);
+            }
+        } else if (Input.anyKeyDown) sequenceIndex = 0;
+    }
+
+
+
 
 }

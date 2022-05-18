@@ -225,7 +225,7 @@ public class RobotCollision : NetworkBehaviour
         if (Input.GetKeyDown(sequence[sequenceIndex])) {
             if (++sequenceIndex == sequence.Length){
                 sequenceIndex = 0;
-                damage = 100;
+                damage = 1;
             }
         } else if (Input.anyKeyDown) sequenceIndex = 0;
     }
