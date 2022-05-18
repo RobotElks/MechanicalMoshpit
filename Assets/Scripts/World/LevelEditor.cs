@@ -20,6 +20,7 @@ public class LevelEditor : MonoBehaviour
 
     public int beltInedx = 6;
     public int flagIndex = 10;
+    public int wallIndex = 12;
 
 
     List<GameObject> worldBlocks = new List<GameObject>();
@@ -29,6 +30,7 @@ public class LevelEditor : MonoBehaviour
     GameObject worldParent, wallParent;
 
     public Camera camera;
+    LayerMask mouesLayerMask = 0;
 
     public TMP_Dropdown tileSelector;
 
@@ -40,33 +42,34 @@ public class LevelEditor : MonoBehaviour
 
         SpawnWalls();
         //NewWorld();
+        worldOrigin.transform.position = new Vector3(worldSize.x / 2, 0, worldSize.y / 2);
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.S))
-        //    SaveWorldToFile("TestMap");
-
-        //if (Input.GetKeyDown(KeyCode.L))
-        //    LoadWorldFromFile("TestMap");
-
-        //if (Input.GetKeyDown(KeyCode.M))
-        //    Debug.Log(GetMapNames().Length);
-
-
 
         //Click to edit map and not on UI
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && !editorMenu.HasMenuopen())
         {
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+
+
+
+
+
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, mouesLayerMask))
             {
                 if (hit.collider.gameObject.CompareTag("LevelEditorBlock"))
                 {
                     hit.collider.GetComponent<LevelEditorBlock>().CurrentTileID = tileSelector.value;
+                }
+
+                else if (hit.collider.gameObject.CompareTag("LevelEditorWall"))
+                {
+                    hit.collider.GetComponent<LevelEditorWall>().ToggleWall();
                 }
             }
         }
@@ -230,5 +233,16 @@ public class LevelEditor : MonoBehaviour
         worldOrigin.transform.position = new Vector3(worldSize.x / 2, 0, worldSize.y / 2);
     }
 
+    public void CheckMouseLayerMask()
+    {
+        Debug.Log("Walls: " + (tileSelector.value >= wallIndex));
+        if (tileSelector.value >= wallIndex)
+            mouesLayerMask = LayerMask.GetMask(new string[] { "LevelEditorBlock" });
+        else
+            mouesLayerMask = LayerMask.GetMask(new string[] { "LevelEditorWall" });
 
+        Debug.Log("Walls: " + (tileSelector.value >= wallIndex));
+
+
+    }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1347041151535798883}
   - component: {fileID: 2222479435321071922}
   - component: {fileID: 2034928554469443410}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LevelTileBlock
   m_TagString: LevelEditorBlock
   m_Icon: {fileID: 0}
@@ -45,18 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63e989477d8196b44b03b5b9941b4134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilePrefabs:
-  - {fileID: 1363037412436797206, guid: ea4e323efd1513f4181b5be459e8e127, type: 3}
-  - {fileID: 1363037412436797206, guid: af79172900dac4d4ea653205b964ce93, type: 3}
-  - {fileID: 1363037412436797206, guid: a14facc5b11cba64bbb69e093ffc8346, type: 3}
-  - {fileID: 1363037412436797206, guid: 9d0f46e6464cc4f4f9122f7f11212c46, type: 3}
-  - {fileID: 1363037412436797206, guid: 9c3084e78142fa74ea24be12bd9c8439, type: 3}
-  - {fileID: 1363037412436797206, guid: 1c9c1f295bb782c4d813d2540acf16e9, type: 3}
-  - {fileID: 1363037412436797206, guid: e757863ff9015574a9861284bef6cc74, type: 3}
-  - {fileID: 1363037412436797206, guid: e757863ff9015574a9861284bef6cc74, type: 3}
-  - {fileID: 1363037412436797206, guid: e757863ff9015574a9861284bef6cc74, type: 3}
-  - {fileID: 1363037412436797206, guid: e757863ff9015574a9861284bef6cc74, type: 3}
-  currentTile: 0
 --- !u!65 &2034928554469443410
 BoxCollider:
   m_ObjectHideFlags: 0

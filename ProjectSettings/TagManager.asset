@@ -17,6 +17,7 @@ TagManager:
   - LevelEditorBlock
   - Flag
   - Editor
+  - LevelEditorWall
   layers:
   - Default
   - TransparentFX
@@ -26,8 +27,8 @@ TagManager:
   - UI
   - Robots
   - RobotsRaycast
-  - 
-  - 
+  - LevelEditorBlock
+  - LevelEditorWall
   - 
   - 
   - 
