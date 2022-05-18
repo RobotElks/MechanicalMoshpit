@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class LevelEditorWall : MonoBehaviour
 {
+    public enum Walltype { WallX, WallZ}
+
+    public Walltype walltype { get; set; }
+
     public void HideWall()
     {
         transform.GetChild(0).gameObject.SetActive(false);
@@ -21,11 +25,9 @@ public class LevelEditorWall : MonoBehaviour
 
     }
 
-    public void Update()
+    public bool IsVisible()
     {
-        if (Input.GetKeyDown(KeyCode.S))
-            ToggleWall();
-
-        
+       return transform.GetChild(0).gameObject.activeInHierarchy;
     }
+
 }

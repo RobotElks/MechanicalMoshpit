@@ -23,6 +23,7 @@ public class LevelEditor : MonoBehaviour
     public int wallIndex = 12;
 
 
+
     List<GameObject> worldBlocks = new List<GameObject>();
     List<GameObject> worldWalls = new List<GameObject>();
 
@@ -30,7 +31,7 @@ public class LevelEditor : MonoBehaviour
     GameObject worldParent, wallParent;
 
     public Camera camera;
-    LayerMask mouesLayerMask = 0;
+    bool editWalls = false;
 
     public TMP_Dropdown tileSelector;
 
@@ -55,12 +56,8 @@ public class LevelEditor : MonoBehaviour
         {
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 
-
-
-
-
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, mouesLayerMask))
+            if (Physics.Raycast(ray, out hit))
             {
                 if (hit.collider.gameObject.CompareTag("LevelEditorBlock"))
                 {
@@ -88,18 +85,33 @@ public class LevelEditor : MonoBehaviour
                 if (x != worldSize.x)
                 {
                     GameObject wall = Instantiate(wallXPrefab, new Vector3(x, 0, z), Quaternion.identity, wallParent.transform);
-                    wall.GetComponent<LevelEditorWall>().ShowWall();
+                    wall.GetComponent<LevelEditorWall>().HideWall();
+                    wall.GetComponent<LevelEditorWall>().walltype = LevelEditorWall.Walltype.WallX;
+                    wall.GetComponent<BoxCollider>().enabled = false;
+
                     worldWalls.Add(wall);
                 }
 
                 if (z != worldSize.y)
                 {
                     GameObject wall = Instantiate(wallZPrefab, new Vector3(x, 0, z), Quaternion.identity, wallParent.transform);
-                    wall.GetComponent<LevelEditorWall>().ShowWall();
+                    wall.GetComponent<LevelEditorWall>().HideWall();
+                    wall.GetComponent<LevelEditorWall>().walltype = LevelEditorWall.Walltype.WallZ;
+                    wall.GetComponent<BoxCollider>().enabled = false;
+
                     worldWalls.Add(wall);
                 }
 
             }
+        }
+    }
+
+    public void HideAllWalls()
+    {
+        foreach (GameObject wall in worldWalls)
+        {
+            wall.GetComponent<LevelEditorWall>().HideWall();
+            wall.GetComponent<BoxCollider>().enabled = false;
         }
     }
 
@@ -122,6 +134,7 @@ public class LevelEditor : MonoBehaviour
         worldParent.transform.parent = this.transform;
         worldBlocks.Clear();
 
+        HideAllWalls();
 
         for (int z = 0; z < worldSize.y; z++)
         {
@@ -140,6 +153,8 @@ public class LevelEditor : MonoBehaviour
     public void SaveWorldToFile(string name)
     {
         StreamWriter writer = new System.IO.StreamWriter(@"Worlds\" + name + ".txt", false);
+
+        //Blocks
         foreach (GameObject tile in worldBlocks)
         {
             if (tile.GetComponent<LevelEditorBlock>().CurrentTileID >= flagIndex)
@@ -150,7 +165,15 @@ public class LevelEditor : MonoBehaviour
 
             else
                 writer.WriteLine("{" + tile.transform.position.x + "," + tile.transform.position.y + "," + tile.transform.position.z + "," + tile.GetComponent<LevelEditorBlock>().CurrentTileID + "}");
+        }
 
+        //Walls
+        foreach (GameObject wall in worldWalls)
+        {
+            LevelEditorWall wallScript = wall.GetComponent<LevelEditorWall>();
+
+            if (wallScript.IsVisible())
+                writer.WriteLine("{" + wall.transform.position.x + "," + wall.transform.position.y + "," + wall.transform.position.z + "," + (wallIndex + (int)wallScript.walltype) + "}");
 
 
         }
@@ -166,6 +189,8 @@ public class LevelEditor : MonoBehaviour
         worldParent.transform.parent = this.transform;
         worldBlocks.Clear();
 
+        HideAllWalls();
+
         string path = @"Worlds\" + name + ".txt";
 
         string[] fileLines = File.ReadAllLines(path).Where(l => l[0] == '{').ToArray();
@@ -174,6 +199,7 @@ public class LevelEditor : MonoBehaviour
 
         int x = 0;
         int z = 0;
+        int y = 0;
         int tileID = 0;
         //Tiles at ground level (not spawns or flags)
         tileInfo.AddRange(fileLines.Where(l => int.Parse(l.Replace("{", "").Replace("}", "").Split(',').Last()) < flagIndex).ToArray());
@@ -202,24 +228,35 @@ public class LevelEditor : MonoBehaviour
 
         }
 
-
-
-        //Flags, spawns
+        //Flags, spawns, and walls
         tileInfo.Clear();
         tileInfo.AddRange(fileLines.Where(l => int.Parse(l.Replace("{", "").Replace("}", "").Split(',').Last()) >= flagIndex).ToArray());
 
         foreach (string line in tileInfo)
         {
+
             string[] extracted = line.Split(',', '{', '}');
             try
             {
                 x = int.Parse(extracted[1]);
                 z = int.Parse(extracted[3]);
+                y = int.Parse(extracted[2]);
                 tileID = int.Parse(extracted[4]);
 
-                Vector3 pos = new Vector3(x, 0, z);
+                //Flag, spawn
+                if (tileID < wallIndex)
+                {
+                    Vector3 pos = new Vector3(x, 0, z);
 
-                worldBlocks.Where(t => t.transform.position == pos).First().GetComponent<LevelEditorBlock>().CurrentTileID = tileID;
+                    worldBlocks.Where(t => t.transform.position == pos).First().GetComponent<LevelEditorBlock>().CurrentTileID = tileID;
+                }
+
+                //Walls
+                else
+                {
+                    Vector3 pos = new Vector3(x, y, z);
+                    worldWalls.Where(t => t.transform.position == pos && (int)t.GetComponent<LevelEditorWall>().walltype == (tileID - wallIndex)).First().GetComponent<LevelEditorWall>().ShowWall();
+                }
             }
             catch
             {
@@ -235,14 +272,27 @@ public class LevelEditor : MonoBehaviour
 
     public void CheckMouseLayerMask()
     {
-        Debug.Log("Walls: " + (tileSelector.value >= wallIndex));
+
         if (tileSelector.value >= wallIndex)
-            mouesLayerMask = LayerMask.GetMask(new string[] { "LevelEditorBlock" });
-        else
-            mouesLayerMask = LayerMask.GetMask(new string[] { "LevelEditorWall" });
+        {
+            if (!editWalls)
+            {
+                editWalls = true;
+                foreach (GameObject block in worldBlocks)
+                    block.GetComponent<BoxCollider>().enabled = false;
+                foreach (GameObject wall in worldWalls)
+                    wall.GetComponent<BoxCollider>().enabled = true;
+            }
 
-        Debug.Log("Walls: " + (tileSelector.value >= wallIndex));
-
+        }
+        else if (editWalls)
+        {
+            editWalls = false;
+            foreach (GameObject block in worldBlocks)
+                block.GetComponent<BoxCollider>().enabled = true;
+            foreach (GameObject wall in worldWalls)
+                wall.GetComponent<BoxCollider>().enabled = false;
+        }
 
     }
 }

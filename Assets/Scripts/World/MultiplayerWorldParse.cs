@@ -225,11 +225,11 @@ public class MultiplayerWorldParse : MonoBehaviour
                 break;
 
             case 12:
-                Instantiate(tile10wall_x, new Vector3(x, y + 0.4f, z - 0.5f), Quaternion.identity, worldParent.transform);
+                Instantiate(tile10wall_x, new Vector3(x, y + 1.3f, z - 0.5f), Quaternion.identity, worldParent.transform);
                 break;
             // wall_y
             case 13:
-                Instantiate(tile11wall_z, new Vector3(x - 0.5f, y + 0.4f, z), Quaternion.identity, worldParent.transform);
+                Instantiate(tile11wall_z, new Vector3(x - 0.5f, y + 1.3f, z), Quaternion.identity, worldParent.transform);
                 break;
 
             
