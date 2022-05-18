@@ -25,8 +25,10 @@ public class PlayerHealthBar : NetworkBehaviour
     RobotRoundsHandler roundsHandlerScript;
     RobotFlags flagScript;
     Dead deadScript;
+    RobotMultiplayerMovement thisRobotMovementScript;
 
-  
+
+
 
 
     public override void OnNetworkSpawn()
@@ -41,7 +43,7 @@ public class PlayerHealthBar : NetworkBehaviour
         programmingInterface = GameObject.Find("ProgrammingInterface Multiplayer Variant");
         flagScript = GetComponentInParent<RobotFlags>();
         deadScript = GetComponentInParent<Dead>();
-
+        thisRobotMovementScript = GetComponentInParent<RobotMultiplayerMovement>();
     }
 
     void Update()

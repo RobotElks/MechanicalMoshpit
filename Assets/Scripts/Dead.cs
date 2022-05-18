@@ -6,7 +6,6 @@ using Unity.Netcode;
 public class Dead : NetworkBehaviour 
 {
     RobotList robotList;
-    ChickenDinner chickenDinner;
     [SerializeField] private ParticleSystem smoke;
     //[SerializeField] private Renderer colorBase;
     //[SerializeField] private Renderer colorTower;
@@ -36,8 +35,6 @@ public class Dead : NetworkBehaviour
         var em = smoke.emission;
         em.enabled = true;
 
-        ChickenDinner chickenDinner = GameObject.Find("ChickenDinner").GetComponent<ChickenDinner>();
-        chickenDinner.RobotDeath();
     }
 
 }
