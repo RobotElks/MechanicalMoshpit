@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public enum StateOfAnimation {Idle, Forward, Backward, Right, Left, Death, Push};
+public enum StateOfAnimation {Idle, Forward, Backward, Right, Left, Death, Hit};
 
 public class RobotMultiplayerMovement : NetworkBehaviour
 {
@@ -30,7 +30,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     float movementGear;
     float rotateGear;
     float turnRate = 1.0f;
-    StateOfAnimation localAnimationState = StateOfAnimation.Idle;
+    public StateOfAnimation localAnimationState = StateOfAnimation.Idle;
     Gear currentGear = Gear.None;
     Instructions currentInstruction = Instructions.None;
 
@@ -90,6 +90,10 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                     localAnimationState = StateOfAnimation.Idle;
                 }
 
+            }
+            else
+            {
+                localAnimationState = StateOfAnimation.Idle;
             }
 
             //Push movement
@@ -335,5 +339,15 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             force = movDir * (int)currentGear;
 
         return force;
+    }
+
+    public void SetAnimation(StateOfAnimation newState)
+    {
+        this.localAnimationState = newState;
+    }
+    
+    public StateOfAnimation GetAnimation()
+    {
+        return localAnimationState;
     }
 }

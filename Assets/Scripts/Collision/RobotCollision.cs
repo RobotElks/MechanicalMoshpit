@@ -111,17 +111,14 @@ public class RobotCollision : NetworkBehaviour
 
     private void PlayerCollision(Collision robotCollision)
     {
-
         if (IsOwner)
         {
-
             RobotMultiplayerMovement otherRobotMovementScript = robotCollision.gameObject.GetComponent<RobotMultiplayerMovement>();
 
             if (otherRobotMovementScript.IsMoving() || otherRobotMovementScript.IsPushed())
             {
                 Vector3 otherRobotForceOnThis = otherRobotMovementScript.GetForceToMe(transform.position);
                 thisRobotMovementScript.Push(otherRobotForceOnThis, (int)otherRobotForceOnThis.magnitude);
-
             }
         }
     }
@@ -129,14 +126,13 @@ public class RobotCollision : NetworkBehaviour
     private void LaserCollision(Collision collider){
         Destroy(collider.gameObject, 0f);
         playerHealthBarScript.GetHit(10);
-        
+        thisRobotMovementScript.SetAnimation(StateOfAnimation.Hit);
     }
 
     private void WallCollision(Collision hitWall){
         if (IsOwner)
         {
             thisRobotMovementScript.WallCollision();
-            
         }
     }
     private void TakeDamage(){
@@ -150,8 +146,6 @@ public class RobotCollision : NetworkBehaviour
         onEnergyStation = false;
         onHealthStation = false;
         onTurnLeft = false;
-        onTurnRight = false;
-        
+        onTurnRight = false;  
     }
-
 }
