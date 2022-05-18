@@ -27,6 +27,7 @@ public class PlayerHealthBar : NetworkBehaviour
     RobotFlags flagScript;
     Dead deadScript;
     RobotMultiplayerMovement thisRobotMovementScript;
+    RobotEnergy energScript;
 
 
 
@@ -45,6 +46,7 @@ public class PlayerHealthBar : NetworkBehaviour
         flagScript = GetComponentInParent<RobotFlags>();
         deadScript = GetComponentInParent<Dead>();
         thisRobotMovementScript = GetComponentInParent<RobotMultiplayerMovement>();
+        energScript = GetComponentInParent<RobotEnergy>();
     }
 
     void Update()
@@ -71,13 +73,11 @@ public class PlayerHealthBar : NetworkBehaviour
     public void ReviveRobot()
     {
         localHealth = 100;
-        //localDeaths += 1;
-        //UpdateDeathsInfoServerRpc(localDeaths);
         UpdateHealthInfoServerRpc(localHealth);
-        deadScript.SetDeadServerRpc(false);
-        localHealth = healthPoints.Value;
         abovePlayerHealth.value = (float)localHealth;
         healthSlider.value = (float)localHealth;
+        deadScript.SetDeadServerRpc(false);
+        energScript.RestoreEnergyFull();
 
     }
 

@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class RobotEnergy : NetworkBehaviour
 {
     public NetworkVariable<float> networkEnergyPoints = new NetworkVariable<float>();
+    float maxEnergy = 200;
 
     ProgramMuiltiplayerRobot programRobotScript;
     Slider energySlider;
@@ -38,7 +39,7 @@ public class RobotEnergy : NetworkBehaviour
     [ServerRpc]
     public void EnergyStartServerRPC()
     {
-        networkEnergyPoints.Value = 200f;
+        networkEnergyPoints.Value = maxEnergy;
 
     }
 
@@ -61,6 +62,11 @@ public class RobotEnergy : NetworkBehaviour
         }
     }
 
+    public void RestoreEnergyFull()
+    {
+        restoreEnergyServerRpc(maxEnergy);
+    }
+
     public void restoreEnergy(float energy)
     {
         restoreEnergyServerRpc(energy);
@@ -69,13 +75,13 @@ public class RobotEnergy : NetworkBehaviour
     [ServerRpc]
     public void restoreEnergyServerRpc(float energy)
     {
-        if (networkEnergyPoints.Value + energy < 100f)
+        if (networkEnergyPoints.Value + energy < maxEnergy)
         {
             networkEnergyPoints.Value = networkEnergyPoints.Value + energy;
         }
         else
         {
-            networkEnergyPoints.Value = 100f;
+            networkEnergyPoints.Value = maxEnergy;
         }
     }
 

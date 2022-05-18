@@ -254,7 +254,7 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
         }
         else if (collisionScript.onEnergyStation)
         {
-            energyScript.restoreEnergy(100);
+            energyScript.RestoreEnergyFull();
         }
         instructionScript.StopExecute();
         instructionsQueue.Clear();
