@@ -8,9 +8,9 @@ public class ScoreBoardScript : MonoBehaviour
     public GameObject chickenDinner;
     public GameObject content;
     public GameObject row;
-    public int rank = 1;
+    //public int rank = 1;
     // Start is called before the first frame update
-    public void AddToScoreBoard(string name, int stars, int deaths, int shotsFired)
+    public void AddToScoreBoard(string name, int stars, int deaths, int shotsFired, int rank)
     {
         GameObject newRow = Instantiate(row, content.transform);
 
@@ -24,7 +24,7 @@ public class ScoreBoardScript : MonoBehaviour
         deathsObject.GetComponent<TextMeshProUGUI>().text = deaths.ToString();
         GameObject shotsFiredObject = newRow.transform.GetChild(4).gameObject;
         shotsFiredObject.GetComponent<TextMeshProUGUI>().text = shotsFired.ToString();
-        rank +=1;
+        //rank +=1;
 
 
     }

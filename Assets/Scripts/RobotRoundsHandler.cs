@@ -397,17 +397,71 @@ public class RobotRoundsHandler : NetworkBehaviour
 
         }
         stats.Sort((a, b) => b.Item2.CompareTo(a.Item2));
+        //stats.Sort((a, b) => a.Item3.CompareTo(b.Item3));
+        //stats.Sort((a, b) => a.Item4.CompareTo(b.Item4));
+
+        int k = (stats.Count)/2;
+        while(k > 0){
+            for(int i = 0; i < stats.Count-1; i++){
+                if(stats[i].Item2 == stats[i+1].Item2){
+                    if(stats[i].Item3 > stats[i+1].Item3){
+                    Swap(stats, i, i+1);
+                    }
+                    else if(stats[i].Item3 == stats[i+1].Item3){
+                        if(stats[i].Item4 > stats[i+1].Item4){
+                            Swap(stats, i, i+1);
+                        }
+                    }
+                // sätt ranken till samma här
+                }
+            k--;
+            }
+        }
+        
+        
+        /*
         foreach((string, int, int, int) stat in stats){
             ShowScoreBoardClientRpc(stat.Item1, stat.Item2, stat.Item3, stat.Item4);
         }
+        */
+        int rank = 0;
+        for(int i = 0; i < stats.Count; i++){
+            if((i != 0) && CheckRank(stats, i, i-1)){
+                ShowScoreBoardClientRpc(stats[i].Item1, stats[i].Item2, stats[i].Item3, stats[i].Item4, rank);
+            }
+            else{
+                rank++;
+                ShowScoreBoardClientRpc(stats[i].Item1, stats[i].Item2, stats[i].Item3, stats[i].Item4, rank);
+            }
+        }
+        
         ChickenDinnerClientRpc();
     }
 
+    public bool CheckRank(List<(string, int, int, int)> stats, int indexA, int indexB){
+        if(stats[indexA].Item2 == stats[indexB].Item2){
+            if(stats[indexA].Item3 == stats[indexB].Item3){
+                if(stats[indexA].Item4 == stats[indexB].Item4){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    static void Swap(List<(string, int, int, int)> stats, int indexA, int indexB)
+    {
+        (string, int, int, int) tmp = stats[indexA];
+        stats[indexA] = stats[indexB];
+        stats[indexB] = tmp;
+    }
+
     [ClientRpc]
-    public void ShowScoreBoardClientRpc(string bruh1, int stars, int deaths, int shotsFired)
+    public void ShowScoreBoardClientRpc(string bruh1, int stars, int deaths, int shotsFired, int rank)
     {
         if(IsOwner)
-            scoreBoardObject.GetComponent<ScoreBoardScript>().AddToScoreBoard(bruh1, stars, deaths, shotsFired);
+            scoreBoardObject.GetComponent<ScoreBoardScript>().AddToScoreBoard(bruh1, stars, deaths, shotsFired, rank);
 
     }
 

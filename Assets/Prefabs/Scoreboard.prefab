@@ -253,7 +253,6 @@ MonoBehaviour:
   chickenDinner: {fileID: 2111024915853524653}
   content: {fileID: 2111024914269704257}
   row: {fileID: 6392312449897100624, guid: ccd61e060f27c4a06871b644b8fc5788, type: 3}
-  rank: 1
 --- !u!1 &2111024914269704257
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,7 +542,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.10196079, g: 0.023529414, b: 0.31764707, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
