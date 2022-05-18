@@ -12,9 +12,10 @@ public class PlayerHealthBar : NetworkBehaviour
 
     // Network variables
     NetworkVariable<int> healthPoints = new NetworkVariable<int>(100);
-    
+    NetworkVariable<int> deaths = new NetworkVariable<int>(0);
 
     // Local variables
+    public int localDeaths = 0;
     public int localHealth = 100;
     public int heal = 50;
     public bool changeColorLocal = false;
@@ -55,6 +56,7 @@ public class PlayerHealthBar : NetworkBehaviour
         {
             localHealth = healthPoints.Value;
             abovePlayerHealth.value = (float)localHealth;
+            //healthSlider.value = (float)localHealth;
         }
         //if (IsOwner)
         //{
@@ -69,6 +71,8 @@ public class PlayerHealthBar : NetworkBehaviour
     public void ReviveRobot()
     {
         localHealth = 100;
+        //localDeaths += 1;
+        //UpdateDeathsInfoServerRpc(localDeaths);
         UpdateHealthInfoServerRpc(localHealth);
         deadScript.SetDeadServerRpc(false);
         localHealth = healthPoints.Value;
@@ -77,6 +81,9 @@ public class PlayerHealthBar : NetworkBehaviour
 
     }
 
+    public int GetDeaths(){
+        return deaths.Value;
+    }
     public void GetHit(int damageAmount)
     {
         if (IsOwner && roundsHandlerScript.InsideActiveGame() && localHealth > 0)
@@ -104,6 +111,12 @@ public class PlayerHealthBar : NetworkBehaviour
         healthPoints.Value = health;
         abovePlayerHealth.value = (float)health;
         healthSlider.value = (float)health;
+    }
+
+    [ServerRpc]
+    public void UpdateDeathsInfoServerRpc(int localDeaths)
+    {
+        deaths.Value = localDeaths;
     }
 
     public void HealPowerUp()
@@ -143,6 +156,8 @@ public class PlayerHealthBar : NetworkBehaviour
         if (IsOwner)
         {
             GetComponentInParent<RobotMultiplayerMovement>().SetAnimation(StateOfAnimation.Death);
+            localDeaths += 1;
+            UpdateDeathsInfoServerRpc(localDeaths);
             GetComponentInParent<RobotMultiplayerInstructionScript>().StopExecute();
             programmingInterface.SetActive(false);
             flagScript.LoseFlag();

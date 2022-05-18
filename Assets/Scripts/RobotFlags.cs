@@ -49,6 +49,10 @@ public class RobotFlags : NetworkBehaviour
         }
     }
 
+    public int GetFlags(){
+        return flagCount.Value;
+    }
+
     public void LoseFlag()
     {
         DecreaseFlagCountServerRpc();
