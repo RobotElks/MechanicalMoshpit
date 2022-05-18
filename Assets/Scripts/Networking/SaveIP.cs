@@ -21,7 +21,7 @@ public class SaveIP : NetworkBehaviour
 
     public TMP_InputField inputPlayerName;
     public TMP_InputField inputHostName;
-    private string savedPlayerName;
+    private string savedPlayerName = "";
 
        // Start is called before the first frame update
     void Start()
