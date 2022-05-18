@@ -51,8 +51,11 @@ public class PlayerHealthBar : NetworkBehaviour
         {
             localHealth = healthPoints.Value;
             abovePlayerHealth.value = (float)localHealth;
-            healthSlider.value = (float)localHealth;
         }
+        //if (IsOwner)
+        //{
+        //    healthSlider.value = (float)localHealth;
+        //}
 
         //Die on fall
         if (gameObject.transform.position.y < -20) GetHit(100);

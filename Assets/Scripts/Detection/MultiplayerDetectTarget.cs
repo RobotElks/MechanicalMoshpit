@@ -65,7 +65,8 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (IsOwner && roundsHandlerScript.GetCurrentGameState() != GameState.Programming)
+        GameState state = roundsHandlerScript.GetCurrentGameState();
+        if (IsOwner && state != GameState.Programming && state != GameState.Countdown)
         {
                 if ((Time.time > nextShotTime) && CheckIfTargetInScope())
                 {
