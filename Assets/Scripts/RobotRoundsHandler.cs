@@ -6,54 +6,70 @@ using UnityEngine.UI;
 using TMPro;
 
 
-public enum GameState { InLobby, Countdown, Programming, Excecuting };
+public enum GameState { InLobby, Countdown, Programming, Excecuting, GameOver };
 
 public class RobotRoundsHandler : NetworkBehaviour
 {
     NetworkVariable<bool> isReady = new NetworkVariable<bool>();
-    NetworkVariable<GameState> gameState = new NetworkVariable<GameState>();
+    public NetworkVariable<GameState> gameState = new NetworkVariable<GameState>();
     NetworkVariable<float> countdownTimer = new NetworkVariable<float>();
+    NetworkVariable<float> gameTimer = new NetworkVariable<float>();
 
     TextMeshProUGUI countdownText;
+    TextMeshProUGUI gameTimeText;
     GameObject readyScreen;
     GameObject finishedButton;
     GameObject programmingInterface;
     GameObject runProgramButton;
     GameObject stopProgramButton;
     Slider energySlider;
+    GameObject hud;
 
     RobotList robotList;
 
     RobotMultiplayerInstructionScript instructionScript;
+    RobotMultiplayerMovement movementScript;
     MultiplayerLevelInfo levelInfoScript;
     Dead deadScript;
+    RobotFlags flagScript;
+    PlayerHealthBar healthBarScript;
+
+    MultiplayerWorldParse worldScript;
 
     public float countdownTime = 5;
     public float programmingTime = 8;
     public float finishedTime = 10;
     public float excecutingTime = 3;
-
+    public float gameTime = 600;
 
 
     //Network functions
     public override void OnNetworkSpawn()
     {
         countdownText = GameObject.Find("Countdown").GetComponent<TextMeshProUGUI>();
+        gameTimeText = GameObject.Find("Game Time").GetComponent<TextMeshProUGUI>();
+
         robotList = GameObject.Find("RobotList").GetComponent<RobotList>();
         readyScreen = GameObject.Find("ReadyScreen");
         finishedButton = GameObject.Find("Finished");
         programmingInterface = GameObject.Find("ProgrammingInterface Multiplayer Variant");
         runProgramButton = GameObject.Find("StartButton");
         stopProgramButton = GameObject.Find("StopButton");
-        energySlider = GameObject.Find("Hud").transform.Find("EnergyBar").GetComponent<Slider>();
+        hud = GameObject.Find("Hud");
+        energySlider = hud.transform.Find("EnergyBar").GetComponent<Slider>();
+        worldScript = GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>();
 
         //Tells the game to run a function everytime the variables is changed
         gameState.OnValueChanged += GameStateChanged;
-        countdownTimer.OnValueChanged += TimerChanged;
+        countdownTimer.OnValueChanged += CountdownTimerChanged;
+        gameTimer.OnValueChanged += GameTimerChanged;
 
         instructionScript = GetComponent<RobotMultiplayerInstructionScript>();
         levelInfoScript = GetComponent<MultiplayerLevelInfo>();
         deadScript = GetComponent<Dead>();
+        flagScript = GetComponent<RobotFlags>();
+        healthBarScript = GetComponentInChildren<PlayerHealthBar>();
+        movementScript = GetComponent<RobotMultiplayerMovement>();
 
         if (IsHost)
         {
@@ -75,7 +91,7 @@ public class RobotRoundsHandler : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         gameState.OnValueChanged -= GameStateChanged;
-        countdownTimer.OnValueChanged -= TimerChanged;
+        countdownTimer.OnValueChanged -= CountdownTimerChanged;
 
     }
 
@@ -87,6 +103,22 @@ public class RobotRoundsHandler : NetworkBehaviour
 
         if (IsOwner)
         {
+            switch (oldState)
+            {
+                case GameState.Excecuting:
+                    flagScript.CaptureFlag();
+                    break;
+
+                case GameState.Countdown:
+                    if (IsHost && IsOwner)
+                    {
+                        gameTimer.Value = gameTime;
+                    }
+                    break;
+            }
+
+
+
             switch (newState)
             {
                 //Countdown starts
@@ -126,18 +158,19 @@ public class RobotRoundsHandler : NetworkBehaviour
                         {
                             robot.GetComponent<RobotRoundsHandler>().HostSetReady(false);
                         }
-
-
                     }
 
-                    if (!deadScript.IsDead())
+
+
+                    if (deadScript.IsDead())
                     {
-                        programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
-                        programmingInterface.SetActive(true);
+                        healthBarScript.ReviveRobot();
+                        movementScript.MoveToSpawnPoints(worldScript.GetSpawnPoint());
+
                     }
 
-                    //Stop excecuting
-
+                    programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
+                    programmingInterface.SetActive(true);
                     break;
 
 
@@ -147,25 +180,45 @@ public class RobotRoundsHandler : NetworkBehaviour
                         SetTimerServerRpc(excecutingTime);
                     }
 
-                    if (!deadScript.IsDead())
-                    {
-                        programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().sendProgramToRobot();
-                        programmingInterface.SetActive(false);
-                    }
 
+                    programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().sendProgramToRobot();
+                    programmingInterface.SetActive(false);
+                    break;
 
+                case GameState.GameOver:
+
+                    hud.SetActive(false);
+                    programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
+                    programmingInterface.SetActive(false);
                     break;
             }
         }
     }
 
     //Update timer text
-    private void TimerChanged(float oldTimer, float newTimer)
+    private void CountdownTimerChanged(float oldTimer, float newTimer)
     {
         countdownText.text = "";
 
         if (newTimer > 0)
             countdownText.text += Mathf.CeilToInt(newTimer);
+
+    }
+
+    //Update timer text
+    private void GameTimerChanged(float oldTimer, float newTimer)
+    {
+
+        if (newTimer > 0)
+        {
+            int min = ((int)Mathf.CeilToInt(newTimer) / 60);
+            int sec = ((int)Mathf.CeilToInt(newTimer) % 60);
+            gameTimeText.text = min + ":" + sec;
+
+        }
+        else
+            gameTimeText.text = "";
+
 
     }
 
@@ -176,6 +229,7 @@ public class RobotRoundsHandler : NetworkBehaviour
         //Host updates timer
         if (IsHost && IsOwner)
         {
+
             //Countdown the timer (Not "> 0" to stop it from being false on first countdown update)
             if (countdownTimer.Value >= 0)
             {
@@ -217,8 +271,22 @@ public class RobotRoundsHandler : NetworkBehaviour
                         break;
                 }
             }
+
+            if (InsideActiveGame())
+            {
+                if (gameTimer.Value >= 0)
+                    gameTimer.Value -= Time.deltaTime;
+                else
+                    HostSetGameStateForAll(GameState.GameOver);
+            }
+
+
+
         }
 
+        //Bad but wont work in GameStateChanged
+        if (gameState.Value == GameState.GameOver)
+            programmingInterface.SetActive(false);
     }
 
 
@@ -249,14 +317,17 @@ public class RobotRoundsHandler : NetworkBehaviour
         isReady.Value = ready;
     }
 
+    [ServerRpc]
+    public void SetGameStateForAllServerRpc(GameState gameState)
+    {
+        HostSetGameStateForAll(gameState);
+    }
+
 
     public void FinishedProgramming()
     {
-
         SetIsReadyServerRpc(true);
         programmingInterface.SetActive(false);
-
-
     }
 
 

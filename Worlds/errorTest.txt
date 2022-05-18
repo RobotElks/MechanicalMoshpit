@@ -8,6 +8,9 @@
 {30,1,15,0}
 {30,1,30,0}
 
+#Flag start
+{15,1,15,16}
+
 # Inside walls
 # outer rim/ starting area
 # z
@@ -205,8 +208,8 @@
 {25,0,24,15}
 
 # interaction tiles
-# lava center
-{15,0,15,7}
+
+{15,0,15,1}
 
 # lava along inner walls
 {11,0,9,7}

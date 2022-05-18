@@ -14,6 +14,7 @@ public class RobotCollision : NetworkBehaviour
     public bool onTurnLeft = false;
     public bool onTurnRight = false;
     public bool onDamageTile = false;
+    public bool onFlagTile = false;
 
 
 	void Start () {
@@ -47,6 +48,10 @@ public class RobotCollision : NetworkBehaviour
         else if (collision.collider.CompareTag("DamageTile"))
         {
             onDamageTile = false;
+        }
+        else if (collision.collider.CompareTag("Flag"))
+        {
+            onFlagTile = false;
         }
     }
 
@@ -91,7 +96,11 @@ public class RobotCollision : NetworkBehaviour
         {
             onTurnRight = true;
         }
-        
+        else if (collision.collider.CompareTag("Flag"))
+        {
+            onFlagTile = true;
+        }
+
 
     }
     
