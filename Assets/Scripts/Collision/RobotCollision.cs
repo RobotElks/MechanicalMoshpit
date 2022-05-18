@@ -35,17 +35,6 @@ public class RobotCollision : NetworkBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider collider)
-    {
-        //if (collider.CompareTag("wallX"))
-        //{
-        //    WallCollision(0);
-        //}
-        //else if (collider.CompareTag("wallZ"))
-        //{
-        //    WallCollision(1);
-        //}
-    }
 
 
     void OnCollisionExit (Collision collision) 

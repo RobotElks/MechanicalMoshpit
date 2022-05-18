@@ -282,58 +282,62 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         leftToPush += direction * tileSize * numOfTiles - direction * 0.3f;
     }
 
+    // Gives less instant pushback than Push()
     public void Wall(Vector3 direction, int numOfTiles)
     {
         direction.y = 0;
         direction = direction.normalized;
 
-        leftToPush += direction * tileSize * numOfTiles;
+        transform.position += direction * 0.1f;
+        positionTarget += direction * 0.1f;
+
+        leftToPush += direction * tileSize * numOfTiles - direction * 0.1f;
     }
 
     public void WallCollisionX()
     {
-        if (IsMoving())
-        {
-            int movingDir = (int)GetMovingDirection().x;
-            Debug.Log("X movingDir : " + movingDir);
-
-            int force = Mathf.Abs(movingDir);
-            if (force > 0.05)
-                MoveBackPosition();
-        }
+        // Inverse push-force if pushed, else move back
         if (IsPushed())
         {
             int force = Mathf.CeilToInt(Mathf.Abs(leftToPush.x));
-            Debug.Log("X Force from push : " + force);
+            //Debug.Log("X Force from push : " + force);
             if (leftToPush.x > 0.05)
                 Wall(new Vector3(-1, 0, 0), force);
             else if (leftToPush.x < -0.05)
                 Wall(new Vector3(1, 0, 0), force);
         }
-    }
-
-    public void WallCollisionZ()
-    {
-        if (IsMoving())
+        else
         {
-            int movingDir = (int)GetMovingDirection().z;
-            Debug.Log("Z movingDir : " + movingDir);
+            int movingDir = (int)GetMovingDirection().x;
+            //Debug.Log("X movingDir : " + movingDir);
             int force = Mathf.Abs(movingDir);
             if (force > 0.05)
                 MoveBackPosition();
         }
+    }
+
+    public void WallCollisionZ()
+    {
+        // Inverse push-force if pushed, else move back
         if (IsPushed())
         {
             int force = Mathf.CeilToInt(Mathf.Abs(leftToPush.z));
-            Debug.Log("Z Force from push : " + force);
+            //Debug.Log("Z Force from push : " + force);
             if (leftToPush.z > 0.05)
                 Wall(new Vector3(0, 0, -1), force);
             else if (leftToPush.z < -0.05)
                 Wall(new Vector3(0, 0, 1), force);
         }
+        else
+        {
+            int movingDir = (int)GetMovingDirection().z;
+            //Debug.Log("Z movingDir : " + movingDir);
+            int force = Mathf.Abs(movingDir);
+            if (force > 0.05)
+                MoveBackPosition();
+        }
     }
-
-    /*
+/*
         public void WallCollisionX()
         {
             //Debug.Log("Hit wall in X - direction");
@@ -427,7 +431,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         */
     public void MoveBackPosition()
     {
-        //Debug.Log("Move Back Positon, position target is : " + positionTarget);
         positionTarget -= GetMovingDirection() * tileSize;
     }
 
