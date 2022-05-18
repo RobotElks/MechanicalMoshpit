@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.UI;
 
 public class RobotMultiplayerMovement : NetworkBehaviour
 {
@@ -27,10 +28,13 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
 
     Gear currentGear = Gear.None;
+    Slider gearSlider;
     Instructions currentInstruction = Instructions.None;
 
     public override void OnNetworkSpawn()
     {
+        gearSlider = GameObject.Find("ProgrammingInterface Multiplayer Variant").GetComponentInChildren<Slider>();
+
         //Set gear to third to calculate pushedSpeed
         SetGear(Gear.Third);
         pushedSpeed = movementSpeed * movementGear * 2f;
@@ -181,8 +185,6 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         if (IsDoingInstruction()) return;
         positionTarget = transform.position + direction.transform.forward * tileSize;
         currentInstruction = Instructions.MapMovement;
-
-
     }
     //Call on function to return whether robot is moving or not
     public bool IsMoving()
@@ -231,6 +233,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         positionTarget = spawnPoint;
         transform.position = spawnPoint;
         GetComponent<Rigidbody>().velocity = Vector3.zero;
+        SetGear(Gear.First);
     }
 
     //Call on function to set gear to either First, Second or Third.
@@ -245,14 +248,17 @@ public class RobotMultiplayerMovement : NetworkBehaviour
             case Gear.First:
                 movementGear = 1;
                 rotateGear = 1;
+                gearSlider.value = 1f;
                 break;
             case Gear.Second:
                 movementGear = 1.5f;
                 rotateGear = 1.5f;
+                gearSlider.value = 2f;
                 break;
             case Gear.Third:
                 movementGear = 2f;
                 rotateGear = 2;
+                gearSlider.value = 3f;
                 break;
         }
     }

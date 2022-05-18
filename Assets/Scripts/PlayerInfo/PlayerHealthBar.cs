@@ -84,6 +84,7 @@ public class PlayerHealthBar : NetworkBehaviour
             {
                 localHealth = 0;
                 abovePlayerHealth.value = (float)localHealth;
+                healthSlider.value = 0f;
                 killed();
             }
             UpdateHealthInfoServerRpc(localHealth);
@@ -94,6 +95,8 @@ public class PlayerHealthBar : NetworkBehaviour
     public void UpdateHealthInfoServerRpc(int health)
     {
         healthPoints.Value = health;
+        abovePlayerHealth.value = (float)health;
+        healthSlider.value = (float)health;
     }
 
     public void HealPowerUp()
@@ -118,14 +121,14 @@ public class PlayerHealthBar : NetworkBehaviour
 
     public void killed()
     {
-        //MonoBehaviour[] comps = GetComponents<MonoBehaviour>();
-        //foreach (MonoBehaviour c in comps)
-        //{
-        //    if (c.GetType() != typeof(PlayerHealthBar))
-        //    {
-        //        c.enabled = false;
-        //    }
-        //}
+        MonoBehaviour[] comps = GetComponents<MonoBehaviour>();
+        foreach (MonoBehaviour c in comps)
+        {
+            if (c.GetType() == typeof(MultiplayerDetectTarget))
+            {
+                c.enabled = false;
+            }
+        }
 
         healthSlider.value = (float)localHealth;
         abovePlayerHealth.value = (float)localHealth;

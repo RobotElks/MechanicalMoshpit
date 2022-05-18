@@ -75,8 +75,14 @@ public class RobotCollision : NetworkBehaviour
 
     private void CollisionCheck(Collision collision)
     {
+        if (collision.collider.CompareTag("ConveyorBelt"))
+        {
+            onConveyorBelt = true;
+            thisRobotMovementScript.SetDirection(collision.collider.gameObject);
+        }
         if (collision.collider.CompareTag("Player"))
         {
+            RobotMultiplayerMovement otherRobotMovementScript = collision.gameObject.GetComponent<RobotMultiplayerMovement>();
             PlayerCollision(collision);
         }
         else if (collision.collider.CompareTag("wallX"))
@@ -102,11 +108,6 @@ public class RobotCollision : NetworkBehaviour
         else if (collision.collider.CompareTag("DamageTile"))
         {
             onDamageTile = true;
-        }
-        else if (collision.collider.CompareTag("ConveyorBelt"))
-        {
-            onConveyorBelt = true;
-            thisRobotMovementScript.SetDirection(collision.collider.gameObject);
         }
         else if (collision.collider.CompareTag("TurnGearLeft"))
         {
@@ -144,12 +145,11 @@ public class RobotCollision : NetworkBehaviour
 
         if (IsOwner)
         {
-            //Debug.Log("Robots moving direction : " + thisRobotMovementScript.GetMovingDirection());
             RobotMultiplayerMovement otherRobotMovementScript = robotCollision.gameObject.GetComponent<RobotMultiplayerMovement>();
-
             if (otherRobotMovementScript.IsMoving() || otherRobotMovementScript.IsPushed())
             {
                 Vector3 otherRobotForceOnThis = otherRobotMovementScript.GetForceToMe(transform.position);
+                Debug.Log((int)otherRobotForceOnThis.magnitude);
                 thisRobotMovementScript.Push(otherRobotForceOnThis, (int)otherRobotForceOnThis.magnitude);
                 //Debug.Log("Other robots force on this robot : " + otherRobotForceOnThis);
                 if (otherRobotForceOnThis == Vector3.zero && thisRobotMovementScript.IsMoving())

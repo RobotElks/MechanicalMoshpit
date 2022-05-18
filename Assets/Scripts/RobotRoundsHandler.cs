@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.UI;
 using TMPro;
 
 
@@ -21,6 +22,7 @@ public class RobotRoundsHandler : NetworkBehaviour
     GameObject programmingInterface;
     GameObject runProgramButton;
     GameObject stopProgramButton;
+    Slider energySlider;
     GameObject hud;
 
     RobotList robotList;
@@ -53,8 +55,9 @@ public class RobotRoundsHandler : NetworkBehaviour
         programmingInterface = GameObject.Find("ProgrammingInterface Multiplayer Variant");
         runProgramButton = GameObject.Find("StartButton");
         stopProgramButton = GameObject.Find("StopButton");
-        worldScript = GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>();
         hud = GameObject.Find("Hud");
+        energySlider = hud.transform.Find("EnergyBar").GetComponent<Slider>();
+        worldScript = GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>();
 
         //Tells the game to run a function everytime the variables is changed
         gameState.OnValueChanged += GameStateChanged;

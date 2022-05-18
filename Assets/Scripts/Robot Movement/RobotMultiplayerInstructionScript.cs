@@ -20,7 +20,6 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
         collisionScript = GetComponent<RobotCollision>();
         healthScript = GetComponentInChildren<PlayerHealthBar>();
 
-
         if(IsOwner)
         {
             GameObject.Find("ProgrammingInterface Multiplayer Variant").GetComponent<ProgramMuiltiplayerRobot>().instructionScript = this;
@@ -37,6 +36,7 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
             {
                 if(collisionScript.onConveyorBelt){
                     movementScript.MoveDirection();
+                    Debug.Log("MOVING FROM BELT: " + movementScript.IsMoving());
                     collisionScript.onConveyorBelt = false;
                     return;
                 }
