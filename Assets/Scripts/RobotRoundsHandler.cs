@@ -99,7 +99,7 @@ public class RobotRoundsHandler : NetworkBehaviour
     //Changed gamestate
     private void GameStateChanged(GameState oldState, GameState newState)
     {
-        Debug.Log("Old: " + oldState + " |  new: " + newState);
+        //Debug.Log("Old: " + oldState + " |  new: " + newState);
 
         if (IsOwner)
         {
