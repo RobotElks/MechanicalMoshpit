@@ -2796,6 +2796,10 @@ PrefabInstance:
       propertyPath: m_Direction
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 6893104147575927921, guid: 0b6f013c32e63104fb309e33994dd0b3, type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6893104147654531379, guid: 0b6f013c32e63104fb309e33994dd0b3, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
