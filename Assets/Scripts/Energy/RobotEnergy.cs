@@ -38,7 +38,7 @@ public class RobotEnergy : NetworkBehaviour
     [ServerRpc]
     public void EnergyStartServerRPC()
     {
-        networkEnergyPoints.Value = 100f;
+        networkEnergyPoints.Value = 200f;
 
     }
 

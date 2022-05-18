@@ -2178,8 +2178,8 @@ MonoBehaviour:
   playerInfo: {fileID: 7575047151173342961}
   scoreBoardPrefab: {fileID: 2111024914152377703, guid: c00fbb0e1aa1b4ac5a267b33def2af47, type: 3}
   countdownTime: 5
-  programmingTime: 20
-  finishedTime: 5
+  programmingTime: 25
+  finishedTime: 8
   excecutingTime: 10
   gameTime: 600
 --- !u!114 &4632698607522853418
@@ -3775,7 +3775,7 @@ MonoBehaviour:
   abovePlayerHealth: {fileID: 0}
   localDeaths: 0
   localHealth: 100
-  heal: 50
+  heal: 100
   changeColorLocal: 0
   damageTilePower: 10
 --- !u!1 &7632391356594547115

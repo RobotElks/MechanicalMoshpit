@@ -17,7 +17,7 @@ public class PlayerHealthBar : NetworkBehaviour
     // Local variables
     public int localDeaths = 0;
     public int localHealth = 100;
-    public int heal = 50;
+    public int heal = 100;
     public bool changeColorLocal = false;
     public int damageTilePower = 10;
 

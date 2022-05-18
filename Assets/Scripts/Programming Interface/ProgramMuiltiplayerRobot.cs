@@ -39,7 +39,8 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     RobotEnergy energyScript;
     RobotCollision collisionScript;
     PlayerHealthBar healthScript;
-    
+    RobotRoundsHandler roundsScript;
+
     public int movingEnergy = 5;
     public float restoredEnergyPerRound = 30f;
 
@@ -85,39 +86,40 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
         energyScript = robot.GetComponent<RobotEnergy>();
         healthScript = robot.GetComponentInChildren<PlayerHealthBar>();
         collisionScript = robot.GetComponent<RobotCollision>();
+        roundsScript = robot.GetComponent<RobotRoundsHandler>();
 
     }
     void Update()
     {
-        if(Input.GetKeyDown("w"))
+        if (Input.GetKeyDown("w"))
             addMoveForwardToProgram();
-        else if(Input.GetKeyDown("s"))
+        else if (Input.GetKeyDown("s"))
             addMoveBackwardToProgram();
-        else if(Input.GetKeyDown("a"))
+        else if (Input.GetKeyDown("a"))
             addTurnLeftToProgram();
-        else if(Input.GetKeyDown("d"))
+        else if (Input.GetKeyDown("d"))
             addTurnRightToProgram();
-        else if(Input.GetKeyDown("q"))
+        else if (Input.GetKeyDown("q"))
             decreaseGear();
-        else if(Input.GetKeyDown("e"))
+        else if (Input.GetKeyDown("e"))
             increaseGear();
-        else if(Input.GetKeyDown(KeyCode.Backspace))
+        else if (Input.GetKeyDown(KeyCode.Backspace))
             removeLastInstruction();
-        else if(Input.GetKeyDown(KeyCode.Return))
+        else if (Input.GetKeyDown(KeyCode.Return) && roundsScript.GetCurrentGameState() == GameState.Programming)
             FinishedProgramming();
     }
 
 
     void increaseGear()
     {
-        if(gearValue < 3)
+        if (gearValue < 3)
             gearValue += 1;
         gear.GetComponent<Slider>().value = gearValue;
     }
 
     void decreaseGear()
     {
-        if(gearValue > 1)
+        if (gearValue > 1)
             gearValue -= 1;
         gear.GetComponent<Slider>().value = gearValue;
     }
@@ -125,46 +127,50 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
 
     void addMoveForwardToProgram()
     {
-        if(energyScript.networkEnergyPoints.Value >= movingEnergy * gearValue){
+        if (energyScript.networkEnergyPoints.Value >= movingEnergy * gearValue)
+        {
             textInstructions.text = textInstructions.text + moveForwardString + gearValue + "\n";
-            energyScript.useEnergy(movingEnergy*gearValue);
+            energyScript.useEnergy(movingEnergy * gearValue);
         }
     }
 
     void addMoveBackwardToProgram()
     {
-        if(energyScript.networkEnergyPoints.Value >= movingEnergy * gearValue){
+        if (energyScript.networkEnergyPoints.Value >= movingEnergy * gearValue)
+        {
             textInstructions.text = textInstructions.text + moveBackwardString + gearValue + "\n";
-            energyScript.useEnergy(movingEnergy*gearValue);
+            energyScript.useEnergy(movingEnergy * gearValue);
 
         }
     }
 
     void addTurnRightToProgram()
     {
-        if(energyScript.networkEnergyPoints.Value >= movingEnergy * gearValue){
+        if (energyScript.networkEnergyPoints.Value >= movingEnergy * gearValue)
+        {
             textInstructions.text = textInstructions.text + turnRightString + gearValue + "\n";
-            energyScript.useEnergy(movingEnergy*gearValue);
+            energyScript.useEnergy(movingEnergy * gearValue);
         }
     }
 
     void addTurnLeftToProgram()
     {
-        if(energyScript.networkEnergyPoints.Value >= movingEnergy * gearValue){
+        if (energyScript.networkEnergyPoints.Value >= movingEnergy * gearValue)
+        {
             textInstructions.text = textInstructions.text + turnLeftString + gearValue + "\n";
-            energyScript.useEnergy(movingEnergy*gearValue);
+            energyScript.useEnergy(movingEnergy * gearValue);
 
         }
     }
 
     void removeLastInstruction()
     {
-        if(textInstructions.text == "") return;
+        if (textInstructions.text == "") return;
         string[] seperateInstructions = textInstructions.text.Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
 
         int gear = int.Parse(seperateInstructions[(seperateInstructions.Length - 1)].Split(' ')[2]);
-        energyScript.restoreEnergy(gear*movingEnergy);
-        
+        energyScript.restoreEnergy(gear * movingEnergy);
+
         seperateInstructions = seperateInstructions.SkipLast(1).ToArray();
         string instructionsString = String.Join("\n", seperateInstructions);
         textInstructions.text = instructionsString;
@@ -241,11 +247,13 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     public void stopProgram()
     {
         energyScript.restoreEnergy(restoredEnergyPerRound);
-        if(collisionScript.onHealthStation){
+        if (collisionScript.onHealthStation)
+        {
             healthScript.HealPowerUp();
             collisionScript.healthStationScript.Inactivate();
         }
-        else if(collisionScript.onEnergyStation){
+        else if (collisionScript.onEnergyStation)
+        {
             energyScript.restoreEnergy(100);
         }
         instructionScript.StopExecute();
