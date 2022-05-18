@@ -15,6 +15,8 @@ public class mapSelection : MonoBehaviour
         //TODO: Filter out all non text files
         maps = Directory.GetFiles("Worlds");
         selectedMap = 0;
+        worldBuilderScript.CreateFlag();
+
         GenerateMap();
         
     }

@@ -34,7 +34,6 @@ public class MultiplayerWorldParse : MonoBehaviour
     void Start()
     {
         CreateWorldParent();
-        flag = Instantiate(tileFlag, defaultFlagSpawn, Quaternion.identity, this.transform);
     }
 
 
@@ -252,6 +251,12 @@ public class MultiplayerWorldParse : MonoBehaviour
         worldParent = new GameObject("Generated World");
         worldParent.transform.position = Vector3.zero;
         worldParent.transform.parent = this.transform;
+
+    }
+
+    public void CreateFlag()
+    {
+        flag = Instantiate(tileFlag, defaultFlagSpawn, Quaternion.identity, this.transform);
     }
 
     public void MoveWorldToOrigin()

@@ -21,6 +21,7 @@ public class MultiplayerLevelInfo : NetworkBehaviour
         if (IsOwner)
         {
             worldScript.CreateWorldParent();
+            worldScript.CreateFlag();
             worldScript.BuildLobby();
             transform.position = worldScript.GetLobbySpawnPoint();
 
