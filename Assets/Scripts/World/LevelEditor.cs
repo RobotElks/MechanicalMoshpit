@@ -31,7 +31,9 @@ public class LevelEditor : MonoBehaviour
     GameObject worldParent, wallParent;
 
     public Camera camera;
+    public float cameraSpeed = 5f;
     bool editWalls = false;
+
 
     public TMP_Dropdown tileSelector;
 
@@ -50,6 +52,16 @@ public class LevelEditor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Move camera
+        if (Input.GetKey(KeyCode.W))
+            worldOrigin.transform.position += camera.transform.forward * cameraSpeed * Time.deltaTime;
+        else if (Input.GetKey(KeyCode.S))
+            worldOrigin.transform.position -= camera.transform.forward * cameraSpeed * Time.deltaTime;
+        else if (Input.GetKey(KeyCode.A))
+            worldOrigin.transform.position -= camera.transform.right * cameraSpeed * Time.deltaTime;
+        else if (Input.GetKey(KeyCode.D))
+            worldOrigin.transform.position += camera.transform.right * cameraSpeed * Time.deltaTime;
+
 
         //Click to edit map and not on UI
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && !editorMenu.HasMenuopen())

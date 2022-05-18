@@ -64,6 +64,8 @@ MonoBehaviour:
   wallZPrefab: {fileID: 1863924120945026921, guid: eda93d00f49e87a41b9b424f11bf61ff, type: 3}
   beltInedx: 6
   flagIndex: 10
+  wallIndex: 12
   worldSize: {x: 30, y: 30}
   camera: {fileID: 0}
+  cameraSpeed: 6
   tileSelector: {fileID: 0}
