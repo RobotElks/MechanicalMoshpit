@@ -9,6 +9,7 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
 
     Queue<Instructions> instructionsQueue = new Queue<Instructions>();
     bool isExecuting = false;
+    bool hasRotated = false;
     RobotMultiplayerMovement movementScript;
     RobotCollision collisionScript;
     PlayerHealthBar healthScript;
@@ -39,13 +40,15 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
                     collisionScript.onConveyorBelt = false;
                     return;
                 }
-                else if(collisionScript.onTurnLeft){
+                else if(collisionScript.onTurnLeft && !hasRotated){
+                    hasRotated = true;
                     movementScript.RotateLeft();
-                    collisionScript.onTurnLeft = false;
+                    return;
                 }
-                else if(collisionScript.onTurnRight){
+                else if(collisionScript.onTurnRight && !hasRotated){
+                    hasRotated = true;
                     movementScript.RotateRight();
-                    collisionScript.onTurnRight = false;
+                    return;
                 }
                 
                 if (instructionsQueue.Count > 0)
@@ -54,21 +57,24 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
                     {
                         healthScript.DamageTile();
                     }
-
                     Instructions instruction = instructionsQueue.Dequeue();
                     switch (instruction)
                     {
                         case Instructions.MoveForward:
                             movementScript.MoveForward();
+                            hasRotated = false;
                             break;
                         case Instructions.MoveBackward:
                             movementScript.MoveBackwards();
+                            hasRotated = false;
                             break;
                         case Instructions.RotateLeft:
                             movementScript.RotateLeft();
+                            hasRotated = false;
                             break;
                         case Instructions.RotateRight:
                             movementScript.RotateRight();
+                            hasRotated = false;
                             break;
                         case Instructions.FirstGear:
                             movementScript.SetGear(Gear.First);
