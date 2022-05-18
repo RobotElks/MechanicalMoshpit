@@ -65,7 +65,7 @@ MonoBehaviour:
   beltInedx: 6
   flagIndex: 10
   wallIndex: 12
-  worldSize: {x: 30, y: 30}
+  worldSize: {x: 31, y: 31}
   camera: {fileID: 0}
   cameraSpeed: 6
   tileSelector: {fileID: 0}
