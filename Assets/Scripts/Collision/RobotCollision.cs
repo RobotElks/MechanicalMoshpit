@@ -27,17 +27,6 @@ public class RobotCollision : NetworkBehaviour
         CollisionCheck(collision);
     }
 
-    private void OnCollisionStay(Collision collision) {
-        if (collision.collider.CompareTag("TurnGearLeft"))
-        {
-            onTurnLeft = true;
-        }
-        else if (collision.collider.CompareTag("TurnGearRight"))
-        {
-            onTurnRight = true;
-        }
-    }
-
     void OnCollisionExit (Collision collision) 
     {
         if (collision.collider.CompareTag("Laser"))
