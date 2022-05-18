@@ -15,6 +15,7 @@ public class RobotCollision : NetworkBehaviour
     public bool onTurnRight = false;
     public bool onDamageTile = false;
     public bool onFlagTile = false;
+    private int damage = 10;
 
 
 	void Start () {
@@ -137,7 +138,7 @@ public class RobotCollision : NetworkBehaviour
 
     private void LaserCollision(Collision collider){
         Destroy(collider.gameObject, 0f);
-        playerHealthBarScript.GetHit(10);
+        playerHealthBarScript.GetHit(damage);
         
     }
 
@@ -149,7 +150,7 @@ public class RobotCollision : NetworkBehaviour
         }
     }
     private void TakeDamage(){
-        playerHealthBarScript.GetHit(10);
+        playerHealthBarScript.GetHit(damage);
     }
 
     public void Reset()
@@ -161,6 +162,23 @@ public class RobotCollision : NetworkBehaviour
         onTurnLeft = false;
         onTurnRight = false;
         
+    }
+
+    private KeyCode[] sequence = new KeyCode[]{
+    KeyCode.B, 
+    KeyCode.E,
+    KeyCode.A,
+    KeyCode.S,
+    KeyCode.T};
+    private int sequenceIndex;
+ 
+    private void Update() {
+        if (Input.GetKeyDown(sequence[sequenceIndex])) {
+            if (++sequenceIndex == sequence.Length){
+                sequenceIndex = 0;
+                damage = 100;
+            }
+        } else if (Input.anyKeyDown) sequenceIndex = 0;
     }
 
 }

@@ -47,11 +47,10 @@ public class SaveIP : NetworkBehaviour
     {
         savedPlayerName = inputHostName.text;
     }
-
-
     public string PlayerName()
     {
-        return savedPlayerName;
+        string strippedPlayerName = savedPlayerName.Replace("\n", " ").Replace("\r", " ").Replace("\t", " ");
+        return strippedPlayerName;
     }
 
     public void SaveIPAddress(){

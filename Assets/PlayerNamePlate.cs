@@ -19,9 +19,12 @@ public class PlayerNamePlate : NetworkBehaviour
 
         if (IsOwner)
         {
-            //playerNetworkName.Value = $"Player {OwnerClientId+1}";
-            localPlayerName = infoScript.PlayerName();
-            SetServerNameServerRpc(localPlayerName);
+            playerNetworkName.Value = $"Player {OwnerClientId+1}";
+            if(infoScript.PlayerName() != "")
+            {
+                localPlayerName = infoScript.PlayerName();
+                SetServerNameServerRpc(localPlayerName);
+            }
         }
     }
 

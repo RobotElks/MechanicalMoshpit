@@ -89,23 +89,26 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     }
     void Update()
     {
-        //Debug.Log(gearValue);
-        //Debug.Log(gear);
-        //Debug.Log(gear.GetComponent<Slider>().value);
-        
-        // //gearValue = gear.GetComponent<Slider>().value;
+        if(Input.GetKeyDown("w"))
+            addMoveForwardToProgram();
+        else if(Input.GetKeyDown("s"))
+            addMoveBackwardToProgram();
+        else if(Input.GetKeyDown("a"))
+            addTurnLeftToProgram();
+        else if(Input.GetKeyDown("d"))
+            addTurnRightToProgram();
+        else if(Input.GetKeyDown("q"))
+            decreaseGear();
+        else if(Input.GetKeyDown("e"))
+            increaseGear();
     }
-    // void addInstructionToProgram(string instruction, float gearValue)
-    // {
-    //     textInstructions.text = textInstructions.text + instruction + gearValue + "\n";
-    // }
+
 
     void increaseGear()
     {
         if(gearValue < 3)
             gearValue += 1;
         gear.GetComponent<Slider>().value = gearValue;
-        Debug.Log("Gear: " + gearValue);
     }
 
     void decreaseGear()
@@ -113,7 +116,6 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
         if(gearValue > 1)
             gearValue -= 1;
         gear.GetComponent<Slider>().value = gearValue;
-        Debug.Log("Gear: " + gearValue);
     }
 
 
