@@ -408,7 +408,7 @@ public class RobotRoundsHandler : NetworkBehaviour
                     Swap(stats, i, i+1);
                     }
                     else if(stats[i].Item3 == stats[i+1].Item3){
-                        if(stats[i].Item4 > stats[i+1].Item4){
+                        if(stats[i].Item4 < stats[i+1].Item4){
                             Swap(stats, i, i+1);
                         }
                     }

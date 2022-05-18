@@ -78,9 +78,9 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     }
 
     [ServerRpc]
-    public void UpdateShotsFiredInfoServerRpc(int deaths)
+    public void UpdateShotsFiredInfoServerRpc(int localShots)
     {
-        shotsFired.Value = localShotsFired;
+        shotsFired.Value = localShots;
     }
 
     private void ShootTarget(){

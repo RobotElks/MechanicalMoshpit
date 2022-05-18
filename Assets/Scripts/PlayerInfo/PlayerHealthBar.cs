@@ -64,8 +64,8 @@ public class PlayerHealthBar : NetworkBehaviour
     public void ReviveRobot()
     {
         localHealth = 100;
-        localDeaths += 1;
-        UpdateDeathsInfoServerRpc(localDeaths);
+        //localDeaths += 1;
+        //UpdateDeathsInfoServerRpc(localDeaths);
         UpdateHealthInfoServerRpc(localHealth);
         deadScript.SetDeadServerRpc(false);
         localHealth = healthPoints.Value;
@@ -145,6 +145,8 @@ public class PlayerHealthBar : NetworkBehaviour
 
         if (IsOwner)
         {
+            localDeaths += 1;
+            UpdateDeathsInfoServerRpc(localDeaths);
             GetComponentInParent<RobotMultiplayerInstructionScript>().StopExecute();
             programmingInterface.SetActive(false);
             flagScript.LoseFlag();
