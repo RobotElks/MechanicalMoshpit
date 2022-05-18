@@ -19,7 +19,7 @@ public class RobotCollision : NetworkBehaviour
 
 	void Start () {
 		playerHealthBarScript = this.GetComponentInChildren<PlayerHealthBar>();
-        thisRobotMovementScript = GetComponent<RobotMultiplayerMovement>();
+        thisRobotMovementScript = this.GetComponent<RobotMultiplayerMovement>();
 	}
 
 
@@ -28,12 +28,22 @@ public class RobotCollision : NetworkBehaviour
         CollisionCheck(collision);
     }
 
+    private void OnTriggerStay(Collider collider)
+    {
+        if (collider.CompareTag("Laser"))
+        {
+            LaserCollision(collider);
+        }
+    }
+
+
+
     void OnCollisionExit (Collision collision) 
     {
-        if (collision.collider.CompareTag("Laser"))
-        {
-            LaserCollision(collision);
-        }
+        //if (collision.collider.CompareTag("Laser"))
+        //{
+        //    LaserCollision(collision);
+        //}
 
         if (collision.collider.CompareTag("HealthStation"))
         {
@@ -53,6 +63,14 @@ public class RobotCollision : NetworkBehaviour
         {
             onFlagTile = false;
         }
+        else if (collision.collider.CompareTag("TurnGearLeft"))
+        {
+            onTurnLeft = false;
+        }
+        else if (collision.collider.CompareTag("TurnGearRight"))
+        {
+            onTurnRight = false;
+        }
     }
 
     private void CollisionCheck(Collision collision)
@@ -61,10 +79,13 @@ public class RobotCollision : NetworkBehaviour
         {
             PlayerCollision(collision);
         }
-
-        else if (collision.collider.CompareTag("Wall"))
+        else if (collision.collider.CompareTag("wallX"))
         {
-            WallCollision(collision);
+            WallCollision(0);
+        }
+        else if (collision.collider.CompareTag("wallZ"))
+        {
+            WallCollision(1);
         }
         else if (collision.collider.CompareTag("HealthStation"))
         {
@@ -123,29 +144,41 @@ public class RobotCollision : NetworkBehaviour
 
         if (IsOwner)
         {
-
+            //Debug.Log("Robots moving direction : " + thisRobotMovementScript.GetMovingDirection());
             RobotMultiplayerMovement otherRobotMovementScript = robotCollision.gameObject.GetComponent<RobotMultiplayerMovement>();
 
             if (otherRobotMovementScript.IsMoving() || otherRobotMovementScript.IsPushed())
             {
                 Vector3 otherRobotForceOnThis = otherRobotMovementScript.GetForceToMe(transform.position);
                 thisRobotMovementScript.Push(otherRobotForceOnThis, (int)otherRobotForceOnThis.magnitude);
-
+                //Debug.Log("Other robots force on this robot : " + otherRobotForceOnThis);
+                if (otherRobotForceOnThis == Vector3.zero && thisRobotMovementScript.IsMoving())
+                    if(WallOnOtherSide())
+                        thisRobotMovementScript.Wall(-thisRobotMovementScript.GetMovingDirection(), 1);
             }
+            else if (thisRobotMovementScript.IsMoving())
+                if (WallOnOtherSide())
+                    thisRobotMovementScript.Wall(-thisRobotMovementScript.GetMovingDirection(), 1);
         }
     }
 
-    private void LaserCollision(Collision collider){
+    private void LaserCollision(Collider collider)
+    {
         Destroy(collider.gameObject, 0f);
         playerHealthBarScript.GetHit(10);
-        
+        this.gameObject.GetComponent<Rigidbody>().AddForce(Vector3.up*200);
+
     }
 
-    private void WallCollision(Collision hitWall){
+    private void WallCollision(int wall){
         if (IsOwner)
         {
-            thisRobotMovementScript.WallCollision();
-            
+            // 0 := Wall X, 1 := Wall Z 
+            if(wall == 1)
+                thisRobotMovementScript.WallCollisionX();
+            else
+                thisRobotMovementScript.WallCollisionZ();
+
         }
     }
     private void TakeDamage(){
@@ -161,6 +194,23 @@ public class RobotCollision : NetworkBehaviour
         onTurnLeft = false;
         onTurnRight = false;
         
+    }
+
+    // raycast above robots to check if wall is on other side (less than 1,5 tiles away) of pushed robot
+    public bool WallOnOtherSide()
+    {
+        Vector3 pos = transform.position + new Vector3(0, 1, 0);
+        Vector3 dir = thisRobotMovementScript.GetMovingDirection();
+        //Debug.Log("Raycast. Pos : " + pos + ", dir : " + dir);
+        RaycastHit hit;
+        if (Physics.Raycast(pos, dir, out hit))
+        {
+            //Debug.Log("Hit info. Hit tag : " + hit.collider.tag + ", Hit distance : " + hit.distance);
+            // A WALL IS A TILE A WAY (BUT NOT NEXT TO ROBOT)
+            return ((hit.collider.tag == "wallX" || hit.collider.tag == "wallZ") && (hit.distance > 0.8 && hit.distance < 1.5f));
+        }
+        else
+            return false;
     }
 
 }

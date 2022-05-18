@@ -61,6 +61,7 @@ public class DetectTarget : MonoBehaviour
         //Debug.Log("reloadTime: " + reloadTime);
         
         if ((Time.time > nextShotTime) && CheckIfTargetInScope()) {
+            Debug.Log("But this?");
             nextShotTime = Time.time + reloadTime; 
             //Debug.Log(nextShotTime);
             ShootTarget();
