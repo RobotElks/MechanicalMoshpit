@@ -30,7 +30,7 @@ public class LeaveGame : MonoBehaviour
 
                 panel.SetActive(true);
 
-                if (informationScript.IsHost())
+                if (informationScript.IsThisHost())
                 {
                     textSavedIp.text = "Hosting on:\n" + informationScript.GetSaved();
                 }
