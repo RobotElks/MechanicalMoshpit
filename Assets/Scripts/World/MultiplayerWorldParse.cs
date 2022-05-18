@@ -33,14 +33,10 @@ public class MultiplayerWorldParse : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //ClearWorld();
+        CreateWorldParent();
+        flag = Instantiate(tileFlag, defaultFlagSpawn, Quaternion.identity, this.transform);
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
-            RandomFlagPosition();
-    }
 
     public void BuildWorldString(string part)
     {
@@ -103,7 +99,6 @@ public class MultiplayerWorldParse : MonoBehaviour
 
     public void BuildWorld()
     {
-
         worldMiddle = Vector3.zero;
 
         //Debug.Log("Parsing world");
@@ -136,7 +131,7 @@ public class MultiplayerWorldParse : MonoBehaviour
 
         worldMiddle /= 2;
 
-        flag = Instantiate(tileFlag, defaultFlagSpawn, Quaternion.identity, worldParent.transform);
+        SetFlagPosition(defaultFlagSpawn);
     }
 
     // Extract information form specific line
@@ -185,7 +180,7 @@ public class MultiplayerWorldParse : MonoBehaviour
             case 3:
                 Instantiate(damageTile, new Vector3(x, y - 0.1f, z), Quaternion.identity, worldParent.transform);
                 break;
-                //Gears
+            //Gears
             case 4:
                 Instantiate(leftTurningGear, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
                 break;
@@ -209,7 +204,7 @@ public class MultiplayerWorldParse : MonoBehaviour
                 lefttile.transform.eulerAngles = 270f * Vector3.up;
                 break;
 
-                //Flag
+            //Flag
             case 10:
                 defaultFlagSpawn = new Vector3(x, y, z);
                 break;
@@ -232,7 +227,7 @@ public class MultiplayerWorldParse : MonoBehaviour
                 Instantiate(tile11wall_z, new Vector3(x - 0.5f, y + 1.3f, z), Quaternion.identity, worldParent.transform);
                 break;
 
-            
+
 
         }
 
@@ -260,6 +255,7 @@ public class MultiplayerWorldParse : MonoBehaviour
     public void MoveWorldToOrigin()
     {
         worldParent.transform.position = -worldMiddle;
+        flag.transform.position += -worldMiddle;
     }
 
     public void RandomFlagPosition()
