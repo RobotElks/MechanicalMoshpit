@@ -53,14 +53,17 @@ public class LevelEditor : MonoBehaviour
     void Update()
     {
         //Move camera
-        if (Input.GetKey(KeyCode.W))
-            worldOrigin.transform.position += camera.transform.forward * cameraSpeed * Time.deltaTime;
-        else if (Input.GetKey(KeyCode.S))
-            worldOrigin.transform.position -= camera.transform.forward * cameraSpeed * Time.deltaTime;
-        else if (Input.GetKey(KeyCode.A))
-            worldOrigin.transform.position -= camera.transform.right * cameraSpeed * Time.deltaTime;
-        else if (Input.GetKey(KeyCode.D))
-            worldOrigin.transform.position += camera.transform.right * cameraSpeed * Time.deltaTime;
+        if (!editorMenu.HasMenuopen())
+        {
+            if (Input.GetKey(KeyCode.W))
+                worldOrigin.transform.position += camera.transform.forward * cameraSpeed * Time.deltaTime;
+            else if (Input.GetKey(KeyCode.S))
+                worldOrigin.transform.position -= camera.transform.forward * cameraSpeed * Time.deltaTime;
+            else if (Input.GetKey(KeyCode.A))
+                worldOrigin.transform.position -= camera.transform.right * cameraSpeed * Time.deltaTime;
+            else if (Input.GetKey(KeyCode.D))
+                worldOrigin.transform.position += camera.transform.right * cameraSpeed * Time.deltaTime;
+        }
 
 
         //Click to edit map and not on UI
