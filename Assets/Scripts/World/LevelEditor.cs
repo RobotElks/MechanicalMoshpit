@@ -27,7 +27,7 @@ public class LevelEditor : MonoBehaviour
     List<GameObject> worldBlocks = new List<GameObject>();
     List<GameObject> worldWalls = new List<GameObject>();
 
-    public Vector2 worldSize = new Vector2(30, 30);
+    public Vector2 worldSize = new Vector2(31, 31);
     GameObject worldParent, wallParent;
 
     public Camera camera;
@@ -150,6 +150,7 @@ public class LevelEditor : MonoBehaviour
         worldBlocks.Clear();
 
         HideAllWalls();
+        tileSelector.value = 0;
 
         for (int z = 0; z < worldSize.y; z++)
         {
@@ -205,6 +206,9 @@ public class LevelEditor : MonoBehaviour
         worldBlocks.Clear();
 
         HideAllWalls();
+
+        tileSelector.value = 0;
+
 
         string path = @"Worlds\" + name + ".txt";
 
