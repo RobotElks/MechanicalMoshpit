@@ -101,6 +101,10 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
             decreaseGear();
         else if(Input.GetKeyDown("e"))
             increaseGear();
+        else if(Input.GetKeyDown(KeyCode.Backspace))
+            removeLastInstruction();
+        else if(Input.GetKeyDown(KeyCode.Return))
+            FinishedProgramming();
     }
 
 
