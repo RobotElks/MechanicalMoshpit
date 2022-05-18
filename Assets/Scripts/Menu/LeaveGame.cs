@@ -24,11 +24,14 @@ public class LeaveGame : MonoBehaviour
             if (panel.activeInHierarchy)
             {
                 panel.SetActive(false);
+
+                try { GameObject.Find("Scoreboard").transform.GetChild(1).gameObject.SetActive(true); } catch { }
             }
             else
-            {
-
+            {  
                 panel.SetActive(true);
+                try { GameObject.Find("Scoreboard").transform.GetChild(1).gameObject.SetActive(false); } catch { }
+
 
                 if (informationScript.IsThisHost())
                 {

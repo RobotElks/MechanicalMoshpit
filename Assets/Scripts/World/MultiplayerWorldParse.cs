@@ -167,7 +167,9 @@ public class MultiplayerWorldParse : MonoBehaviour
             // Ground-block
             case 0:
                 Instantiate(tile1Ground, new Vector3(x, y, z), Quaternion.identity, worldParent.transform);
-                flagSpawnPoints.Add(new Vector3(x, y + 1, z));
+
+                if (x < 999)
+                    flagSpawnPoints.Add(new Vector3(x, y + 1, z));
                 break;
             // Health station
             case 1:

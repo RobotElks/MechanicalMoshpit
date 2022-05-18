@@ -2133,6 +2133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd5469b34c7db64e96c59fcd15b1348, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  localShotsFired: 0
 --- !u!114 &-4125571294898638298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2174,6 +2175,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameState:
     m_InternalValue: 0
+  playerInfo: {fileID: 7575047151173342961}
+  scoreBoardPrefab: {fileID: 2111024914152377703, guid: c00fbb0e1aa1b4ac5a267b33def2af47, type: 3}
   countdownTime: 5
   programmingTime: 8
   finishedTime: 10
@@ -3770,6 +3773,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthSlider: {fileID: 0}
   abovePlayerHealth: {fileID: 0}
+  localDeaths: 0
   localHealth: 100
   heal: 50
   changeColorLocal: 0

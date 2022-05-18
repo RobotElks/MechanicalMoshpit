@@ -26,7 +26,7 @@ public class RobotRoundsHandler : NetworkBehaviour
     GameObject hud;
     public GameObject playerInfo;
 
-    public GameObject scoreBoard;
+    public GameObject scoreBoardPrefab;
     GameObject scoreBoardObject;
 
     RobotList robotList;
@@ -472,8 +472,12 @@ public class RobotRoundsHandler : NetworkBehaviour
     [ClientRpc]
     public void EndOfGameClientRpc()
     {
-        if(IsOwner)
-        scoreBoardObject = Instantiate(scoreBoard);
+        if (IsOwner)
+        {
+            scoreBoardObject = Instantiate(scoreBoardPrefab);
+            scoreBoardObject.transform.SetAsLastSibling();
+            scoreBoardObject.name = "Scoreboard";
+        }
     }
 
     [ClientRpc]
