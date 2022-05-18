@@ -37,7 +37,7 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
             {
                 if(collisionScript.onConveyorBelt){
                     movementScript.MoveDirection();
-                    Debug.Log("MOVING FROM BELT: " + movementScript.IsMoving());
+                    //Debug.Log("MOVING FROM BELT: " + movementScript.IsMoving());
                     collisionScript.onConveyorBelt = false;
                     return;
                 }

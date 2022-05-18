@@ -407,6 +407,8 @@ public class RobotMultiplayerMovement : NetworkBehaviour
 
         else if (IsMoving() && Vector3.Dot(movDir, posDiff) > 0.95f)
             force = movDir * (int)currentGear;
+        else if (GetCurrentInstruction() == Instructions.MapMovement)
+            force = posDiff;
 
         return force;
     }
