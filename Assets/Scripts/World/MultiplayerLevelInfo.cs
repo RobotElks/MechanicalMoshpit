@@ -23,6 +23,7 @@ public class MultiplayerLevelInfo : NetworkBehaviour
             worldScript.CreateWorldParent();
             worldScript.CreateFlag();
             worldScript.BuildLobby();
+            worldScript.SetRobotList();
             transform.position = worldScript.GetLobbySpawnPoint();
 
             if (NetworkManager.Singleton.IsHost)

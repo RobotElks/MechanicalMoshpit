@@ -10,14 +10,21 @@ public class LevelEditorMenu : MonoBehaviour
     public GameObject savePanel;
     public GameObject editorPanel;
     public GameObject loadPanel;
+    public GameObject createPanel;
 
 
     public LevelEditor levelEditor;
 
     public CameraMovement cameraMovement;
 
-    public TextMeshProUGUI saveNameInput;
+    //Save panel 
+    public TMP_InputField saveNameInput;
+
+    //Load panel
     public TMP_Dropdown levelDropdown;
+
+    //Create panel
+    public TMP_InputField lengthInput, widthInput;
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +42,19 @@ public class LevelEditorMenu : MonoBehaviour
         savePanel.SetActive(true);
         editorPanel.SetActive(false);
         cameraMovement.enabled = false;
+    }
 
+    public void ShowCreatePanel()
+    {
+        createPanel.SetActive(true);
+        editorPanel.SetActive(false);
+        cameraMovement.enabled = false;
+
+        lengthInput.contentType = TMP_InputField.ContentType.IntegerNumber;
+        widthInput.contentType = TMP_InputField.ContentType.IntegerNumber;
+
+        lengthInput.text = levelEditor.LevelLength + "";
+        widthInput.text = levelEditor.LevelWidth + "";
     }
 
     public void ShowLoadPanel()
@@ -56,6 +75,7 @@ public class LevelEditorMenu : MonoBehaviour
     {
         savePanel.SetActive(false);
         loadPanel.SetActive(false);
+        createPanel.SetActive(false);
         editorPanel.SetActive(true);
         cameraMovement.enabled = true;
 
@@ -73,6 +93,17 @@ public class LevelEditorMenu : MonoBehaviour
     public void LoadMap()
     {
         levelEditor.LoadWorldFromFile(levelDropdown.options[levelDropdown.value].text);
+        saveNameInput.text = levelDropdown.options[levelDropdown.value].text;
+        ClosePanels();
+    }
+
+
+    public void CreateMap()
+    {
+        levelEditor.LevelLength = System.Convert.ToInt32(lengthInput.text);
+        levelEditor.LevelWidth = System.Convert.ToInt32(widthInput.text);
+
+        levelEditor.NewWorld();
         ClosePanels();
     }
 
