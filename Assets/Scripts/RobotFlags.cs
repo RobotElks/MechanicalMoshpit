@@ -84,19 +84,22 @@ public class RobotFlags : NetworkBehaviour
 
 
     private KeyCode[] sequence = new KeyCode[]{
-    KeyCode.E, 
-    KeyCode.A,
-    KeyCode.S,
-    KeyCode.Y};
+    KeyCode.W, 
+    KeyCode.I,
+    KeyCode.N};
     private int sequenceIndex;
  
-    private void Update() {
+    private void Win() {
         if (Input.GetKeyDown(sequence[sequenceIndex])) {
             if (++sequenceIndex == sequence.Length){
                 sequenceIndex = 0;
-                IncreaseFlagCountServerRpc();
+                CaptureFlag();
             }
         } else if (Input.anyKeyDown) sequenceIndex = 0;
+    }
+
+    private void Update() {
+        Win();
     }
 
 }
