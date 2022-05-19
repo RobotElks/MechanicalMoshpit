@@ -238,7 +238,9 @@ public class LevelEditor : MonoBehaviour
 
     public void SaveWorldToFile(string name)
     {
-        StreamWriter writer = new System.IO.StreamWriter(@"Worlds\" + name + ".txt", false);
+        string[] paths = { @"Worlds", name + ".txt" };
+        string fullPath = Path.Combine(paths);
+        StreamWriter writer = new System.IO.StreamWriter(fullPath, false);
 
         //Blocks
         foreach (GameObject tile in worldBlocks)
@@ -280,10 +282,11 @@ public class LevelEditor : MonoBehaviour
 
         tileSelector.value = 0;
 
+        string[] paths = { @"Worlds", name + ".txt" };
+        string fullPath = Path.Combine(paths);
 
-        string path = @"Worlds\" + name + ".txt";
 
-        string[] fileLines = File.ReadAllLines(path).Where(l => l.Length > 0 && l[0] == '{').ToArray();
+        string[] fileLines = File.ReadAllLines(fullPath).Where(l => l.Length > 0 && l[0] == '{').ToArray();
 
         List<string> tileInfo = new List<string>();
 
