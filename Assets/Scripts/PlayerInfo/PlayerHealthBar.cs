@@ -71,6 +71,15 @@ public class PlayerHealthBar : NetworkBehaviour
         deadScript.SetDeadServerRpc(false);
         energScript.RestoreEnergyFull();
 
+        MonoBehaviour[] comps = GetComponentsInParent<MonoBehaviour>();
+        foreach (MonoBehaviour c in comps)
+        {
+            if (c.GetType() == typeof(MultiplayerDetectTarget))
+            {
+                c.enabled = true;
+            }
+        }
+
     }
 
     public int GetDeaths(){

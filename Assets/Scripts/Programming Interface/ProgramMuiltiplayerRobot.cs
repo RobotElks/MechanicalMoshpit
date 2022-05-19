@@ -105,7 +105,7 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
             increaseGear();
         else if (Input.GetKeyDown(KeyCode.Backspace))
             removeLastInstruction();
-        else if (Input.GetKeyDown(KeyCode.Return) && roundsScript.GetCurrentGameState() == GameState.Programming)
+        else if (Input.GetKeyDown(KeyCode.Space) && roundsScript.GetCurrentGameState() == GameState.Programming)
             FinishedProgramming();
     }
 
