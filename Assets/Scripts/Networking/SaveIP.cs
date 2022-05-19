@@ -21,7 +21,9 @@ public class SaveIP : NetworkBehaviour
 
     public TMP_InputField inputPlayerName;
     public TMP_InputField inputHostName;
+
     private string savedPlayerName = "";
+   
 
        // Start is called before the first frame update
     void Start()
@@ -32,8 +34,12 @@ public class SaveIP : NetworkBehaviour
             if (this.gameObject != info)
             {
                 saved = info.GetComponent<SaveIP>().GetSaved();
+                savedPlayerName = info.GetComponent<SaveIP>().GetName();
+
                 GameObject.Destroy(info);
                 addressInput.text = saved;
+                inputHostName.text = savedPlayerName;
+                inputPlayerName.text = savedPlayerName;
             }
         }
         DontDestroyOnLoad(this.gameObject);
@@ -67,7 +73,10 @@ public class SaveIP : NetworkBehaviour
     public string GetSaved(){
         return saved;
     }
-
+    public string GetName()
+    {
+        return savedPlayerName;
+    }
     public string GetWorldString()
     {
         return worldString;
