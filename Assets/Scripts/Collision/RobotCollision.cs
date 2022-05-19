@@ -143,7 +143,6 @@ public class RobotCollision : NetworkBehaviour
 
     private void PlayerCollision(Collision robotCollision)
     {
-
         if (IsOwner)
         {
             RobotMultiplayerMovement otherRobotMovementScript = robotCollision.gameObject.GetComponent<RobotMultiplayerMovement>();
@@ -167,7 +166,8 @@ public class RobotCollision : NetworkBehaviour
     {
         Destroy(collider.gameObject, 0f);
         playerHealthBarScript.GetHit(damage);
-        this.gameObject.GetComponent<Rigidbody>().AddForce(Vector3.up*200);
+        thisRobotMovementScript.SetAnimation(StateOfAnimation.Hit);
+        //this.gameObject.GetComponent<Rigidbody>().AddForce(Vector3.up*200);
     }
 
     private void WallCollision(int wall){
@@ -192,8 +192,7 @@ public class RobotCollision : NetworkBehaviour
         onEnergyStation = false;
         onHealthStation = false;
         onTurnLeft = false;
-        onTurnRight = false;
-        
+        onTurnRight = false;  
     }
 
     // raycast above robots to check if wall is on other side (less than 1,5 tiles away) of pushed robot

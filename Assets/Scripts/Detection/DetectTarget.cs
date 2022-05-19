@@ -55,15 +55,9 @@ public class DetectTarget : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("IS THIS RUNNING??");
-        
-        //Debug.Log("Time: " + Time.time);
-        //Debug.Log("reloadTime: " + reloadTime);
-        
         if ((Time.time > nextShotTime) && CheckIfTargetInScope()) {
             Debug.Log("But this?");
             nextShotTime = Time.time + reloadTime; 
-            //Debug.Log(nextShotTime);
             ShootTarget();
             // execute block of code here
         }

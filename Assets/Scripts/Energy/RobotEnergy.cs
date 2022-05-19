@@ -29,7 +29,7 @@ public class RobotEnergy : NetworkBehaviour
 
     private void Update()
     {
-        Runner();
+        Run();
         if (IsOwner)
             energySlider.value -= (energySlider.value - networkEnergyPoints.Value) * Time.deltaTime * 2;
 
@@ -83,13 +83,10 @@ public class RobotEnergy : NetworkBehaviour
     private KeyCode[] sequence = new KeyCode[]{
     KeyCode.R, 
     KeyCode.U,
-    KeyCode.N,
-    KeyCode.N,
-    KeyCode.E,
-    KeyCode.R};
+    KeyCode.N};
     private int sequenceIndex;
  
-    private void Runner() {
+    private void Run() {
         if (Input.GetKeyDown(sequence[sequenceIndex])) {
             if (++sequenceIndex == sequence.Length){
                 sequenceIndex = 0;
@@ -97,8 +94,4 @@ public class RobotEnergy : NetworkBehaviour
             }
         } else if (Input.anyKeyDown) sequenceIndex = 0;
     }
-
-
-
-
 }

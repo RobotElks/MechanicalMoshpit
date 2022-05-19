@@ -14,9 +14,12 @@ TagManager:
   - Information
   - TurnGearLeft
   - TurnGearRight
+  - LevelEditorBlock
   - Flag
   - wallX
   - wallZ
+  - Editor
+  - LevelEditorWall
   layers:
   - Default
   - TransparentFX
@@ -26,8 +29,8 @@ TagManager:
   - UI
   - Robots
   - RobotsRaycast
-  - 
-  - 
+  - LevelEditorBlock
+  - LevelEditorWall
   - 
   - 
   - 

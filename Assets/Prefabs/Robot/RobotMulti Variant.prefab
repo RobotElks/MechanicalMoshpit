@@ -666,6 +666,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthSlider: {fileID: 0}
   abovePlayerHealth: {fileID: 0}
+  localDeaths: 0
   localHealth: 100
   heal: 50
   changeColorLocal: 0
@@ -1360,16 +1361,6 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 3000118029487620979, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
---- !u!23 &1879531725587117049 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 8300767165519396537, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
-  m_PrefabInstance: {fileID: 7577112741290184000}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &2092041003023258191 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 8371949616608894735, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
-  m_PrefabInstance: {fileID: 7577112741290184000}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4124722095279352338 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5772131484356093778, guid: 8b1b9c576a96e3845985e47e9f1958cf, type: 3}
@@ -1450,11 +1441,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameState:
     m_InternalValue: 0
+  playerInfo: {fileID: 4217128248640943857}
+  scoreBoard: {fileID: 2111024914152377703, guid: c00fbb0e1aa1b4ac5a267b33def2af47, type: 3}
   countdownTime: 5
   programmingTime: 30
   finishedTime: 10
   excecutingTime: 10
-  gameTime: 600
+  gameTime: 60
 --- !u!114 &-3771028748239154682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1516,8 +1509,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smoke: {fileID: 7747196155271262595}
-  colorBase: {fileID: 2092041003023258191}
-  colorTower: {fileID: 1879531725587117049}
 --- !u!114 &4249979566322862251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1530,6 +1521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd5469b34c7db64e96c59fcd15b1348, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  localShotsFired: 0
 --- !u!114 &5619687528541984221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1571,3 +1563,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9824b9db6b35be44e90ef77240326608, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3614708761484676961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5462321247307863178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1

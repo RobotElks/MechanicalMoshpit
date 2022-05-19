@@ -39,8 +39,8 @@ public class HealthPoints : NetworkBehaviour
     {
 
         abovePlayerHealth.value = (float)localHealth;
-        if (Input.GetKeyDown("space"))
-            getHit(25);
+        // if (Input.GetKeyDown("space"))
+        //     getHit(25);
         //healthSlider.value -= (healthSlider.value - (float)localHealth) * Time.deltaTime * 2;
         /*
                 if (IsOwner)

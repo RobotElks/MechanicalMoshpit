@@ -13,6 +13,7 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
     RobotMultiplayerMovement movementScript;
     RobotCollision collisionScript;
     PlayerHealthBar healthScript;
+    
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
     {
@@ -36,7 +37,7 @@ public class RobotMultiplayerInstructionScript : NetworkBehaviour
             {
                 if(collisionScript.onConveyorBelt){
                     movementScript.MoveDirection();
-                    Debug.Log("MOVING FROM BELT: " + movementScript.IsMoving());
+                    //Debug.Log("MOVING FROM BELT: " + movementScript.IsMoving());
                     collisionScript.onConveyorBelt = false;
                     return;
                 }

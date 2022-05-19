@@ -10,6 +10,7 @@ public class MultiplayerLevelInfo : NetworkBehaviour
     RobotMultiplayerMovement movementScript;
     MultiplayerWorldParse worldScript;
 
+
     const int MAX_MAP_SEND_SIZE = 5000;
 
     public override void OnNetworkSpawn()
@@ -20,6 +21,7 @@ public class MultiplayerLevelInfo : NetworkBehaviour
         if (IsOwner)
         {
             worldScript.CreateWorldParent();
+            worldScript.CreateFlag();
             worldScript.BuildLobby();
             transform.position = worldScript.GetLobbySpawnPoint();
 
@@ -81,13 +83,13 @@ public class MultiplayerLevelInfo : NetworkBehaviour
 
     public void HostSendsSpawnPointsToClients()
     {
-        if(IsHost && IsOwner)
+        if (IsHost && IsOwner)
         {
             Vector3[] spawnPoints = worldScript.GetSpawnPoints();
 
             GameObject[] robots = GameObject.Find("RobotList").GetComponent<RobotList>().GetRobots();
 
-            foreach(GameObject robot in robots)
+            foreach (GameObject robot in robots)
             {
                 robot.GetComponent<MultiplayerLevelInfo>().SetSpawnPointClientRpc(spawnPoints);
             }
@@ -98,7 +100,7 @@ public class MultiplayerLevelInfo : NetworkBehaviour
     [ClientRpc]
     private void SetSpawnPointClientRpc(Vector3[] spawnPoints)
     {
-        
+
         int id = (int)NetworkManager.Singleton.LocalClientId;
         movementScript.MoveToSpawnPoints(spawnPoints[id]);
     }
