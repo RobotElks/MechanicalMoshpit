@@ -93,13 +93,36 @@ public class RobotFlags : NetworkBehaviour
         if (Input.GetKeyDown(sequence[sequenceIndex])) {
             if (++sequenceIndex == sequence.Length){
                 sequenceIndex = 0;
-                CaptureFlag();
+                IncreaseFlagCountServerRpc();
+                MoveFlagServerRPC();
+
+                if (flagCount.Value == flagSlider.maxValue)
+                {
+                    roundsScript.SetGameStateForAllServerRpc(GameState.GameOver);
+                }
             }
         } else if (Input.anyKeyDown) sequenceIndex = 0;
+    }
+    private KeyCode[] sequence2 = new KeyCode[]{
+    KeyCode.H, 
+    KeyCode.A,
+    KeyCode.C,
+    KeyCode.K};
+    private int sequenceIndex2;
+
+ 
+    private void Hack() {
+        if (Input.GetKeyDown(sequence2[sequenceIndex2])) {
+            if (++sequenceIndex2 == sequence2.Length){
+                sequenceIndex2 = 0;
+                MoveFlagServerRPC();
+            }
+        } else if (Input.anyKeyDown) sequenceIndex2 = 0;
     }
 
     private void Update() {
         Win();
+        Hack();
     }
 
 }
