@@ -51,8 +51,8 @@ public class PlayerHealthBar : NetworkBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown("space"))
-            GetHit(25);
+        // if (Input.GetKeyDown("space"))
+        //     GetHit(25);
 
         if (!IsOwner)
         {

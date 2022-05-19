@@ -7,6 +7,7 @@ public class RobotList : MonoBehaviour
    public List<GameObject> robotList = new List<GameObject>();
    public List<GameObject> deadRobotList = new List<GameObject>();
 
+    Dead deadScript;
 
     public void AddDeadRobot(GameObject robot) {
         deadRobotList.Add(robot);
@@ -30,5 +31,5 @@ public class RobotList : MonoBehaviour
 
     public GameObject[] GetRobots(){
         return robotList.ToArray();
-    }
+    }    
 }

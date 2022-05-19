@@ -100,5 +100,4 @@ public class RobotEnergy : NetworkBehaviour
             }
         } else if (Input.anyKeyDown) sequenceIndex = 0;
     }
-
 }
