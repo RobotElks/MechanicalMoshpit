@@ -97,7 +97,11 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 }
 
             }
-            else if(!deadScript.IsDead())
+            else if(deadScript.IsDead())
+            {
+                localAnimationState = StateOfAnimation.Death;
+            }
+            else
             {
                 localAnimationState = StateOfAnimation.Idle;
             }
