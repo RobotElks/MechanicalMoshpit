@@ -48,9 +48,9 @@ public class LevelEditor : MonoBehaviour
         worldParent = new GameObject("Editor World");
         wallParent = new GameObject("Editor Walls");
 
-        SpawnWalls();
+        //SpawnWalls();
         //NewWorld();
-        worldOrigin.transform.position = new Vector3(worldSize.x / 2, 0, worldSize.y / 2);
+        //worldOrigin.transform.position = new Vector3(worldSize.x / 2, 0, worldSize.y / 2);
 
     }
 
@@ -204,7 +204,7 @@ public class LevelEditor : MonoBehaviour
         worldParent.transform.parent = this.transform;
         worldBlocks.Clear();
 
-        HideAllWalls();
+        SpawnWalls();
         tileSelector.value = 0;
 
         for (int z = 0; z < worldSize.y; z++)
@@ -262,7 +262,6 @@ public class LevelEditor : MonoBehaviour
         worldParent.transform.parent = this.transform;
         worldBlocks.Clear();
 
-        HideAllWalls();
 
         tileSelector.value = 0;
 
@@ -308,10 +307,12 @@ public class LevelEditor : MonoBehaviour
 
 
         }
+        worldSize += new Vector2(1, 1);
 
         //Flags, spawns, and walls
         tileInfo.Clear();
         tileInfo.AddRange(fileLines.Where(l => int.Parse(l.Replace("{", "").Replace("}", "").Split(',').Last()) >= flagIndex).ToArray());
+        SpawnWalls();
 
         foreach (string line in tileInfo)
         {
