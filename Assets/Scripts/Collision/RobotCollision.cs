@@ -15,7 +15,7 @@ public class RobotCollision : NetworkBehaviour
     public bool onTurnRight = false;
     public bool onDamageTile = false;
     public bool onFlagTile = false;
-    private int damage = 50;
+    private int damage = 10;
 
 
 	void Start () {
