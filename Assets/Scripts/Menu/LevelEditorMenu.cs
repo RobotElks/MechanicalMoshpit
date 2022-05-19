@@ -102,6 +102,7 @@ public class LevelEditorMenu : MonoBehaviour
     {
         levelEditor.LevelLength = System.Convert.ToInt32(lengthInput.text);
         levelEditor.LevelWidth = System.Convert.ToInt32(widthInput.text);
+        saveNameInput.text = "";
 
         levelEditor.NewWorld();
         ClosePanels();
