@@ -48,6 +48,7 @@ public class RobotRoundsHandler : NetworkBehaviour
     public float excecutingTime = 3;
     public float gameTime = 600;
 
+    public bool endGame = false;
 
     //Network functions
     public override void OnNetworkSpawn()
@@ -114,7 +115,7 @@ public class RobotRoundsHandler : NetworkBehaviour
             switch (oldState)
             {
                 case GameState.Excecuting:
-
+                    flagScript.CaptureFlag();
                     //GameObject[] robots = robotList.GetRobots();
 
                     //foreach (GameObject robot in robots)
@@ -162,34 +163,23 @@ public class RobotRoundsHandler : NetworkBehaviour
 
                 case GameState.Programming:
                     //Host starts countdown
-                    bool hasWinner = false;
-
+                   
                     if (IsHost)
                     {
                         SetTimerServerRpc(programmingTime);
 
                         //Set all players ready to false (Used for finised button)
                         GameObject[] robots = robotList.GetRobots();
-
-
                         foreach (GameObject robot in robots)
                         {
                             robot.GetComponent<RobotRoundsHandler>().HostSetReady(false);
-
-                            if (robot.GetComponent<RobotFlags>().CaptureFlag())
-                            {
-                                hasWinner = true;
-
-                            }
                         }
 
 
                     }
 
-
-                    if (!hasWinner)
+                    if (!endGame)
                     {
-
                         if (deadScript.IsDead())
                         {
                             healthBarScript.ReviveRobot();
@@ -270,15 +260,21 @@ public class RobotRoundsHandler : NetworkBehaviour
                 {
                     case GameState.Programming:
 
-                        //If finised programming early
-
                         int ready = 0;
                         GameObject[] robots = robotList.GetRobots();
                         foreach (GameObject robot in robots)
                         {
                             if (robot.GetComponent<RobotRoundsHandler>().GetIsReady())
                                 ready++;
+
+                            if(robot.GetComponent<RobotFlags>().HasWon())
+                            {
+                                endGame = true;
+                            }
                         }
+
+                        if (endGame)
+                            HostSetGameStateForAll(GameState.GameOver);
 
                         if (countdownTimer.Value > finishedTime && ready > 0)
                             SetTimerServerRpc(finishedTime);

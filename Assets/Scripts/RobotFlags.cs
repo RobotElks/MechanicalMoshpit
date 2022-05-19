@@ -37,13 +37,11 @@ public class RobotFlags : NetworkBehaviour
             IncreaseFlagCountServerRpc();
             MoveFlagServerRPC();
 
-            if (flagCount.Value == flagSlider.maxValue)
-            {
-                roundsScript.SetGameStateForAllServerRpc(GameState.GameOver);
-                return true;
-            }
-
-
+            //if (flagCount.Value == flagSlider.maxValue)
+            //{
+            //    roundsScript.SetGameStateForAllServerRpc(GameState.GameOver);
+            //    return true;
+            //}
         }
 
         return false;
