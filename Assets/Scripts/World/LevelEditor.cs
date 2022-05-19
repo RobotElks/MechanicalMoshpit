@@ -48,9 +48,9 @@ public class LevelEditor : MonoBehaviour
         worldParent = new GameObject("Editor World");
         wallParent = new GameObject("Editor Walls");
 
-        SpawnWalls();
+        //SpawnWalls();
         //NewWorld();
-        worldOrigin.transform.position = new Vector3(worldSize.x / 2, 0, worldSize.y / 2);
+        //worldOrigin.transform.position = new Vector3(worldSize.x / 2, 0, worldSize.y / 2);
 
     }
 
@@ -84,6 +84,21 @@ public class LevelEditor : MonoBehaviour
                 else if (hit.collider.gameObject.CompareTag("LevelEditorWall"))
                 {
                     hit.collider.GetComponent<LevelEditorWall>().ToggleWall();
+                }
+            }
+        }
+
+        if (Input.GetMouseButtonDown(2) && !EventSystem.current.IsPointerOverGameObject() && !editorMenu.HasMenuopen())
+        {
+            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.collider.gameObject.CompareTag("LevelEditorBlock"))
+                {
+
+                    tileSelector.value = hit.collider.GetComponent<LevelEditorBlock>().CurrentTileID;
                 }
             }
         }
@@ -204,7 +219,7 @@ public class LevelEditor : MonoBehaviour
         worldParent.transform.parent = this.transform;
         worldBlocks.Clear();
 
-        HideAllWalls();
+        SpawnWalls();
         tileSelector.value = 0;
 
         for (int z = 0; z < worldSize.y; z++)
@@ -223,7 +238,9 @@ public class LevelEditor : MonoBehaviour
 
     public void SaveWorldToFile(string name)
     {
-        StreamWriter writer = new System.IO.StreamWriter(@"Worlds\" + name + ".txt", false);
+        string[] paths = { @"Worlds", name + ".txt" };
+        string fullPath = Path.Combine(paths);
+        StreamWriter writer = new System.IO.StreamWriter(fullPath, false);
 
         //Blocks
         foreach (GameObject tile in worldBlocks)
@@ -262,14 +279,14 @@ public class LevelEditor : MonoBehaviour
         worldParent.transform.parent = this.transform;
         worldBlocks.Clear();
 
-        HideAllWalls();
 
         tileSelector.value = 0;
 
+        string[] paths = { @"Worlds", name + ".txt" };
+        string fullPath = Path.Combine(paths);
 
-        string path = @"Worlds\" + name + ".txt";
 
-        string[] fileLines = File.ReadAllLines(path).Where(l => l.Length > 0 && l[0] == '{').ToArray();
+        string[] fileLines = File.ReadAllLines(fullPath).Where(l => l.Length > 0 && l[0] == '{').ToArray();
 
         List<string> tileInfo = new List<string>();
 
@@ -308,10 +325,12 @@ public class LevelEditor : MonoBehaviour
 
 
         }
+        worldSize += new Vector2(1, 1);
 
         //Flags, spawns, and walls
         tileInfo.Clear();
         tileInfo.AddRange(fileLines.Where(l => int.Parse(l.Replace("{", "").Replace("}", "").Split(',').Last()) >= flagIndex).ToArray());
+        SpawnWalls();
 
         foreach (string line in tileInfo)
         {
@@ -347,7 +366,7 @@ public class LevelEditor : MonoBehaviour
         }
 
 
-        
+
         worldOrigin.transform.position = new Vector3(worldSize.x / 2, 0, worldSize.y / 2);
     }
 

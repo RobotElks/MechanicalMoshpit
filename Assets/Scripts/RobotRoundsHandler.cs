@@ -250,16 +250,21 @@ public class RobotRoundsHandler : NetworkBehaviour
                     case GameState.Programming:
 
                         //If finised programming early
-                        if (countdownTimer.Value > finishedTime)
-                        {
-                            GameObject[] robots = robotList.GetRobots();
 
-                            foreach (GameObject robot in robots)
-                            {
-                                if (robot.GetComponent<RobotRoundsHandler>().GetIsReady())
-                                    SetTimerServerRpc(finishedTime);
-                            }
+                        int ready = 0;
+                        GameObject[] robots = robotList.GetRobots();
+                        foreach (GameObject robot in robots)
+                        {
+                            if (robot.GetComponent<RobotRoundsHandler>().GetIsReady())
+                                ready++;
                         }
+
+                        if (countdownTimer.Value > finishedTime && ready > 0)
+                            SetTimerServerRpc(finishedTime);
+
+                        if (ready == robots.Length)
+                            HostSetGameStateForAll(GameState.Excecuting);
+
                         break;
                 }
             }

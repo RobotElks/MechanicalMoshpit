@@ -297,5 +297,10 @@ public class MultiplayerWorldParse : MonoBehaviour
         flag.transform.position = newPos;
     }
 
+    public Vector3 GetWorldMiddle()
+    {
+        return worldMiddle;
+    }
+
 
 }
