@@ -115,6 +115,13 @@ public class RobotRoundsHandler : NetworkBehaviour
             {
                 case GameState.Excecuting:
                     flagScript.CaptureFlag();
+
+                    GameObject[] robots = robotList.GetRobots();
+
+                    foreach (GameObject robot in robots)
+                        if (robot.GetComponent<RobotFlags>().HasWon())
+                            return;
+
                     break;
 
                 case GameState.Countdown:
