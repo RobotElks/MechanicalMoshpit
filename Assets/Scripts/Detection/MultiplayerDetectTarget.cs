@@ -48,9 +48,10 @@ public class MultiplayerDetectTarget : NetworkBehaviour
 
 
     private bool CheckIfTargetInScope(){
+
+
         if (Physics.Raycast(this.transform.position, this.transform.forward, out hit))
         {
-
             if(hit.collider.tag == "Player")
             return !hit.collider.gameObject.GetComponent<Dead>().IsDead();
         }

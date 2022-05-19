@@ -36,6 +36,20 @@ public class RobotCollision : NetworkBehaviour
             LaserCollision(collider);
         }
     }
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.CompareTag("Flag"))
+        {
+            onFlagTile = true;
+        }
+    }
+    private void OnTriggerExit(Collider collider)
+    {
+        if (collider.CompareTag("Flag"))
+        {
+            onFlagTile = false;
+        }
+    }
 
 
 
@@ -60,10 +74,7 @@ public class RobotCollision : NetworkBehaviour
         {
             onDamageTile = false;
         }
-        else if (collision.collider.CompareTag("Flag"))
-        {
-            onFlagTile = false;
-        }
+
         else if (collision.collider.CompareTag("TurnGearLeft"))
         {
             onTurnLeft = false;
@@ -117,10 +128,6 @@ public class RobotCollision : NetworkBehaviour
         else if (collision.collider.CompareTag("TurnGearRight"))
         {
             onTurnRight = true;
-        }
-        else if (collision.collider.CompareTag("Flag"))
-        {
-            onFlagTile = true;
         }
 
 

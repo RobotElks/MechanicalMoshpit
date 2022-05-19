@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3055908429513138647}
   - component: {fileID: 3055908429513138640}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Flag
   m_TagString: Flag
   m_Icon: {fileID: 0}
@@ -41,11 +41,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3055908429513138643}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 1, z: 0.5}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.5, y: 0.1, z: 0.5}
+  m_Center: {x: 0, y: -0.5, z: 0}
 --- !u!1 &6494093597268907533
 GameObject:
   m_ObjectHideFlags: 0
@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 4808502158746122749}
   - component: {fileID: 452515121043750049}
   - component: {fileID: 9130936024649468629}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
