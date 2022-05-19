@@ -60,45 +60,13 @@ public class LevelEditor : MonoBehaviour
         if (!editorMenu.HasMenuopen())
         {
             //Move camera
-            if (Input.GetKey(KeyCode.W))
-                worldOrigin.transform.position += Vector3.forward * cameraSpeed * Time.deltaTime;
-            else if (Input.GetKey(KeyCode.S))
-                worldOrigin.transform.position -= Vector3.forward * cameraSpeed * Time.deltaTime;
-            else if (Input.GetKey(KeyCode.A))
-                worldOrigin.transform.position -= Vector3.right * cameraSpeed * Time.deltaTime;
-            else if (Input.GetKey(KeyCode.D))
-                worldOrigin.transform.position += Vector3.right * cameraSpeed * Time.deltaTime;
+            CameraMovement();
 
             //Change block 
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-                tileSelector.value = 0;
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-                tileSelector.value = 1;
-            if (Input.GetKeyDown(KeyCode.Alpha3))
-                tileSelector.value = 2;
-            if (Input.GetKeyDown(KeyCode.Alpha4))
-                tileSelector.value = 3;
-            if (Input.GetKeyDown(KeyCode.Alpha5))
-                tileSelector.value = 4;
-            if (Input.GetKeyDown(KeyCode.Alpha6))
-                tileSelector.value = 5;
-            if (Input.GetKeyDown(KeyCode.Alpha7))
-                tileSelector.value = 6;
-            if (Input.GetKeyDown(KeyCode.Alpha8))
-                tileSelector.value = 7;
-            if (Input.GetKeyDown(KeyCode.Alpha9))
-                tileSelector.value = 8;
-            if (Input.GetKeyDown(KeyCode.Alpha0))
-                tileSelector.value = 9;
-            if (Input.GetKeyDown(KeyCode.F))
-                tileSelector.value = 10;
-            if (Input.GetKeyDown(KeyCode.R))
-                tileSelector.value = 11;
-            if (Input.GetKeyDown(KeyCode.Q))
-                tileSelector.value = 12;
+            BlockKeyBindings();
         }
 
-        
+
 
         //Click to edit map and not on UI
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && !editorMenu.HasMenuopen())
@@ -119,6 +87,59 @@ public class LevelEditor : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void BlockKeyBindings()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            tileSelector.value = 0;
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            tileSelector.value = 1;
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            tileSelector.value = 2;
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+            tileSelector.value = 3;
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+            tileSelector.value = 4;
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+            tileSelector.value = 5;
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+            tileSelector.value = 6;
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+            tileSelector.value = 7;
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+            tileSelector.value = 8;
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+            tileSelector.value = 9;
+        if (Input.GetKeyDown(KeyCode.F))
+            tileSelector.value = 10;
+        if (Input.GetKeyDown(KeyCode.R))
+            tileSelector.value = 11;
+        if (Input.GetKeyDown(KeyCode.Q))
+            tileSelector.value = 12;
+    }
+
+    private void CameraMovement()
+    {
+        if (Input.GetKey(KeyCode.W))
+        {
+            Vector3 forward = camera.transform.forward;
+            forward.y = 0;
+            forward = forward.normalized;
+            worldOrigin.transform.position += forward * cameraSpeed * Time.deltaTime;
+
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            Vector3 forward = camera.transform.forward;
+            forward.y = 0;
+            forward = forward.normalized;
+            worldOrigin.transform.position -= forward * cameraSpeed * Time.deltaTime;
+        }
+        else if (Input.GetKey(KeyCode.A))
+            worldOrigin.transform.position -= camera.transform.right * cameraSpeed * Time.deltaTime;
+        else if (Input.GetKey(KeyCode.D))
+            worldOrigin.transform.position += camera.transform.right * cameraSpeed * Time.deltaTime;
     }
 
     private void SpawnWalls()
