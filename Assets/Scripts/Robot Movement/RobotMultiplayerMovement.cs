@@ -56,12 +56,17 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+
         animator.SetInteger("transitionDecider", (int)localAnimationState);
 
         //Local player owns the object
         if (IsOwner)
         {
-            
+            if (deadScript.IsDead())
+            {
+                localAnimationState = StateOfAnimation.Death;
+            }
+
             //Rotation movement
             if (IsRotating())
             {
@@ -97,11 +102,7 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 }
 
             }
-            else if(deadScript.IsDead())
-            {
-                localAnimationState = StateOfAnimation.Death;
-            }
-            else
+            else if(!deadScript.IsDead())
             {
                 localAnimationState = StateOfAnimation.Idle;
             }
