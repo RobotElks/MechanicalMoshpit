@@ -30,21 +30,23 @@ public class RobotFlags : NetworkBehaviour
         flagSlider.value = newInt;
     }
 
-    public void CaptureFlag()
+    public bool CaptureFlag()
     {
-        //num of flags ++
-        //Check victory
-        if (IsOwner)
-            if (collisionScript.onFlagTile && !deadScript.IsDead())
-            {
-                IncreaseFlagCountServerRpc();
-                MoveFlagServerRPC();
+        if (collisionScript.onFlagTile && !deadScript.IsDead())
+        {
+            IncreaseFlagCountServerRpc();
+            MoveFlagServerRPC();
 
-                if (flagCount.Value == flagSlider.maxValue)
-                {
-                    roundsScript.SetGameStateForAllServerRpc(GameState.GameOver);
-                }
+            if (flagCount.Value == flagSlider.maxValue)
+            {
+                roundsScript.SetGameStateForAllServerRpc(GameState.GameOver);
+                return true;
             }
+
+
+        }
+
+        return false;
     }
 
     public int GetFlags()

@@ -114,7 +114,6 @@ public class RobotRoundsHandler : NetworkBehaviour
             switch (oldState)
             {
                 case GameState.Excecuting:
-                    flagScript.CaptureFlag();
 
                     //GameObject[] robots = robotList.GetRobots();
 
@@ -163,29 +162,45 @@ public class RobotRoundsHandler : NetworkBehaviour
 
                 case GameState.Programming:
                     //Host starts countdown
+                    bool hasWinner = false;
+
                     if (IsHost)
                     {
                         SetTimerServerRpc(programmingTime);
 
                         //Set all players ready to false (Used for finised button)
                         GameObject[] robots = robotList.GetRobots();
+
+
                         foreach (GameObject robot in robots)
                         {
                             robot.GetComponent<RobotRoundsHandler>().HostSetReady(false);
+
+                            if (robot.GetComponent<RobotFlags>().CaptureFlag())
+                            {
+                                hasWinner = true;
+
+                            }
                         }
+
+
                     }
 
 
-
-                    if (deadScript.IsDead())
+                    if (!hasWinner)
                     {
-                        healthBarScript.ReviveRobot();
-                        movementScript.MoveToSpawnPoints(worldScript.GetSpawnPoint());
 
+                        if (deadScript.IsDead())
+                        {
+                            healthBarScript.ReviveRobot();
+                            movementScript.MoveToSpawnPoints(worldScript.GetSpawnPoint());
+
+                        }
+
+                        programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
+                        programmingInterface.SetActive(true);
                     }
 
-                    programmingInterface.GetComponent<ProgramMuiltiplayerRobot>().stopProgram();
-                    programmingInterface.SetActive(true);
                     break;
 
 
@@ -245,7 +260,6 @@ public class RobotRoundsHandler : NetworkBehaviour
         //Host updates timer
         if (IsHost && IsOwner)
         {
-
             //Countdown the timer (Not "> 0" to stop it from being false on first countdown update)
             if (countdownTimer.Value >= 0)
             {
