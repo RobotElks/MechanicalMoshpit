@@ -26,6 +26,9 @@ public class RobotFlags : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (IsOwner)
+            if (Input.GetKeyDown(KeyCode.O))
+                MoveFlagServerRPC();
     }
 
     private void FlagCountChange(int oldInt, int newInt)

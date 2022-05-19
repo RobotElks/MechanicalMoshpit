@@ -195,6 +195,12 @@ public class LevelEditor : MonoBehaviour
         worldOrigin.transform.position = new Vector3(worldSize.x / 2, 0, worldSize.y / 2);
     }
 
+    public void SetWorldSize(int widht, int height)
+    {
+        worldSize.x = widht;
+        worldSize.y = height;
+    }
+
     public void SaveWorldToFile(string name)
     {
         StreamWriter writer = new System.IO.StreamWriter(@"Worlds\" + name + ".txt", false);
