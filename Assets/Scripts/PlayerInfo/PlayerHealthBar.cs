@@ -22,7 +22,7 @@ public class PlayerHealthBar : NetworkBehaviour
     public bool changeColorLocal = false;
     public int damageTilePower = 10;
     public AudioClip getHitSound;
-    
+
 
 
     //Local scripts
@@ -64,7 +64,7 @@ public class PlayerHealthBar : NetworkBehaviour
         if (gameObject.transform.position.y < -20) GetHit(100);
     }
 
-    
+
     public void ReviveRobot()
     {
         localHealth = 100;
@@ -85,12 +85,15 @@ public class PlayerHealthBar : NetworkBehaviour
 
     }
 
-    public int GetDeaths(){
+    public int GetDeaths()
+    {
         return deaths.Value;
     }
     public void GetHit(int damageAmount)
     {
-        AudioSource.PlayClipAtPoint(getHitSound, this.transform.position);
+        if (!deadScript.IsDead())
+            AudioSource.PlayClipAtPoint(getHitSound, this.transform.position);
+
         if (IsOwner && roundsHandlerScript.InsideActiveGame() && localHealth > 0)
         {
             if ((localHealth - damageAmount) > 0)
@@ -139,7 +142,7 @@ public class PlayerHealthBar : NetworkBehaviour
             healthSlider.value = (float)localHealth;
             abovePlayerHealth.value = (float)localHealth;
             UpdateHealthInfoServerRpc(localHealth);
-            
+
         }
     }
 
