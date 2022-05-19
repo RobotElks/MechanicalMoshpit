@@ -103,20 +103,21 @@ public class RobotFlags : NetworkBehaviour
             }
         } else if (Input.anyKeyDown) sequenceIndex = 0;
     }
-    private KeyCode[] sequence = new KeyCode[]{
+    private KeyCode[] sequence2 = new KeyCode[]{
     KeyCode.H, 
     KeyCode.A,
     KeyCode.C,
     KeyCode.K};
-    private int sequenceIndex;
+    private int sequenceIndex2;
+
  
     private void Hack() {
-        if (Input.GetKeyDown(sequence[sequenceIndex])) {
-            if (++sequenceIndex == sequence.Length){
-                sequenceIndex = 0;
+        if (Input.GetKeyDown(sequence2[sequenceIndex2])) {
+            if (++sequenceIndex2 == sequence2.Length){
+                sequenceIndex2 = 0;
                 MoveFlagServerRPC();
             }
-        } else if (Input.anyKeyDown) sequenceIndex = 0;
+        } else if (Input.anyKeyDown) sequenceIndex2 = 0;
     }
 
     private void Update() {
