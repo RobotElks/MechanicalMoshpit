@@ -294,7 +294,8 @@ public class RobotRoundsHandler : NetworkBehaviour
         }
 
         //Bad but wont work in GameStateChanged
-        if (gameState.Value == GameState.GameOver){
+        if (gameState.Value == GameState.GameOver)
+        {
             programmingInterface.SetActive(false);
 
         }
@@ -331,7 +332,11 @@ public class RobotRoundsHandler : NetworkBehaviour
     [ServerRpc]
     public void SetGameStateForAllServerRpc(GameState gameState)
     {
-        HostSetGameStateForAll(gameState);
+        GameObject[] robots = robotList.GetRobots();
+        foreach (GameObject robot in robots)
+        {
+            robot.GetComponent<RobotRoundsHandler>().HostSetGameState(gameState);
+        }
     }
 
     public void FinishedProgramming()
@@ -389,62 +394,75 @@ public class RobotRoundsHandler : NetworkBehaviour
         EndOfGameClientRpc();
         GameObject[] robots = robotList.GetRobots();
         List<(string, int, int, int)> stats = new List<(string, int, int, int)>();
-        foreach(GameObject robot in robots)
+        foreach (GameObject robot in robots)
         {
             RobotRoundsHandler roundsHandler = robot.GetComponent<RobotRoundsHandler>();
             string name = roundsHandler.playerInfo.GetComponent<PlayerNamePlate>().GetPlayerName();
             int stars = roundsHandler.flagScript.GetFlags();
             int deaths = roundsHandler.healthBarScript.GetDeaths();
             int shotsFired = roundsHandler.detectionScript.GetShotsFired();
-            stats.Add((name,stars,deaths,shotsFired));
+            stats.Add((name, stars, deaths, shotsFired));
 
         }
         stats.Sort((a, b) => b.Item2.CompareTo(a.Item2));
         //stats.Sort((a, b) => a.Item3.CompareTo(b.Item3));
         //stats.Sort((a, b) => a.Item4.CompareTo(b.Item4));
 
-        int k = (stats.Count)/2;
-        while(k > 0){
-            for(int i = 0; i < stats.Count-1; i++){
-                if(stats[i].Item2 == stats[i+1].Item2){
-                    if(stats[i].Item3 > stats[i+1].Item3){
-                    Swap(stats, i, i+1);
+        int k = (stats.Count) / 2;
+        while (k > 0)
+        {
+            for (int i = 0; i < stats.Count - 1; i++)
+            {
+                if (stats[i].Item2 == stats[i + 1].Item2)
+                {
+                    if (stats[i].Item3 > stats[i + 1].Item3)
+                    {
+                        Swap(stats, i, i + 1);
                     }
-                    else if(stats[i].Item3 == stats[i+1].Item3){
-                        if(stats[i].Item4 < stats[i+1].Item4){
-                            Swap(stats, i, i+1);
+                    else if (stats[i].Item3 == stats[i + 1].Item3)
+                    {
+                        if (stats[i].Item4 < stats[i + 1].Item4)
+                        {
+                            Swap(stats, i, i + 1);
                         }
                     }
-                // sätt ranken till samma här
+                    // sätt ranken till samma här
                 }
-            k--;
+                k--;
             }
         }
-        
-        
+
+
         /*
         foreach((string, int, int, int) stat in stats){
             ShowScoreBoardClientRpc(stat.Item1, stat.Item2, stat.Item3, stat.Item4);
         }
         */
         int rank = 0;
-        for(int i = 0; i < stats.Count; i++){
-            if((i != 0) && CheckRank(stats, i, i-1)){
+        for (int i = 0; i < stats.Count; i++)
+        {
+            if ((i != 0) && CheckRank(stats, i, i - 1))
+            {
                 ShowScoreBoardClientRpc(stats[i].Item1, stats[i].Item2, stats[i].Item3, stats[i].Item4, rank);
             }
-            else{
+            else
+            {
                 rank++;
                 ShowScoreBoardClientRpc(stats[i].Item1, stats[i].Item2, stats[i].Item3, stats[i].Item4, rank);
             }
         }
-        
+
         ChickenDinnerClientRpc();
     }
 
-    public bool CheckRank(List<(string, int, int, int)> stats, int indexA, int indexB){
-        if(stats[indexA].Item2 == stats[indexB].Item2){
-            if(stats[indexA].Item3 == stats[indexB].Item3){
-                if(stats[indexA].Item4 == stats[indexB].Item4){
+    public bool CheckRank(List<(string, int, int, int)> stats, int indexA, int indexB)
+    {
+        if (stats[indexA].Item2 == stats[indexB].Item2)
+        {
+            if (stats[indexA].Item3 == stats[indexB].Item3)
+            {
+                if (stats[indexA].Item4 == stats[indexB].Item4)
+                {
                     return true;
                 }
             }
@@ -463,7 +481,7 @@ public class RobotRoundsHandler : NetworkBehaviour
     [ClientRpc]
     public void ShowScoreBoardClientRpc(string bruh1, int stars, int deaths, int shotsFired, int rank)
     {
-        if(IsOwner)
+        if (IsOwner)
             scoreBoardObject.GetComponent<ScoreBoardScript>().AddToScoreBoard(bruh1, stars, deaths, shotsFired, rank);
 
     }
@@ -483,8 +501,8 @@ public class RobotRoundsHandler : NetworkBehaviour
     [ClientRpc]
     public void ChickenDinnerClientRpc()
     {
-        if(IsOwner)
-        scoreBoardObject.GetComponent<ScoreBoardScript>().ChickenDinner(playerInfo.GetComponent<PlayerNamePlate>().GetPlayerName().ToString());
+        if (IsOwner)
+            scoreBoardObject.GetComponent<ScoreBoardScript>().ChickenDinner(playerInfo.GetComponent<PlayerNamePlate>().GetPlayerName().ToString());
     }
 
 
