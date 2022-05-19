@@ -2,11 +2,13 @@
 using System.Collections;
 using Unity.Netcode;
 
+[RequireComponent(typeof(AudioSource))]
 public class CannonBehavior : NetworkBehaviour {
 
 	public Transform muzzle;
 	public GameObject shotPrefab;
 	public GameObject shot_spawn;
+	public AudioClip shotSound;
 
 	
 	// Update is called once per frame
@@ -32,6 +34,7 @@ public class CannonBehavior : NetworkBehaviour {
 		//m_shotPrefab.GetComponent<Light>().color = new Color.yellow;
 		GameObject laser = GameObject.Instantiate(shotPrefab, spawnPosition, muzzle);
 		Physics.IgnoreCollision(laser.GetComponent<BoxCollider>(), GetComponent<CapsuleCollider>(), true);
+		AudioSource.PlayClipAtPoint(shotSound, spawnPosition);
 		GameObject.Destroy(laser, 3f);
 	}
 

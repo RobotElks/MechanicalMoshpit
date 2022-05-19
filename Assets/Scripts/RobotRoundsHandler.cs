@@ -42,6 +42,8 @@ public class RobotRoundsHandler : NetworkBehaviour
 
     MultiplayerWorldParse worldScript;
 
+    public AudioSource swapPhaseSound;
+
     public float countdownTime = 5;
     public float programmingTime = 8;
     public float finishedTime = 10;
@@ -55,6 +57,8 @@ public class RobotRoundsHandler : NetworkBehaviour
     {
         countdownText = GameObject.Find("Countdown").GetComponent<TextMeshProUGUI>();
         gameTimeText = GameObject.Find("Game Time").GetComponent<TextMeshProUGUI>();
+
+        swapPhaseSound = GetComponent<AudioSource>();
 
         robotList = GameObject.Find("RobotList").GetComponent<RobotList>();
         readyScreen = GameObject.Find("ReadyScreen");
@@ -109,6 +113,7 @@ public class RobotRoundsHandler : NetworkBehaviour
     private void GameStateChanged(GameState oldState, GameState newState)
     {
         //Debug.Log("Old: " + oldState + " |  new: " + newState);
+        swapPhaseSound.Play();
 
         if (IsOwner)
         {

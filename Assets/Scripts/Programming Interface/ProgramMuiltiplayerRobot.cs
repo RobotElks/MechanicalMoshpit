@@ -34,6 +34,8 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     public Button turnLeftButton;
     string turnLeftString = "Turn Left ";
 
+    public AudioSource clickAudio;
+
     public RobotMultiplayerInstructionScript instructionScript;
     GameObject robot;
     RobotEnergy energyScript;
@@ -43,6 +45,8 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
 
     public int movingEnergy = 5;
     public float restoredEnergyPerRound = 30f;
+    public AudioClip healthStationSound;
+    public AudioClip energyStationSound;
 
 
     void Start()
@@ -91,22 +95,38 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetKeyDown("w"))
+        if (Input.GetKeyDown("w")){
             addMoveForwardToProgram();
-        else if (Input.GetKeyDown("s"))
+            clickAudio.Play();
+        }
+        else if (Input.GetKeyDown("s")){
             addMoveBackwardToProgram();
-        else if (Input.GetKeyDown("a"))
+            clickAudio.Play();
+        }
+        else if (Input.GetKeyDown("a")){
             addTurnLeftToProgram();
-        else if (Input.GetKeyDown("d"))
+            clickAudio.Play();
+        }   
+        else if (Input.GetKeyDown("d")){
             addTurnRightToProgram();
-        else if (Input.GetKeyDown("q"))
+            clickAudio.Play();
+        }
+        else if (Input.GetKeyDown("q")){
             decreaseGear();
-        else if (Input.GetKeyDown("e"))
+            clickAudio.Play();
+        }
+        else if (Input.GetKeyDown("e")){
             increaseGear();
-        else if (Input.GetKeyDown(KeyCode.Backspace))
+            clickAudio.Play();
+        }
+        else if (Input.GetKeyDown(KeyCode.Backspace)){
             removeLastInstruction();
-        else if (Input.GetKeyDown(KeyCode.Space) && roundsScript.GetCurrentGameState() == GameState.Programming)
+            clickAudio.Play();
+        }
+        else if (Input.GetKeyDown(KeyCode.Space) && roundsScript.GetCurrentGameState() == GameState.Programming){
             FinishedProgramming();
+            clickAudio.Play();
+        }
     }
 
 
@@ -246,14 +266,17 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
 
     public void stopProgram()
     {
+        
         energyScript.restoreEnergy(restoredEnergyPerRound);
         if (collisionScript.onHealthStation)
         {
+            AudioSource.PlayClipAtPoint(healthStationSound, robot.transform.position);
             healthScript.HealPowerUp();
             collisionScript.healthStationScript.Inactivate();
         }
         else if (collisionScript.onEnergyStation)
         {
+            AudioSource.PlayClipAtPoint(energyStationSound, robot.transform.position);
             energyScript.RestoreEnergyFull();
         }
         instructionScript.StopExecute();

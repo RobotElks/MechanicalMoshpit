@@ -12,6 +12,7 @@ public class RobotFlags : NetworkBehaviour
     Dead deadScript;
 
     public Slider flagSlider;
+    public AudioClip flagSound;
 
     NetworkVariable<int> flagCount = new NetworkVariable<int>();
 
@@ -34,6 +35,7 @@ public class RobotFlags : NetworkBehaviour
     {
         if (collisionScript.onFlagTile && !deadScript.IsDead())
         {
+            AudioSource.PlayClipAtPoint(flagSound, this.transform.position);
             IncreaseFlagCountServerRpc();
             MoveFlagServerRPC();
 

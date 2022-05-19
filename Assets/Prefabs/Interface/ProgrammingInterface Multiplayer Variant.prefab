@@ -19,6 +19,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4909130934311842446, guid: 0d0a1b5e002b82540b1130807e191ce3, type: 3}
+      propertyPath: m_Value
+      value: -0.0000030936035
+      objectReference: {fileID: 0}
     - target: {fileID: 4909130934760618945, guid: 0d0a1b5e002b82540b1130807e191ce3, type: 3}
       propertyPath: m_Name
       value: ProgrammingInterface Multiplayer Variant
@@ -111,6 +115,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8108056030294313861, guid: 0d0a1b5e002b82540b1130807e191ce3, type: 3}
+      propertyPath: energyStationSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 20608f1e06887a4428b01bfde2b89ed6, type: 3}
+    - target: {fileID: 8108056030294313861, guid: 0d0a1b5e002b82540b1130807e191ce3, type: 3}
+      propertyPath: healthStationSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 18bd7b78dbf5cd6418e70a066153f5f7, type: 3}
     m_RemovedComponents:
     - {fileID: 4909130933384946866, guid: 0d0a1b5e002b82540b1130807e191ce3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 0d0a1b5e002b82540b1130807e191ce3, type: 3}

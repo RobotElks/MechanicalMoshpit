@@ -9,6 +9,7 @@ public class PlayerHealthBar : NetworkBehaviour
     public Slider healthSlider;
     public Slider abovePlayerHealth;
     GameObject programmingInterface;
+    public AudioClip deathSound;
 
     // Network variables
     NetworkVariable<int> healthPoints = new NetworkVariable<int>(100);
@@ -19,7 +20,9 @@ public class PlayerHealthBar : NetworkBehaviour
     public int localHealth = 100;
     public int heal = 100;
     public bool changeColorLocal = false;
-    public int damageTilePower = 25;
+    public int damageTilePower = 10;
+    public AudioClip getHitSound;
+    
 
 
     //Local scripts
@@ -87,6 +90,7 @@ public class PlayerHealthBar : NetworkBehaviour
     }
     public void GetHit(int damageAmount)
     {
+        AudioSource.PlayClipAtPoint(getHitSound, this.transform.position);
         if (IsOwner && roundsHandlerScript.InsideActiveGame() && localHealth > 0)
         {
             if ((localHealth - damageAmount) > 0)
@@ -142,6 +146,7 @@ public class PlayerHealthBar : NetworkBehaviour
     public void killed()
     {
         MonoBehaviour[] comps = GetComponentsInParent<MonoBehaviour>();
+        AudioSource.PlayClipAtPoint(deathSound, this.transform.position);
         foreach (MonoBehaviour c in comps)
         {
             if (c.GetType() == typeof(MultiplayerDetectTarget))
