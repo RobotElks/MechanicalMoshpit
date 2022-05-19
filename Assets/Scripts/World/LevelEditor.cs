@@ -206,7 +206,8 @@ public class LevelEditor : MonoBehaviour
 
         for (int i = 0; i < names.Length; i++)
         {
-            names[i] = names[i].Split("\\")[1].Split(".")[0];
+            //names[i] = names[i].Split("\\")[1].Split(".")[0];
+            names[i] = Path.GetFileName(names[i]).Replace(".txt", "");
         }
 
         return names;

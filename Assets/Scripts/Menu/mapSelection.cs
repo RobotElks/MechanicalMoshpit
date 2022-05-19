@@ -21,7 +21,7 @@ public class mapSelection : MonoBehaviour
         worldBuilderScript.CreateFlag();
 
         GenerateMap();
-        
+
     }
 
     public void NextMap()
@@ -44,8 +44,8 @@ public class mapSelection : MonoBehaviour
         worldBuilderScript.LoadWorldFromInformation();
         worldBuilderScript.BuildWorld();
         worldBuilderScript.MoveWorldToOrigin();
-        
-        mapNameText.text = maps[selectedMap].Split("\\")[1].Split(".")[0] + " - " + worldBuilderScript.NumberOfSpawnpoints + " Players"; 
+
+        mapNameText.text = Path.GetFileName(maps[selectedMap]).Replace(".txt", "") + " - " + worldBuilderScript.NumberOfSpawnpoints + " Players";
     }
 
 
