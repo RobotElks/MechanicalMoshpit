@@ -234,6 +234,8 @@ public class LevelEditor : MonoBehaviour
 
     public void LoadWorldFromFile(string name)
     {
+        worldSize = Vector2.zero;
+
         GameObject.Destroy(worldParent);
         worldParent = new GameObject("Editor World");
         worldParent.transform.parent = this.transform;
@@ -271,6 +273,11 @@ public class LevelEditor : MonoBehaviour
                 tile.GetComponent<LevelEditorBlock>().SetTileList(tilePrefabs, beltInedx);
                 tile.GetComponent<LevelEditorBlock>().CurrentTileID = tileID;
                 worldBlocks.Add(tile);
+
+                if (x > worldSize.x)
+                    worldSize.x = x;
+                if (z > worldSize.y)
+                    worldSize.y = z;
             }
             catch
             {
@@ -319,7 +326,7 @@ public class LevelEditor : MonoBehaviour
         }
 
 
-
+        
         worldOrigin.transform.position = new Vector3(worldSize.x / 2, 0, worldSize.y / 2);
     }
 
