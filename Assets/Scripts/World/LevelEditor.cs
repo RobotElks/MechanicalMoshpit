@@ -27,7 +27,12 @@ public class LevelEditor : MonoBehaviour
     List<GameObject> worldBlocks = new List<GameObject>();
     List<GameObject> worldWalls = new List<GameObject>();
 
+
     public Vector2 worldSize = new Vector2(31, 31);
+    public int LevelWidth { get { return (int)worldSize.x; } set { worldSize.x = value; } }
+    public int LevelLength { get { return (int)worldSize.y; } set { worldSize.y = value; } }
+
+
     GameObject worldParent, wallParent;
 
     public Camera camera;
@@ -193,12 +198,6 @@ public class LevelEditor : MonoBehaviour
         }
 
         worldOrigin.transform.position = new Vector3(worldSize.x / 2, 0, worldSize.y / 2);
-    }
-
-    public void SetWorldSize(int widht, int height)
-    {
-        worldSize.x = widht;
-        worldSize.y = height;
     }
 
     public void SaveWorldToFile(string name)
