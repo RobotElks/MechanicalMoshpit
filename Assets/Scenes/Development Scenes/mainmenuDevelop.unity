@@ -3902,6 +3902,8 @@ MonoBehaviour:
   saved: 
   isHost: 0
   worldString: 
+  inputPlayerName: {fileID: 0}
+  inputHostName: {fileID: 0}
 --- !u!4 &1253345378
 Transform:
   m_ObjectHideFlags: 0
