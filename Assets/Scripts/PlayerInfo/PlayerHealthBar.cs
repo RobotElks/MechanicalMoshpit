@@ -132,7 +132,7 @@ public class PlayerHealthBar : NetworkBehaviour
 
     public void killed()
     {
-        MonoBehaviour[] comps = GetComponents<MonoBehaviour>();
+        MonoBehaviour[] comps = GetComponentsInParent<MonoBehaviour>();
         foreach (MonoBehaviour c in comps)
         {
             if (c.GetType() == typeof(MultiplayerDetectTarget))
@@ -140,6 +140,8 @@ public class PlayerHealthBar : NetworkBehaviour
                 c.enabled = false;
             }
         }
+
+
 
         healthSlider.value = (float)localHealth;
         abovePlayerHealth.value = (float)localHealth;

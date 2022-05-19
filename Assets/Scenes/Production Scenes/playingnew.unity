@@ -2409,6 +2409,26 @@ PrefabInstance:
       propertyPath: m_MaxValue
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 6046289590449099663, guid: 78736e894de974d4f970a5139667bc32, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6046289590449099663, guid: 78736e894de974d4f970a5139667bc32, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6046289590449099663, guid: 78736e894de974d4f970a5139667bc32, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6046289590449099663, guid: 78736e894de974d4f970a5139667bc32, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6046289590449099663, guid: 78736e894de974d4f970a5139667bc32, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6046289590678511216, guid: 78736e894de974d4f970a5139667bc32, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -2428,6 +2448,26 @@ PrefabInstance:
     - target: {fileID: 6046289591375436264, guid: 78736e894de974d4f970a5139667bc32, type: 3}
       propertyPath: m_AnchorMin.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6046289591415708374, guid: 78736e894de974d4f970a5139667bc32, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6046289591415708374, guid: 78736e894de974d4f970a5139667bc32, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6046289591415708374, guid: 78736e894de974d4f970a5139667bc32, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6046289591415708374, guid: 78736e894de974d4f970a5139667bc32, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6046289591415708374, guid: 78736e894de974d4f970a5139667bc32, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6046289591415708375, guid: 78736e894de974d4f970a5139667bc32, type: 3}
       propertyPath: m_RootOrder
