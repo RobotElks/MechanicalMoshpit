@@ -87,6 +87,21 @@ public class LevelEditor : MonoBehaviour
                 }
             }
         }
+
+        if (Input.GetMouseButtonDown(2) && !EventSystem.current.IsPointerOverGameObject() && !editorMenu.HasMenuopen())
+        {
+            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.collider.gameObject.CompareTag("LevelEditorBlock"))
+                {
+
+                    tileSelector.value = hit.collider.GetComponent<LevelEditorBlock>().CurrentTileID;
+                }
+            }
+        }
     }
 
     private void BlockKeyBindings()
@@ -348,7 +363,7 @@ public class LevelEditor : MonoBehaviour
         }
 
 
-        
+
         worldOrigin.transform.position = new Vector3(worldSize.x / 2, 0, worldSize.y / 2);
     }
 
