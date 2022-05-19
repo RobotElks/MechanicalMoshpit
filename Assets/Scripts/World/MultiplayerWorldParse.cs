@@ -72,6 +72,8 @@ public class MultiplayerWorldParse : MonoBehaviour
         return new Vector3(1015, 15, 15);
     }
 
+    public int NumberOfSpawnpoints { get { return robotSpawnPoints.Count; } }
+
     public Vector3[] GetSpawnPoints()
     {
         List<Vector3> sp = new List<Vector3>();
