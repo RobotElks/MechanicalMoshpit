@@ -54,6 +54,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9001449884510678628}
     m_Modifications:
+    - target: {fileID: 3055908429513138640, guid: 7c5b7b97713f95c4ba1bcc9b7776f89c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3055908429513138643, guid: 7c5b7b97713f95c4ba1bcc9b7776f89c, type: 3}
       propertyPath: m_Name
       value: Flag
@@ -158,6 +162,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1363037412436797202, guid: ea4e323efd1513f4181b5be459e8e127, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1363037412436797205, guid: ea4e323efd1513f4181b5be459e8e127, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1363037412436797206, guid: ea4e323efd1513f4181b5be459e8e127, type: 3}

@@ -54,6 +54,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9001449884510678628}
     m_Modifications:
+    - target: {fileID: -4838726018659711075, guid: 21b94344b766047458fb9c56e53eaf9a, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4838726018659711075, guid: 21b94344b766047458fb9c56e53eaf9a, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1652683576438646, guid: 21b94344b766047458fb9c56e53eaf9a, type: 3}
       propertyPath: m_Name
       value: Cute_Robot_2_BLUE
