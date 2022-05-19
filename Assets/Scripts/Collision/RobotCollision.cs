@@ -76,6 +76,12 @@ public class RobotCollision : NetworkBehaviour
         {
             onTurnRight = false;
         }
+        else if (collision.collider.CompareTag("ConveyorBelt"))
+        {
+            onConveyorBelt = false;
+        }
+
+
     }
 
     private void CollisionCheck(Collision collision)
