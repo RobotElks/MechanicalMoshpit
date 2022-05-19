@@ -45,6 +45,8 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
 
     public int movingEnergy = 5;
     public float restoredEnergyPerRound = 30f;
+    public AudioClip healthStationSound;
+    public AudioClip energyStationSound;
 
 
     void Start()
@@ -264,14 +266,17 @@ public class ProgramMuiltiplayerRobot : MonoBehaviour
 
     public void stopProgram()
     {
+        
         energyScript.restoreEnergy(restoredEnergyPerRound);
         if (collisionScript.onHealthStation)
         {
+            AudioSource.PlayClipAtPoint(healthStationSound, robot.transform.position);
             healthScript.HealPowerUp();
             collisionScript.healthStationScript.Inactivate();
         }
         else if (collisionScript.onEnergyStation)
         {
+            AudioSource.PlayClipAtPoint(energyStationSound, robot.transform.position);
             energyScript.RestoreEnergyFull();
         }
         instructionScript.StopExecute();

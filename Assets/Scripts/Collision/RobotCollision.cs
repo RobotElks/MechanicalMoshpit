@@ -16,6 +16,8 @@ public class RobotCollision : NetworkBehaviour
     public bool onDamageTile = false;
     public bool onFlagTile = false;
     private int damage = 10;
+    public AudioClip collisonSound;
+
 
 
 	void Start () {
@@ -49,11 +51,13 @@ public class RobotCollision : NetworkBehaviour
         if (collision.collider.CompareTag("HealthStation"))
         {
             onHealthStation = false;
+            
         }
 
         else if (collision.collider.CompareTag("EnergyStation"))
         {
             onEnergyStation = false;
+            
         }
 
         else if (collision.collider.CompareTag("DamageTile"))
@@ -143,6 +147,7 @@ public class RobotCollision : NetworkBehaviour
 
     private void PlayerCollision(Collision robotCollision)
     {
+        AudioSource.PlayClipAtPoint(collisonSound, this.transform.position);
         if (IsOwner)
         {
             RobotMultiplayerMovement otherRobotMovementScript = robotCollision.gameObject.GetComponent<RobotMultiplayerMovement>();

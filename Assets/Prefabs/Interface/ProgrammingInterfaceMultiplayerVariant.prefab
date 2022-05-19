@@ -2666,9 +2666,12 @@ MonoBehaviour:
   moveBackwardButton: {fileID: 4909130934420711051}
   turnRightButton: {fileID: 4909130934044146066}
   turnLeftButton: {fileID: 4909130934006205608}
+  clickAudio: {fileID: 0}
   instructionScript: {fileID: 0}
   movingEnergy: 5
   restoredEnergyPerRound: 30
+  healthStationSound: {fileID: 8300000, guid: 18bd7b78dbf5cd6418e70a066153f5f7, type: 3}
+  energyStationSound: {fileID: 8300000, guid: 20608f1e06887a4428b01bfde2b89ed6, type: 3}
 --- !u!1 &4909130934914033481
 GameObject:
   m_ObjectHideFlags: 0

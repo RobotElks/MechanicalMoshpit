@@ -1997,6 +1997,7 @@ GameObject:
   - component: {fileID: 7831919321826258242}
   - component: {fileID: 3030283893197960411}
   - component: {fileID: -7393250678059871039}
+  - component: {fileID: 2222588791922817244}
   m_Layer: 6
   m_Name: ScrapV1
   m_TagString: Player
@@ -2177,6 +2178,7 @@ MonoBehaviour:
     m_InternalValue: 0
   playerInfo: {fileID: 7575047151173342961}
   scoreBoardPrefab: {fileID: 2111024914152377703, guid: c00fbb0e1aa1b4ac5a267b33def2af47, type: 3}
+  swapPhaseSound: {fileID: 0}
   countdownTime: 5
   programmingTime: 25
   finishedTime: 8
@@ -2197,6 +2199,7 @@ MonoBehaviour:
   muzzle: {fileID: 4694037814270332}
   shotPrefab: {fileID: 8253658233895520516, guid: c8dc72b05dfb199478565d2a7f514582, type: 3}
   shot_spawn: {fileID: 2690420375951646993}
+  shotSound: {fileID: 8300000, guid: 2b9f18b9fe1e0cb4dab79f3264e377d4, type: 3}
 --- !u!114 &6222840116744481913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2217,6 +2220,7 @@ MonoBehaviour:
   onTurnRight: 0
   onDamageTile: 0
   onFlagTile: 0
+  collisonSound: {fileID: 8300000, guid: d4a138ab79667b844b91ded061d01da3, type: 3}
 --- !u!136 &7831919321826258242
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2260,6 +2264,103 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flagSlider: {fileID: 3381286924730265647}
+  flagSound: {fileID: 8300000, guid: 732b6c4f148c67a4393c3185803c9af0, type: 3}
+--- !u!82 &2222588791922817244
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1652683576438646}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 49de6fb41f097ed4789921a00b8ffae7, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.25
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1663719857077792
 GameObject:
   m_ObjectHideFlags: 0
@@ -3773,11 +3874,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthSlider: {fileID: 0}
   abovePlayerHealth: {fileID: 0}
+  deathSound: {fileID: 8300000, guid: 0501bdbbbbbd6a246baab75cd446b360, type: 3}
   localDeaths: 0
   localHealth: 100
   heal: 100
   changeColorLocal: 0
   damageTilePower: 10
+  getHitSound: {fileID: 8300000, guid: 216bc23381a5327439be8740f8243415, type: 3}
 --- !u!1 &7632391356594547115
 GameObject:
   m_ObjectHideFlags: 0

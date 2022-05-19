@@ -11,6 +11,7 @@ public class RobotFlags : NetworkBehaviour
     RobotRoundsHandler roundsScript;
 
     public Slider flagSlider;
+    public AudioClip flagSound;
 
     NetworkVariable<int> flagCount = new NetworkVariable<int>();
 
@@ -34,6 +35,7 @@ public class RobotFlags : NetworkBehaviour
         //Check victory
         if (collisionScript.onFlagTile)
         {
+            AudioSource.PlayClipAtPoint(flagSound, this.transform.position);
             IncreaseFlagCountServerRpc();
             MoveFlagServerRPC();
 
