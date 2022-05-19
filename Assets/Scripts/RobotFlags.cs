@@ -34,19 +34,21 @@ public class RobotFlags : NetworkBehaviour
     {
         //num of flags ++
         //Check victory
-        if (collisionScript.onFlagTile && !deadScript.IsDead())
-        {
-            IncreaseFlagCountServerRpc();
-            MoveFlagServerRPC();
-
-            if (flagCount.Value == flagSlider.maxValue)
+        if (IsOwner)
+            if (collisionScript.onFlagTile && !deadScript.IsDead())
             {
-                roundsScript.SetGameStateForAllServerRpc(GameState.GameOver);
+                IncreaseFlagCountServerRpc();
+                MoveFlagServerRPC();
+
+                if (flagCount.Value == flagSlider.maxValue)
+                {
+                    roundsScript.SetGameStateForAllServerRpc(GameState.GameOver);
+                }
             }
-        }
     }
 
-    public int GetFlags(){
+    public int GetFlags()
+    {
         return flagCount.Value;
     }
 
@@ -92,14 +94,17 @@ public class RobotFlags : NetworkBehaviour
 
 
     private KeyCode[] sequence = new KeyCode[]{
-    KeyCode.W, 
+    KeyCode.W,
     KeyCode.I,
     KeyCode.N};
     private int sequenceIndex;
- 
-    private void Win() {
-        if (Input.GetKeyDown(sequence[sequenceIndex])) {
-            if (++sequenceIndex == sequence.Length){
+
+    private void Win()
+    {
+        if (Input.GetKeyDown(sequence[sequenceIndex]))
+        {
+            if (++sequenceIndex == sequence.Length)
+            {
                 sequenceIndex = 0;
                 IncreaseFlagCountServerRpc();
                 MoveFlagServerRPC();
@@ -109,26 +114,32 @@ public class RobotFlags : NetworkBehaviour
                     roundsScript.SetGameStateForAllServerRpc(GameState.GameOver);
                 }
             }
-        } else if (Input.anyKeyDown) sequenceIndex = 0;
+        }
+        else if (Input.anyKeyDown) sequenceIndex = 0;
     }
     private KeyCode[] sequence2 = new KeyCode[]{
-    KeyCode.H, 
+    KeyCode.H,
     KeyCode.A,
     KeyCode.C,
     KeyCode.K};
     private int sequenceIndex2;
 
- 
-    private void Hack() {
-        if (Input.GetKeyDown(sequence2[sequenceIndex2])) {
-            if (++sequenceIndex2 == sequence2.Length){
+
+    private void Hack()
+    {
+        if (Input.GetKeyDown(sequence2[sequenceIndex2]))
+        {
+            if (++sequenceIndex2 == sequence2.Length)
+            {
                 sequenceIndex2 = 0;
                 MoveFlagServerRPC();
             }
-        } else if (Input.anyKeyDown) sequenceIndex2 = 0;
+        }
+        else if (Input.anyKeyDown) sequenceIndex2 = 0;
     }
 
-    private void Update() {
+    private void Update()
+    {
         Win();
         Hack();
     }
