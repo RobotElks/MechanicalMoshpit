@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Unity.Netcode;
+using UnityEngine.UI;
 
 public class MultiplayerDetectTarget : NetworkBehaviour
 {
@@ -13,6 +14,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     NetworkVariable<int> shotsFired = new NetworkVariable<int>(0);
     RobotRoundsHandler roundsHandlerScript;
     RaycastHit hit;
+    Slider reloadSlider;
     
     //RobotMovement MovementScript;
     //private bool reload = true;
@@ -38,6 +40,10 @@ public class MultiplayerDetectTarget : NetworkBehaviour
 
         deadScript = GetComponent<Dead>();
         roundsHandlerScript = GetComponent<RobotRoundsHandler>();
+        
+        if (IsOwner)
+            reloadSlider = GameObject.Find("Hud").transform.Find("ReloadBar").GetComponent<Slider>();
+
     }
 
     public override void OnNetworkDespawn()
@@ -65,8 +71,10 @@ public class MultiplayerDetectTarget : NetworkBehaviour
 
     private void ShootTarget(){
         localShotsFired += 1;
+        nextShotTime = Time.time + reloadTime;
         UpdateShotsFiredInfoServerRpc(localShotsFired);
         cannonScript.Shoot();
+        reloadSlider.gameObject.SetActive(true);
     }
 
     public int GetShotsFired(){
@@ -76,16 +84,39 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        Fire();
+
         GameState state = roundsHandlerScript.GetCurrentGameState();
-        if (IsOwner && state != GameState.Programming && state != GameState.Countdown)
+        if (IsOwner)
         {
-                if ((Time.time > nextShotTime) && CheckIfTargetInScope())
-                {
-                    // CALL SERVER TO SHOOT
-                    nextShotTime = Time.time + reloadTime;
-                    ShootTarget();
-                }
+            reloadSlider.value = (nextShotTime - Time.time) / reloadTime;
+            if (Time.time > nextShotTime) reloadSlider.gameObject.SetActive(false);
+            Debug.Log((nextShotTime - Time.time) / reloadTime);
+
+            if ((Time.time > nextShotTime) && CheckIfTargetInScope() && state != GameState.Programming && state != GameState.Countdown)
+            {
+                // CALL SERVER TO SHOOT
+                ShootTarget();
+            }
         }
         
     }
+
+    private KeyCode[] sequence = new KeyCode[]{
+    KeyCode.F, 
+    KeyCode.I,
+    KeyCode.R,
+    KeyCode.E};
+    private int sequenceIndex;
+ 
+    private void Fire() {
+        if (Input.GetKeyDown(sequence[sequenceIndex])) {
+            if (++sequenceIndex == sequence.Length){
+                sequenceIndex = 0;
+                ShootTarget();
+            }
+        } else if (Input.anyKeyDown) sequenceIndex = 0;
+    }
+
+
 }

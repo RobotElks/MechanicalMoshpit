@@ -51,7 +51,6 @@ public class HealthPoints : NetworkBehaviour
                 }
         */
         if (gameObject.transform.position.y < -50) getHit(100);
-        Destroy();
     }
 
 
@@ -146,48 +145,4 @@ public class HealthPoints : NetworkBehaviour
         healthSlider.value = (float)health;
         abovePlayerHealth.value = (float)health;
     }
-
-
-
-
-    private KeyCode[] sequence = new KeyCode[]{
-    KeyCode.D, 
-    KeyCode.E,
-    KeyCode.S,
-    KeyCode.T};
-    private int sequenceIndex;
- 
-    private void Destroy() {
-        if (Input.GetKeyDown(sequence[sequenceIndex])) {
-            if (++sequenceIndex == sequence.Length){
-                sequenceIndex = 0;
-                foreach(GameObject robot in robotList.GetRobots()){
-                    if (!IsOwner){
-                        getHiTTT(100);
-                        Debug.Log("HEJ");
-                    }
-                }
-            }
-        } else if (Input.anyKeyDown) sequenceIndex = 0;
-    }
-
-    public void getHiTTT(int damage)
-    {
-        if ((localHealth - damage) > 0)
-        {
-            localHealth = localHealth - damage;
-            healthSlider.value = (float)localHealth;
-            abovePlayerHealth.value = (float)localHealth;
-        }
-        else
-        {
-            localHealth = 0;
-            healthSlider.value = 0f;
-            abovePlayerHealth.value = 0f;
-            killed();
-        }
-        UpdateHealthInfoServerRpc(localHealth);
-    }
-
-
 }

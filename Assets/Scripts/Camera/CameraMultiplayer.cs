@@ -14,6 +14,7 @@ public class CameraMultiplayer : MonoBehaviour
     public Vector2 zoomMinMax = new Vector2(5, 20);
     private float zoomMin;
     private float zoomMax;
+    private float cameraDistanceOverPlayer = 2f;
 
     public void SetLocalPlayer(Transform localPlayer)
     {
@@ -55,7 +56,9 @@ public class CameraMultiplayer : MonoBehaviour
             }
 
             offset = Mathf.Clamp(offset, zoomMinMax.x, zoomMinMax.y);
-            transform.position = localPlayer.position - transform.forward * offset;
+            Vector3 lockPosition = localPlayer.position;
+            lockPosition.y += cameraDistanceOverPlayer;
+            transform.position = lockPosition - transform.forward * offset;
         }
     }
 }

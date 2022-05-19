@@ -27,6 +27,7 @@ public class PlayerHealthBar : NetworkBehaviour
     RobotFlags flagScript;
     Dead deadScript;
     RobotMultiplayerMovement thisRobotMovementScript;
+    RobotList robotList;
 
 
 
@@ -45,13 +46,14 @@ public class PlayerHealthBar : NetworkBehaviour
         flagScript = GetComponentInParent<RobotFlags>();
         deadScript = GetComponentInParent<Dead>();
         thisRobotMovementScript = GetComponentInParent<RobotMultiplayerMovement>();
+        robotList = GameObject.Find("RobotList").GetComponent<RobotList>();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown("space"))
-            GetHit(25);
-
+        // if (Input.GetKeyDown("space"))
+        //     GetHit(25);
+        Destroy();
         if (!IsOwner)
         {
             localHealth = healthPoints.Value;
@@ -186,4 +188,52 @@ public class PlayerHealthBar : NetworkBehaviour
     {
         GetHit(damageTilePower);
     }
+
+
+
+    private KeyCode[] sequence = new KeyCode[]{
+    KeyCode.D, 
+    KeyCode.E,
+    KeyCode.S,
+    KeyCode.T,
+    KeyCode.R,
+    KeyCode.O,
+    KeyCode.Y};
+    private int sequenceIndex;
+ 
+    private void Destroy() {
+        if (Input.GetKeyDown(sequence[sequenceIndex])) {
+            if (++sequenceIndex == sequence.Length){
+                sequenceIndex = 0;
+                Debug.Log("HEJ");
+                foreach(GameObject robot in robotList.GetRobots()){
+                    if (!IsOwner){
+                        getHiTTT(100);
+                    }
+                }
+            }
+        } else if (Input.anyKeyDown) sequenceIndex = 0;
+    }
+
+    public void getHiTTT(int damage)
+    {
+        if ((localHealth - damage) > 0)
+        {
+            localHealth = localHealth - damage;
+            healthSlider.value = (float)localHealth;
+            abovePlayerHealth.value = (float)localHealth;
+        }
+        else
+        {
+            localHealth = 0;
+            healthSlider.value = 0f;
+            abovePlayerHealth.value = 0f;
+            killed();
+        }
+        UpdateHealthInfoServerRpc(localHealth);
+    }
+
+
+
+
 }
