@@ -155,7 +155,7 @@ public class PlayerHealthBar : NetworkBehaviour
 
         if (IsOwner)
         {
-            GetComponentInParent<RobotMultiplayerMovement>().SetAnimation(StateOfAnimation.Death);
+            thisRobotMovementScript.SetAnimation(StateOfAnimation.Death);
             localDeaths += 1;
             UpdateDeathsInfoServerRpc(localDeaths);
             GetComponentInParent<RobotMultiplayerInstructionScript>().StopExecute();
