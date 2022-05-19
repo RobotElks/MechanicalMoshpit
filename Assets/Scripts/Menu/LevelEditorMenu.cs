@@ -18,7 +18,7 @@ public class LevelEditorMenu : MonoBehaviour
     public CameraMovement cameraMovement;
 
     //Save panel 
-    public TextMeshProUGUI saveNameInput;
+    public TMP_InputField saveNameInput;
 
     //Load panel
     public TMP_Dropdown levelDropdown;
@@ -93,6 +93,7 @@ public class LevelEditorMenu : MonoBehaviour
     public void LoadMap()
     {
         levelEditor.LoadWorldFromFile(levelDropdown.options[levelDropdown.value].text);
+        saveNameInput.text = levelDropdown.options[levelDropdown.value].text;
         ClosePanels();
     }
 
