@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3055908429513138647}
   - component: {fileID: 3055908429513138640}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Flag
   m_TagString: Flag
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 4808502158746122749}
   - component: {fileID: 452515121043750049}
   - component: {fileID: 9130936024649468629}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FX
   m_TagString: Untagged
   m_Icon: {fileID: 0}

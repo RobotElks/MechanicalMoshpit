@@ -15,7 +15,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     RobotRoundsHandler roundsHandlerScript;
     RaycastHit hit;
     Slider reloadSlider;
-    
+
     //RobotMovement MovementScript;
     //private bool reload = true;
     //public float fireRate = 0.5f;
@@ -23,6 +23,8 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     public int localShotsFired;
     private float nextShotTime = 0.0f;
     private float reloadTime = 5f;
+    private float detectionDistance = 30f;
+    public LayerMask maskRobots;
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +42,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
 
         deadScript = GetComponent<Dead>();
         roundsHandlerScript = GetComponent<RobotRoundsHandler>();
-        
+
         if (IsOwner)
             reloadSlider = GameObject.Find("Hud").transform.Find("ReloadBar").GetComponent<Slider>();
 
@@ -53,12 +55,14 @@ public class MultiplayerDetectTarget : NetworkBehaviour
 
 
 
-    private bool CheckIfTargetInScope(){
-        if (Physics.Raycast(this.transform.position, this.transform.forward, out hit))
+    private bool CheckIfTargetInScope()
+    {
+        Vector3 startPoint = transform.position + new Vector3(0, 0.5f, 0) + Vector3.Scale(transform.forward, new Vector3(0.55f, 0f, 0.55f));
+        //Debug.DrawRay(startPoint, transform.forward, Color.red, 0.3f);
+        if (Physics.Raycast(startPoint, transform.forward, out hit, detectionDistance))
         {
-
-            if(hit.collider.tag == "Player")
-            return !hit.collider.gameObject.GetComponent<Dead>().IsDead();
+            if (hit.collider.tag == "Player")
+                return !hit.collider.gameObject.GetComponent<Dead>().IsDead();
         }
         return false;
     }
@@ -69,7 +73,8 @@ public class MultiplayerDetectTarget : NetworkBehaviour
         shotsFired.Value = localShots;
     }
 
-    private void ShootTarget(){
+    private void ShootTarget()
+    {
         localShotsFired += 1;
         nextShotTime = Time.time + reloadTime;
         UpdateShotsFiredInfoServerRpc(localShotsFired);
@@ -77,7 +82,8 @@ public class MultiplayerDetectTarget : NetworkBehaviour
         reloadSlider.gameObject.SetActive(true);
     }
 
-    public int GetShotsFired(){
+    public int GetShotsFired()
+    {
         return shotsFired.Value;
     }
 
@@ -95,26 +101,31 @@ public class MultiplayerDetectTarget : NetworkBehaviour
             if ((Time.time > nextShotTime) && CheckIfTargetInScope() && state != GameState.Programming && state != GameState.Countdown)
             {
                 // CALL SERVER TO SHOOT
+                nextShotTime = Time.time + reloadTime;
                 ShootTarget();
             }
         }
-        
+
     }
 
     private KeyCode[] sequence = new KeyCode[]{
-    KeyCode.F, 
+    KeyCode.F,
     KeyCode.I,
     KeyCode.R,
     KeyCode.E};
     private int sequenceIndex;
- 
-    private void Fire() {
-        if (Input.GetKeyDown(sequence[sequenceIndex])) {
-            if (++sequenceIndex == sequence.Length){
+
+    private void Fire()
+    {
+        if (Input.GetKeyDown(sequence[sequenceIndex]))
+        {
+            if (++sequenceIndex == sequence.Length)
+            {
                 sequenceIndex = 0;
                 ShootTarget();
             }
-        } else if (Input.anyKeyDown) sequenceIndex = 0;
+        }
+        else if (Input.anyKeyDown) sequenceIndex = 0;
     }
 
 
