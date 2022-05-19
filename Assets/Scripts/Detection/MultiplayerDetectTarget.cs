@@ -21,6 +21,8 @@ public class MultiplayerDetectTarget : NetworkBehaviour
     public int localShotsFired;
     private float nextShotTime = 0.0f;
     private float reloadTime = 5f;
+    private float detectionDistance = 30f;
+    public LayerMask maskRobots;
 
     // Start is called before the first frame update
     void Start()
@@ -48,11 +50,12 @@ public class MultiplayerDetectTarget : NetworkBehaviour
 
 
     private bool CheckIfTargetInScope(){
-        if (Physics.Raycast(this.transform.position, this.transform.forward, out hit))
+        Vector3 startPoint = transform.position + new Vector3(0, 0.5f, 0) + Vector3.Scale(transform.forward, new Vector3(0.55f,0f,0.55f));
+        //Debug.DrawRay(startPoint, transform.forward, Color.red, 0.3f);
+        if (Physics.Raycast(startPoint, transform.forward, out hit, detectionDistance))
         {
-
             if(hit.collider.tag == "Player")
-            return !hit.collider.gameObject.GetComponent<Dead>().IsDead();
+                return !hit.collider.gameObject.GetComponent<Dead>().IsDead();
         }
         return false;
     }

@@ -149,7 +149,7 @@ public class RobotCollision : NetworkBehaviour
             if (otherRobotMovementScript.IsMoving() || otherRobotMovementScript.IsPushed())
             {
                 Vector3 otherRobotForceOnThis = otherRobotMovementScript.GetForceToMe(transform.position);
-                Debug.Log((int)otherRobotForceOnThis.magnitude);
+                //Debug.Log((int)otherRobotForceOnThis.magnitude);
                 thisRobotMovementScript.Push(otherRobotForceOnThis, (int)otherRobotForceOnThis.magnitude);
                 //Debug.Log("Other robots force on this robot : " + otherRobotForceOnThis);
                 if (otherRobotForceOnThis == Vector3.zero && thisRobotMovementScript.IsMoving())
@@ -200,13 +200,15 @@ public class RobotCollision : NetworkBehaviour
     {
         Vector3 pos = transform.position + new Vector3(0, 1, 0);
         Vector3 dir = thisRobotMovementScript.GetMovingDirection();
-        //Debug.Log("Raycast. Pos : " + pos + ", dir : " + dir);
+        int layerMask = 1 << LayerMask.NameToLayer("Walls");
+        float maxDistance = 1.8f;
+
         RaycastHit hit;
-        if (Physics.Raycast(pos, dir, out hit))
+        if (Physics.Raycast(pos, dir, out hit, maxDistance, layerMask))
         {
             //Debug.Log("Hit info. Hit tag : " + hit.collider.tag + ", Hit distance : " + hit.distance);
             // A WALL IS A TILE A WAY (BUT NOT NEXT TO ROBOT)
-            return ((hit.collider.tag == "wallX" || hit.collider.tag == "wallZ") && (hit.distance > 0.8 && hit.distance < 1.5f));
+            return ((hit.collider.tag == "wallX" || hit.collider.tag == "wallZ") && hit.distance > 0.8);
         }
         else
             return false;

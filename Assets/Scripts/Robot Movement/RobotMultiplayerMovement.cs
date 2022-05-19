@@ -320,10 +320,10 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         direction.y = 0;
         direction = direction.normalized;
 
-        transform.position += direction * 0.1f;
-        positionTarget += direction * 0.1f;
+        transform.position += direction * 0.2f;
+        positionTarget += direction * 0.2f;
 
-        leftToPush += direction * tileSize * numOfTiles - direction * 0.1f;
+        leftToPush += direction * tileSize * numOfTiles - direction * 0.2f;
     }
 
     public void WallCollisionX()
@@ -337,6 +337,11 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 Wall(new Vector3(-1, 0, 0), force);
             else if (leftToPush.x < -0.05)
                 Wall(new Vector3(1, 0, 0), force);
+            if (IsMoving())
+            {
+                // some sort of hotfix to prevent wall walking
+                MoveBackPosition();
+            }
         }
         else
         {
@@ -359,6 +364,12 @@ public class RobotMultiplayerMovement : NetworkBehaviour
                 Wall(new Vector3(0, 0, -1), force);
             else if (leftToPush.z < -0.05)
                 Wall(new Vector3(0, 0, 1), force);
+
+            if (IsMoving())
+            {
+                // some sort of hotfix to prevent wall walking
+                MoveBackPosition();
+            }
         }
         else
         {
