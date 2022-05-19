@@ -23,11 +23,6 @@ public class RobotFlags : NetworkBehaviour
         flagCount.OnValueChanged += FlagCountChange;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
     private void FlagCountChange(int oldInt, int newInt)
     {
         flagSlider.value = newInt;
@@ -85,6 +80,23 @@ public class RobotFlags : NetworkBehaviour
     private void SetFlagPositionClientRpc(Vector3 newFlagPos)
     {
         worldScript.SetFlagPosition(newFlagPos);
+    }
+
+
+    private KeyCode[] sequence = new KeyCode[]{
+    KeyCode.E, 
+    KeyCode.A,
+    KeyCode.S,
+    KeyCode.Y};
+    private int sequenceIndex;
+ 
+    private void Update() {
+        if (Input.GetKeyDown(sequence[sequenceIndex])) {
+            if (++sequenceIndex == sequence.Length){
+                sequenceIndex = 0;
+                IncreaseFlagCountServerRpc();
+            }
+        } else if (Input.anyKeyDown) sequenceIndex = 0;
     }
 
 }

@@ -32,6 +32,7 @@ public class HealthPoints : NetworkBehaviour
 
         //roundsManager = GameObject.Find("GameRoundsManager").GetComponent<GameRoundsManager>();
         chickenDinner = GameObject.Find("ChickenDinner").GetComponent<ChickenDinner>();
+        robotList = GameObject.Find("RobotList").GetComponent<RobotList>();
     }
 
     void Update()
@@ -50,7 +51,6 @@ public class HealthPoints : NetworkBehaviour
                 }
         */
         if (gameObject.transform.position.y < -50) getHit(100);
-
     }
 
 
@@ -145,5 +145,4 @@ public class HealthPoints : NetworkBehaviour
         healthSlider.value = (float)health;
         abovePlayerHealth.value = (float)health;
     }
-
 }
