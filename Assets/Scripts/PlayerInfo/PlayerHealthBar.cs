@@ -110,7 +110,7 @@ public class PlayerHealthBar : NetworkBehaviour
     {
         healthPoints.Value = health;
         abovePlayerHealth.value = (float)health;
-        healthSlider.value = (float)health;
+        //healthSlider.value = (float)health;
     }
 
     [ServerRpc]
@@ -155,13 +155,12 @@ public class PlayerHealthBar : NetworkBehaviour
 
         if (IsOwner)
         {
-            thisRobotMovementScript.SetAnimation(StateOfAnimation.Death);
             localDeaths += 1;
             UpdateDeathsInfoServerRpc(localDeaths);
             GetComponentInParent<RobotMultiplayerInstructionScript>().StopExecute();
             programmingInterface.SetActive(false);
             flagScript.LoseFlag();
-            //robotMovementScript.MoveToSpawnPoints(worldScript.GetSpawnPoint());
+            thisRobotMovementScript.SetAnimation(StateOfAnimation.Death);
         }
 
         ulong localClientId = NetworkManager.Singleton.LocalClientId;
