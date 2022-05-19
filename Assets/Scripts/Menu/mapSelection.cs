@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using TMPro;
 
 public class mapSelection : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class mapSelection : MonoBehaviour
     public int selectedMap;
     public MultiplayerWorldParse worldBuilderScript;
     public SaveIP informationScript;
+
+    public TextMeshProUGUI mapNameText;
 
     public void Start()
     {
@@ -41,6 +44,8 @@ public class mapSelection : MonoBehaviour
         worldBuilderScript.LoadWorldFromInformation();
         worldBuilderScript.BuildWorld();
         worldBuilderScript.MoveWorldToOrigin();
+        
+        mapNameText.text = maps[selectedMap].Split("\\")[1].Split(".")[0] + " - " + worldBuilderScript.NumberOfSpawnpoints + " Players"; 
     }
 
 
