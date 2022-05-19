@@ -57,7 +57,7 @@ public class MultiplayerDetectTarget : NetworkBehaviour
 
     private bool CheckIfTargetInScope()
     {
-        Vector3 startPoint = transform.position + new Vector3(0, 0.5f, 0) + Vector3.Scale(transform.forward, new Vector3(0.55f, 0f, 0.55f));
+        Vector3 startPoint = transform.position + new Vector3(0, 0.5f, 0);
         //Debug.DrawRay(startPoint, transform.forward, Color.red, 0.3f);
         if (Physics.Raycast(startPoint, transform.forward, out hit, detectionDistance))
         {
