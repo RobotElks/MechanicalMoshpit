@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using System.Linq;
 
 public class MultiplayerWorldParse : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class MultiplayerWorldParse : MonoBehaviour
 
     public string worldString = "";
 
+    public int minFlagDistance = 1;
+
     GameObject worldParent;
 
     Vector3 worldMiddle = Vector3.zero;
@@ -30,10 +33,11 @@ public class MultiplayerWorldParse : MonoBehaviour
     Vector3 defaultFlagSpawn = Vector3.zero;
     GameObject flag;
 
+    RobotList robotList;
+
     // Start is called before the first frame update
     void Start()
     {
-        CreateWorldParent();
     }
 
 
@@ -67,6 +71,8 @@ public class MultiplayerWorldParse : MonoBehaviour
     {
         return new Vector3(1015, 15, 15);
     }
+
+    public int NumberOfSpawnpoints { get { return robotSpawnPoints.Count; } }
 
     public Vector3[] GetSpawnPoints()
     {
@@ -254,6 +260,12 @@ public class MultiplayerWorldParse : MonoBehaviour
 
     }
 
+    public void SetRobotList()
+    {
+        robotList = GameObject.Find("RobotList").GetComponent<RobotList>();
+
+    }
+
     public void CreateFlag()
     {
         flag = Instantiate(tileFlag, defaultFlagSpawn, Quaternion.identity, this.transform);
@@ -267,12 +279,12 @@ public class MultiplayerWorldParse : MonoBehaviour
 
     public void RandomFlagPosition()
     {
-        Vector3 oldPos = flag.transform.position;
-
-        while ((oldPos - flag.transform.position).magnitude < 10)
+        int tries = 0;
+        GameObject[] robots = robotList.GetRobots();
+        do
         {
             flag.transform.position = flagSpawnPoints[Random.Range(0, flagSpawnPoints.Count)];
-        }
+        } while (robots.Where(r => (r.transform.position - flag.transform.position).magnitude < minFlagDistance).Count() > 0 && ++tries < 1000);
     }
 
     public Vector3 GetFlagPosition()
@@ -284,5 +296,11 @@ public class MultiplayerWorldParse : MonoBehaviour
     {
         flag.transform.position = newPos;
     }
+
+    public Vector3 GetWorldMiddle()
+    {
+        return worldMiddle;
+    }
+
 
 }

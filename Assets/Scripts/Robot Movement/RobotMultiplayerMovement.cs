@@ -37,9 +37,12 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     Slider gearSlider;
     Instructions currentInstruction = Instructions.None;
 
+    MultiplayerWorldParse worldScript; 
+
     public override void OnNetworkSpawn()
     {
         gearSlider = GameObject.Find("ProgrammingInterface Multiplayer Variant").GetComponentInChildren<Slider>();
+        worldScript = GameObject.Find("Load World Multiplayer").GetComponent<MultiplayerWorldParse>();
 
         //Set gear to third to calculate pushedSpeed
         SetGear(Gear.Third);
@@ -56,12 +59,17 @@ public class RobotMultiplayerMovement : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+
         animator.SetInteger("transitionDecider", (int)localAnimationState);
 
         //Local player owns the object
         if (IsOwner)
         {
-            
+            if (deadScript.IsDead())
+            {
+                localAnimationState = StateOfAnimation.Death;
+            }
+
             //Rotation movement
             if (IsRotating())
             {
@@ -260,6 +268,14 @@ public class RobotMultiplayerMovement : NetworkBehaviour
         transform.position = spawnPoint;
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         SetGear(Gear.First);
+
+        //Google stuff KekW
+        Vector3 aimingDir = worldScript.GetWorldMiddle() - transform.position;
+        float angle = -Mathf.Atan2(aimingDir.z, aimingDir.x) * Mathf.Rad2Deg + 90.0f;
+        angle = Mathf.Round(angle / 90.0f) * 90.0f;
+        Quaternion qTo = Quaternion.AngleAxis(angle, Vector3.up);
+        transform.rotation = qTo;
+
     }
 
     //Call on function to set gear to either First, Second or Third.

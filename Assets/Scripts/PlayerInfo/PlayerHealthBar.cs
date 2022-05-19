@@ -19,7 +19,7 @@ public class PlayerHealthBar : NetworkBehaviour
     public int localHealth = 100;
     public int heal = 100;
     public bool changeColorLocal = false;
-    public int damageTilePower = 10;
+    public int damageTilePower = 25;
 
 
     //Local scripts
@@ -28,10 +28,6 @@ public class PlayerHealthBar : NetworkBehaviour
     Dead deadScript;
     RobotMultiplayerMovement thisRobotMovementScript;
     RobotEnergy energScript;
-
-
-
-
 
     public override void OnNetworkSpawn()
     {
@@ -51,19 +47,15 @@ public class PlayerHealthBar : NetworkBehaviour
 
     void Update()
     {
-        // if (Input.GetKeyDown("space"))
-        //     GetHit(25);
-
         if (!IsOwner)
         {
             localHealth = healthPoints.Value;
             abovePlayerHealth.value = (float)localHealth;
-            //healthSlider.value = (float)localHealth;
         }
-        //if (IsOwner)
-        //{
-        //    healthSlider.value = (float)localHealth;
-        //}
+        if (IsOwner)
+        {
+            healthSlider.value = (float)localHealth;
+        }
 
         //Die on fall
         if (gameObject.transform.position.y < -20) GetHit(100);
@@ -98,7 +90,7 @@ public class PlayerHealthBar : NetworkBehaviour
             {
                 localHealth = 0;
                 abovePlayerHealth.value = (float)localHealth;
-                healthSlider.value = 0f;
+                healthSlider.value = (float)localHealth;
                 killed();
             }
             UpdateHealthInfoServerRpc(localHealth);
@@ -110,7 +102,6 @@ public class PlayerHealthBar : NetworkBehaviour
     {
         healthPoints.Value = health;
         abovePlayerHealth.value = (float)health;
-        //healthSlider.value = (float)health;
     }
 
     [ServerRpc]
@@ -160,7 +151,6 @@ public class PlayerHealthBar : NetworkBehaviour
             GetComponentInParent<RobotMultiplayerInstructionScript>().StopExecute();
             programmingInterface.SetActive(false);
             flagScript.LoseFlag();
-            thisRobotMovementScript.SetAnimation(StateOfAnimation.Death);
         }
 
         ulong localClientId = NetworkManager.Singleton.LocalClientId;

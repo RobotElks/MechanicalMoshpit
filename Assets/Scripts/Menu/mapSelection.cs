@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using TMPro;
 
 public class mapSelection : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class mapSelection : MonoBehaviour
     public int selectedMap;
     public MultiplayerWorldParse worldBuilderScript;
     public SaveIP informationScript;
+
+    public TextMeshProUGUI mapNameText;
 
     public void Start()
     {
@@ -18,7 +21,7 @@ public class mapSelection : MonoBehaviour
         worldBuilderScript.CreateFlag();
 
         GenerateMap();
-        
+
     }
 
     public void NextMap()
@@ -41,6 +44,8 @@ public class mapSelection : MonoBehaviour
         worldBuilderScript.LoadWorldFromInformation();
         worldBuilderScript.BuildWorld();
         worldBuilderScript.MoveWorldToOrigin();
+
+        mapNameText.text = Path.GetFileName(maps[selectedMap]).Replace(".txt", "") + " - " + worldBuilderScript.NumberOfSpawnpoints + " Players";
     }
 
 
