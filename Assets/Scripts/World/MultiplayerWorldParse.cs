@@ -35,6 +35,8 @@ public class MultiplayerWorldParse : MonoBehaviour
 
     RobotList robotList;
 
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -69,7 +71,7 @@ public class MultiplayerWorldParse : MonoBehaviour
 
     public Vector3 GetLobbySpawnPoint()
     {
-        return new Vector3(1015, 15, 15);
+        return new Vector3(Random.Range(1010,1020), 15, Random.Range(10,20));
     }
 
     public int NumberOfSpawnpoints { get { return robotSpawnPoints.Count; } }
